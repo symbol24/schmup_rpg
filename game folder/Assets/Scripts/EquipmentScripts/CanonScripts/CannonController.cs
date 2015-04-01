@@ -7,8 +7,8 @@ public class CannonController : EquipmentController {
 
 	public float m_baseWeaponDamage = 1.0f;
 	public float m_baseWeaponFireRate = 0.05F;
-	public int m_weaponType = 0;
 	private float m_NextFire = 0.0F;
+
 	public GameObject[] m_ReferencePointForBullet;
 	public ProjectileController m_ProjectileToShootPrefab;
 	private Stack<ProjectileController> m_StackToUse;

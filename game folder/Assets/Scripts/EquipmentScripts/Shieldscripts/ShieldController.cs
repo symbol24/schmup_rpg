@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShieldController : MonoBehaviour {
+public class ShieldController : EquipmentController {
 	public string m_Owner = "player";
 	public float m_shieldHealth = 10.0f;
-	public int m_shieldType = 0;
-	public float m_energyModifier = 1.0f;
 
 	void Start(){
 

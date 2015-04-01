@@ -11,6 +11,7 @@ public class EquipmentController : MonoBehaviour {
 	public float m_shieldModifier = 1.0f;
 	public float m_healthModifier = 1.0f;
 	public float m_creditValue = 1.0f;
+	public int m_damageType = 0;
 
 	// Use this for initialization
 	void Start () {

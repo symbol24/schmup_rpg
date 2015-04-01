@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour {
 	private int m_currentHP = 1;
 	private int m_playerArmor = 0;
 	private float m_playerMouvementSpeed = 5.0f;
-	private float m_maxPlayerEnergy = 1.0f;
-	private float m_currentEnergy = 1.0f;
+	private float m_maxPlayerEnergy = 10.0f;
+	private float m_currentEnergy = 10.0f;
 	private float m_currentCredits = 0.0f;
 
 	//screen limiters
@@ -182,5 +182,21 @@ public class PlayerController : MonoBehaviour {
 	
 	public void SetPlayerFireRate(float newFireRate){
 		m_playerFireRate = newFireRate;
+	}
+
+	public float GetPlayerCurrentEnergy(){
+		return m_currentEnergy;
+	}
+	
+	public void SetPlayerCurrentEnergy(float newCurrentEnergy){
+		m_currentEnergy = newCurrentEnergy;
+	}
+
+	public float GetPlayerMaxEnergy(){
+		return m_maxPlayerEnergy;
+	}
+	
+	public void SetPlayerMaxEnergy(float newMaxEnergy){
+		m_maxPlayerEnergy = newMaxEnergy;
 	}
 }
