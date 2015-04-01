@@ -32,9 +32,9 @@ public class GameManager : MonoBehaviour {
 
 	//score info
 	public GUIText m_ScoreGUI;
-	public int m_TotalScore = 0;
-	private int m_TotalKills = 0;
-	public int m_TargetScore;
+	public float m_TotalScore = 0;
+	private float m_TotalKills = 0;
+	public float m_TargetScore;
 
 	//controls
 	public KeyCode m_PauseButton;
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//hit and mitigate damage together yay!
-	public int Hit(int damage, int hp, int armor) {
+	public float Hit(float damage, float hp, float armor) {
 		if(damage > armor){
 			damage -= armor;
 		}else{
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
 		return hp - damage;
 	}
 	
-	public void UpdateScore(int score){
+	public void UpdateScore(float score){
 		m_TotalKills++;
 		m_TotalScore += score;
 		m_ScoreGUI.text = m_TotalScore.ToString ();
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel(m_NextLevel);
 	}
 
-	public IEnumerator DeathExplosion(int currentHP){
+	public IEnumerator DeathExplosion(float currentHP){
 		m_CurrentState = gameState.dead;
 		Transform transformForExplosion = m_PlayerShip.transform;
 		m_PlayerShip.GetComponent<Renderer>().enabled = false;

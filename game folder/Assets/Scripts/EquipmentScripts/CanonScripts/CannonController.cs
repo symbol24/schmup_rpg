@@ -2,10 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CannonController : MonoBehaviour {
+public class CannonController : EquipmentController {
 	private GameManager m_GameManager;
-	public float m_FireRate = 0.05F;
+
+	public float m_baseWeaponDamage = 1.0f;
+	public float m_baseWeaponFireRate = 0.05F;
 	private float m_NextFire = 0.0F;
+
 	public GameObject[] m_ReferencePointForBullet;
 	public ProjectileController m_ProjectileToShootPrefab;
 	private Stack<ProjectileController> m_StackToUse;
@@ -40,7 +43,7 @@ public class CannonController : MonoBehaviour {
 					}
 				}else{
 					if(Time.time > m_NextFire){
-					m_NextFire = Time.time + m_FireRate;
+					m_NextFire = Time.time + m_baseWeaponFireRate;
 					foreach(GameObject refer in m_ReferencePointForBullet){
 						PopABullet(refer, m_ProjectileToShootPrefab);
 						}

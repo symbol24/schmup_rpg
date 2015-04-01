@@ -2,18 +2,20 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : BasePlayerController {
 	public GameManager m_GameManager;
 
-	//the player basic info
-	public int playerHP = 1;
-	private int currentHP = 1;
-	public int playerArmor = 0;
-	public float speed = 5.0f;
+
+
+	//screen limiters
 	public float horLimit = 0.0f;
 	public float vertLimit = 0.0f;
 	private Vector2 velocity = Vector2.zero;
+
+	//animator
 	private Animator anim;
+
+	//death state
 	private bool isDead = false;
 	private Vector3 startingPosition;
 
@@ -54,7 +56,6 @@ public class PlayerController : MonoBehaviour {
 				instanciatedCannons[i].m_IsAvailable = false;
 			}
 		}
-		currentHP = playerHP;
 	}
 	
 	void Update () {
@@ -76,8 +77,8 @@ public class PlayerController : MonoBehaviour {
 			if(cannonSelectionDirection != -1) ChangeSelectedCannon(cannonSelectionDirection);
 
 			//move
-			velocity.x = m_GameManager.m_HorValue * speed * Time.deltaTime;
-			velocity.y = m_GameManager.m_VertValue * speed * Time.deltaTime;
+			velocity.x = m_GameManager.m_HorValue * GetPlayerSpeed() * Time.deltaTime;
+			velocity.y = m_GameManager.m_VertValue * GetPlayerSpeed() * Time.deltaTime;
 
 			//changing the ship from side to side and idle
 			if (m_GameManager.m_HorValue > 0.0f) {
@@ -89,7 +90,7 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			//move the ship, cannon and shields
-			//velocity = Vector2.ClampMagnitude(velocity, speed * Time.deltaTime);
+			//velocity = Vector2.ClampMagnitude(velocity, m_playerMouvementSpeed * Time.deltaTime);
 			transform.Translate (velocity, Space.World);
 
 			//clamping to screen size
@@ -101,9 +102,9 @@ public class PlayerController : MonoBehaviour {
 
 	//checking health to change amount of shields and changing amount of lives if needed
 	public void CheckHealth(){
-		if(currentHP <= 0){
-			currentHP = playerHP;
-			StartCoroutine(m_GameManager.DeathExplosion(currentHP));
+		if(GetPlayerCurrentHP() <= 0){
+			SetPlayerCurrentHP(GetPlayerMaxHP());
+			StartCoroutine(m_GameManager.DeathExplosion(GetPlayerCurrentHP()));
 		}else{
 			m_Shield.SetActive (false);
 		}
@@ -119,12 +120,13 @@ public class PlayerController : MonoBehaviour {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Owner == target) {
 			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
-			currentHP = m_GameManager.Hit(tempBullet.m_DamageValue, currentHP, playerArmor);
+			SetPlayerCurrentHP( m_GameManager.Hit(tempBullet.m_DamageValue, GetPlayerCurrentHP(), GetPlayerArmour()));
 			CheckHealth();
 			tempBullet.pushBullet(tempBullet);
 		}
 	}
 
+	//changing the equipped gun with the rpess of a button!
 	private void ChangeSelectedCannon(int direction){
 		int previousID = cannonID;
 		bool foundCannon = false;
@@ -155,4 +157,6 @@ public class PlayerController : MonoBehaviour {
 		currentCannon = instanciatedCannons[cannonID];
 		currentCannon.gameObject.SetActive(true);
 	}
+
+
 }
