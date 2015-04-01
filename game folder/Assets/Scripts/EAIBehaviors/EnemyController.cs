@@ -6,10 +6,10 @@ public class EnemyController : MonoBehaviour {
 
 	public GameManager m_GameMgr;
 	public float m_LimiterY = -4.9f;
-	public int m_EaiHP = 1;
-	public int m_CurrentHP;
-	public int m_EaiArmor = 0;
-	public int m_ScoreValue = 100;
+	public float m_EaiHP = 1;
+	public float m_CurrentHP;
+	public float m_EaiArmor = 0;
+	public float m_ScoreValue = 100;
 	public GameObject m_BlueExplosion;
 	public string m_Target = "player";
 	public ProjectileController m_ProjectileToShoot;
@@ -66,7 +66,7 @@ public class EnemyController : MonoBehaviour {
 		}
 	}
 
-	public void DestroyObjectAndBehaviors(int score){
+	public void DestroyObjectAndBehaviors(float score){
 		gameObject.SetActive (false);
 		m_GameMgr.UpdateScore(score);
 		foreach (EAIBehaviors behavior in m_BehaviorsInstances) {

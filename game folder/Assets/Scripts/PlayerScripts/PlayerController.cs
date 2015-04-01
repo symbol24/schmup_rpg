@@ -2,19 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : BasePlayerController {
 	public GameManager m_GameManager;
 
-	//the player basic info
-	private float m_playerDamage = 1.0f;
-	private float m_playerFireRate = 1.0f;
-	private int m_maxPlayerHP = 1;
-	private int m_currentHP = 1;
-	private int m_playerArmor = 0;
-	private float m_playerMouvementSpeed = 5.0f;
-	private float m_maxPlayerEnergy = 10.0f;
-	private float m_currentEnergy = 10.0f;
-	private float m_currentCredits = 0.0f;
+
 
 	//screen limiters
 	public float horLimit = 0.0f;
@@ -65,7 +56,6 @@ public class PlayerController : MonoBehaviour {
 				instanciatedCannons[i].m_IsAvailable = false;
 			}
 		}
-		m_currentHP = m_maxPlayerHP;
 	}
 	
 	void Update () {
@@ -87,8 +77,8 @@ public class PlayerController : MonoBehaviour {
 			if(cannonSelectionDirection != -1) ChangeSelectedCannon(cannonSelectionDirection);
 
 			//move
-			velocity.x = m_GameManager.m_HorValue * m_playerMouvementSpeed * Time.deltaTime;
-			velocity.y = m_GameManager.m_VertValue * m_playerMouvementSpeed * Time.deltaTime;
+			velocity.x = m_GameManager.m_HorValue * GetPlayerSpeed() * Time.deltaTime;
+			velocity.y = m_GameManager.m_VertValue * GetPlayerSpeed() * Time.deltaTime;
 
 			//changing the ship from side to side and idle
 			if (m_GameManager.m_HorValue > 0.0f) {
@@ -112,9 +102,9 @@ public class PlayerController : MonoBehaviour {
 
 	//checking health to change amount of shields and changing amount of lives if needed
 	public void CheckHealth(){
-		if(m_currentHP <= 0){
-			m_currentHP = m_maxPlayerHP;
-			StartCoroutine(m_GameManager.DeathExplosion(m_currentHP));
+		if(GetPlayerCurrentHP() <= 0){
+			SetPlayerCurrentHP(GetPlayerMaxHP());
+			StartCoroutine(m_GameManager.DeathExplosion(GetPlayerCurrentHP()));
 		}else{
 			m_Shield.SetActive (false);
 		}
@@ -130,7 +120,7 @@ public class PlayerController : MonoBehaviour {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Owner == target) {
 			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
-			m_currentHP = m_GameManager.Hit(tempBullet.m_DamageValue, m_currentHP, m_playerArmor);
+			SetPlayerCurrentHP( m_GameManager.Hit(tempBullet.m_DamageValue, GetPlayerCurrentHP(), GetPlayerArmour()));
 			CheckHealth();
 			tempBullet.pushBullet(tempBullet);
 		}
@@ -168,35 +158,5 @@ public class PlayerController : MonoBehaviour {
 		currentCannon.gameObject.SetActive(true);
 	}
 
-	public float GetPlayerDamage(){
-		return m_playerDamage;
-	}
 
-	public void SetPlayerDamage(float newDamage){
-		m_playerDamage = newDamage;
-	}
-
-	public float GetPlayerFireRate(){
-		return m_playerFireRate;
-	}
-	
-	public void SetPlayerFireRate(float newFireRate){
-		m_playerFireRate = newFireRate;
-	}
-
-	public float GetPlayerCurrentEnergy(){
-		return m_currentEnergy;
-	}
-	
-	public void SetPlayerCurrentEnergy(float newCurrentEnergy){
-		m_currentEnergy = newCurrentEnergy;
-	}
-
-	public float GetPlayerMaxEnergy(){
-		return m_maxPlayerEnergy;
-	}
-	
-	public void SetPlayerMaxEnergy(float newMaxEnergy){
-		m_maxPlayerEnergy = newMaxEnergy;
-	}
 }
