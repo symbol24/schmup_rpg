@@ -10,6 +10,7 @@ public class SelectionManager : MonoBehaviour
     private ButtonContainer[] availableChecks;
     public float timeToFade = 2f;
     public float timeBeforePicFadeout = 2f;
+    private ButtonContainer currentActiveButton;
 
 	// Use this for initialization
 	void Start ()
@@ -18,21 +19,34 @@ public class SelectionManager : MonoBehaviour
 	    availableChecks = disorganizedToggles.OrderBy(c => c.MainToggle.transform.position.x).ToArray();
 	    foreach (var availableCheck in availableChecks)
 	    {
-	        availableCheck.MainToggle.isOn = false;
+	        //availableCheck.MainToggle.isOn = false;
             availableCheck.ToggleChanged += AvailableCheckOnToggleChanged;
+	        if (availableCheck.MainToggle.isOn)
+	        {
+                if(currentActiveButton != null) Debug.LogError("There are 2 current active buttons");
+	            currentActiveButton = availableCheck;
+	        }
 	    }
         
 	}
 
+    
     private void AvailableCheckOnToggleChanged(object sender, EventArgs eventArgs)
     {
         var containerReceived = sender as ButtonContainer;
         if (containerReceived != null)
         {
             var currentButtonInstanceID = containerReceived.GetInstanceID();
+            if (currentButtonInstanceID == currentActiveButton.GetInstanceID())
+            {
+                currentActiveButton.MainToggle.isOn = true;
+                return;
+            }
             if (containerReceived.MainToggle.isOn)
             {
-                StartCoroutine(CoroutineDelayed(() => containerReceived.StartFadeIn(timeToFade), timeBeforePicFadeout));
+                currentActiveButton = containerReceived;
+                StartCoroutine(CoroutineDelayed(() => containerReceived.StartFadeIn(timeToFade),
+                    timeBeforePicFadeout));
                 foreach (var buttonContainer in availableChecks)
                 {
                     if (currentButtonInstanceID != buttonContainer.GetInstanceID())
@@ -45,6 +59,7 @@ public class SelectionManager : MonoBehaviour
             {
                 containerReceived.StartFadeout(timeToFade);
             }
+
         }
     }
 

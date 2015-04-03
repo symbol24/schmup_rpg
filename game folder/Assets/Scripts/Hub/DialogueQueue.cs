@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Collections;
@@ -15,7 +16,8 @@ public class DialogueQueue : MonoBehaviour
     public float intervalToCheckQueue = 0.5f;
     public float intervalPerLetter = 0.05f;
     public float intervalToWaitWhenCompleted = 3f;
-    public IEnumerable<DialogueContainer> showText;
+    public IEnumerable<DialogueUIContainer> availableDialogues;
+    public event EventHandler QueueEmptied;
 
 
     // Use this for initialization
@@ -23,55 +25,84 @@ public class DialogueQueue : MonoBehaviour
     {
         //if (showText == null) showText = GetComponent<DialogueContainer>();
         //if (showText == null) showText = FindObjectOfType<DialogueContainer>();
-        if (showText == null) Debug.LogError("NoShowText component in " + gameObject.name);
+        availableDialogues = FindObjectsOfType<DialogueUIContainer>();
+        if (availableDialogues == null) Debug.LogError("NoShowText component in " + gameObject.name);
         //showText.gameObject.SetActive(false);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
     }
 
     public void Enqueue(string text)
     {
-        Queue.Enqueue(new DialogueDataObject{Text = text});
+        var toPass = (DialogueDataObject)previousDataObject.Clone();
+        toPass.Text = text;
+        Queue.Enqueue(toPass);
 
     }
 
+    private DialogueDataObject previousDataObject;
     public void Enqueue(DialogueDataObject text)
     {
+        previousDataObject = text;
         Queue.Enqueue(text);
         if (Queue.Count == 1)
         {
-            CheckForQueue();
+            StartCoroutine(CheckForQueue());
         }
     }
-    private void CheckForQueue()
-{
+
+    private IEnumerator CheckForQueue()
+    {
+        yield return new WaitForEndOfFrame();
         if (Queue.Any())
         {
             StartCoroutine(StartWritingText(Queue.Dequeue()));
         }
+        else
+        {
+            if (QueueEmptied != null) QueueEmptied(this, EventArgs.Empty);
+        }
     }
 
+    private DialogueUIContainer _previousActiveContainer;
     private IEnumerator StartWritingText(DialogueDataObject dialogueDataObject)
-    {/*
-        showText.gameObject.SetActive(true);
+    {
+        var container = FindDialogueContainer(dialogueDataObject);
+        if (_previousActiveContainer == null)
+        {
+            _previousActiveContainer = container;
+            container.SetEverythingActive();
+        }
+        else if (_previousActiveContainer != container)
+        {
+            _previousActiveContainer.SetEverythingInactive();
+            _previousActiveContainer = container;
+            container.SetEverythingActive();
+        }
         string currentActiveString = string.Empty;
-        showText.Title = dialogueDataObject.Title;
+        container.Title = dialogueDataObject.Title;
         var toWrite = dialogueDataObject.Text;
         while (currentActiveString.Length < toWrite.Length)
         {
             currentActiveString = toWrite.Substring(0, currentActiveString.Length + 1);
-            showText.TextToShow = currentActiveString;
+            container.TextToShow = currentActiveString;
             yield return new WaitForSeconds(intervalPerLetter);
         }
         yield return new WaitForSeconds(intervalToWaitWhenCompleted);
-        showText.gameObject.SetActive(false);
-        showText.TextToShow = string.Empty;
-        CheckForQueue();*/
-        yield return null;
+        if (Queue.Any())
+        {
+            StartCoroutine(CheckForQueue());
+        }
+        else
+        {
+            container.SetEverythingInactive();
+            container.TextToShow = string.Empty;
+            _previousActiveContainer = null;
+        }
+    }
+
+    private DialogueUIContainer FindDialogueContainer(DialogueDataObject dataObject)
+    {
+        var ret = availableDialogues.First(c => c.Identifier == dataObject.Character);
+        return ret;
     }
 
 }

@@ -4,5 +4,6 @@ using System.Collections;
 public enum CharacterIdentifier
 {
     Bartender,
-    ShadyGuy
+    ShadyGuy,
+    Player
 }

@@ -10,35 +10,32 @@ using UnityEngine.UI;
 public class ButtonContainer : MonoBehaviour 
 {
     public Toggle MainToggle { get; private set; }
-    public Image[] _imagesRelated;
-    public Image[] ImagesRelated { get { return _imagesRelated; } }
-    public Text[] _textsRelated;
-    public Text[] TextsRelated { get { return _textsRelated; } }
     public event EventHandler ToggleChanged;
+    public Graphic[] _uiElementsToCarryAlong;
+    public Graphic[] UIElements { get { return _uiElementsToCarryAlong; } }
 
 	// Use this for initialization
 	void Awake ()
 	{
 	    MainToggle = GetComponentInChildren<Toggle>();
-        MainToggle.isOn = false;
-	    if (_imagesRelated == null) _imagesRelated = new Image[0];
-	    if (_textsRelated == null) _textsRelated = new Text[0];
-	    foreach (var image in ImagesRelated)
-	    {
-	        StartCoroutine(image.FadeIn(0));
-	    }
+        MainToggle.onValueChanged.AddListener(MainToggle_OnValueChanged);
+	    previousToggleValue = MainToggle.isOn;
+        if(previousToggleValue) StartFadeout(0);
+        else StartFadeIn(0);
+        if(_uiElementsToCarryAlong == null) _uiElementsToCarryAlong = new Graphic[0];
 
 	}
-	
-    private bool previousState = false;
-	// Update is called once per frame
-	void Update () {
-	    if (previousState != MainToggle.isOn)
-	    {
-	        previousState = MainToggle.isOn;
-	        if (ToggleChanged != null) ToggleChanged(this, EventArgs.Empty);
-	    }
-	}
+
+    private bool previousToggleValue;
+    private void MainToggle_OnValueChanged(bool changedTo)
+    {
+        if (previousToggleValue != changedTo)
+        {
+            previousToggleValue = changedTo;
+            if (ToggleChanged != null) ToggleChanged(this, EventArgs.Empty);
+        }
+    }
+
 
     private Stack<IEnumerator> _fadeinCoroutines = new Stack<IEnumerator>();
     public void StartFadeIn(float time)
@@ -48,8 +45,10 @@ public class ButtonContainer : MonoBehaviour
             StopCoroutines(_fadeoutCoroutines);
             _fadeoutCoroutines.Clear();
         }
-        foreach (var image in ImagesRelated) _fadeinCoroutines.Push(image.FadeIn(time));
-        foreach (var text in TextsRelated) _fadeinCoroutines.Push(text.FadeIn(time));
+        foreach (var uiElement in UIElements)
+        {
+            _fadeinCoroutines.Push(uiElement.FadeIn(time));
+        }
         StartCoroutines(_fadeinCoroutines);
     }
     private Stack<IEnumerator> _fadeoutCoroutines = new Stack<IEnumerator>();
@@ -60,13 +59,9 @@ public class ButtonContainer : MonoBehaviour
             StopCoroutines(_fadeinCoroutines);
             _fadeinCoroutines.Clear();
         }
-        foreach (var image in ImagesRelated)
+        foreach (var uiElement in UIElements)
         {
-            _fadeoutCoroutines.Push(image.FadeOut(time));
-        }
-        foreach (var text in TextsRelated)
-        {
-            _fadeoutCoroutines.Push(text.FadeOut(time));
+            _fadeoutCoroutines.Push(uiElement.FadeOut(time));
         }
         StartCoroutines(_fadeoutCoroutines);
     }
