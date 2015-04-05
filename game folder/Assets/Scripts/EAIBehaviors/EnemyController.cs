@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour {
 	public EAIBehaviors[] m_BehaviorsPrefabs;
 	private EAIBehaviors[] m_BehaviorsInstances;
 	private EAIBehaviors m_DeathBehavior;
-	public GameObject[] m_CannonReferances;
+	public CannonReferences[] m_CannonReferances;
 	public float m_MouvementSpeed = 1.0f;
 	public GameObject m_HealthBar;
 	public int m_CannonUpgradeID = 1;
@@ -26,6 +26,9 @@ public class EnemyController : MonoBehaviour {
 
 	void Start(){
 		m_GameMgr = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+
+		//Get cannon references
+		m_CannonReferances = GetCannonReferences ();
 
 		//instanciate all behaviours attached to EAI
 		m_BehaviorsInstances = new EAIBehaviors[m_BehaviorsPrefabs.Length];
@@ -96,7 +99,16 @@ public class EnemyController : MonoBehaviour {
 			Instantiate (m_BlueExplosion, tempBullet.transform.position, tempBullet.transform.rotation);
 			m_CurrentHP = m_GameMgr.Hit(tempBullet.m_DamageValue, m_CurrentHP, m_EaiArmor);
 			checkHealth();
-			tempBullet.pushBullet(tempBullet);
+			tempBullet.DestroyObjectAndBehaviors();
 		}
-	}	
+	}
+
+	public CannonReferences[] GetCannonReferences(){
+		CannonReferences[] cannonRefs = GetComponentsInChildren<CannonReferences>() as CannonReferences[];
+		if (cannonRefs == null) {
+			print ("NO CHILD CANNON REFS ON " + this);
+			cannonRefs = new CannonReferences[0];
+		}
+		return cannonRefs;
+	}
 }

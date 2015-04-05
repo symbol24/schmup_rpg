@@ -361,11 +361,8 @@ public class EAIBehaviorTankBoss : EAIBehaviors {
 		if (Time.time > groupShotTimer && Time.time > nextShotTimer){
 			nextShotTimer = Time.time + ShotDelay;
 			foreach(CannonReferences cRef in theseCannons){
-				Stack<ProjectileController> StackToUpdate = EntitiesCreator.GetStackToUpdate(bullets, m_Controller.m_GameMgr);
-				ProjectileController tempBullet = StackToUpdate.Pop();
-				tempBullet.transform.position = new Vector2(cRef.transform.position.x, cRef.transform.position.y);
-				tempBullet.transform.rotation = cRef.transform.rotation;
-				tempBullet.gameObject.SetActive(true);
+				
+				ShootABullet(cRef, bullets);
 			}
 			
 			currentGroupingCount++;

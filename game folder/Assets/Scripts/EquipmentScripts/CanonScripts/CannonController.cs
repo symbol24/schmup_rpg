@@ -20,7 +20,6 @@ public class CannonController : EquipmentController {
 
 	void Start(){
 		m_GameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
-		m_StackToUse = EntitiesCreator.GetStackToUpdate(m_ProjectileToShootPrefab, m_GameManager);
 		m_ProjectileEnergyValue = m_ProjectileToShootPrefab.m_EnergyValue;
 		m_EnergyBar = GameObject.FindObjectOfType(typeof(EnergySystemController)) as EnergySystemController;
 	}
@@ -45,7 +44,7 @@ public class CannonController : EquipmentController {
 					if(Time.time > m_NextFire){
 					m_NextFire = Time.time + m_baseWeaponFireRate;
 					foreach(GameObject refer in m_ReferencePointForBullet){
-						PopABullet(refer, m_ProjectileToShootPrefab);
+							ShotABullet(refer, m_ProjectileToShootPrefab);
 						}
 					}
 				}
@@ -58,11 +57,8 @@ public class CannonController : EquipmentController {
 		}
 	}
 
-	void PopABullet(GameObject refereance, ProjectileController bulletTemplate){
-		ProjectileController tempBullet = m_StackToUse.Pop();
-		tempBullet.transform.position = new Vector2(refereance.transform.position.x, refereance.transform.position.y);
-		tempBullet.transform.rotation = refereance.transform.rotation;
-		tempBullet.gameObject.SetActive(true);
+	private void ShotABullet(GameObject refereance, ProjectileController bulletTemplate){
+		ProjectileController oneBullet = Instantiate(m_ProjectileToShootPrefab, refereance.transform.position, refereance.transform.rotation) as ProjectileController;
 		m_EnergyBar.ChangeEnergyTotal ("substract", m_ProjectileEnergyValue);
 	}
 }

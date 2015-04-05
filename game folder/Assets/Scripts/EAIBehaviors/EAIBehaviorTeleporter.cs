@@ -102,11 +102,8 @@ public class EAIBehaviorTeleporter : EAIBehaviors {
 			break;
 		case BossState.normal:
 			if(Time.time >=m_NormalGroupingTimer && Time.time >= m_NormalShotTimer){
-				foreach(GameObject cRef in m_Controller.m_CannonReferances){
-					Stack<ProjectileController> StackToUpdate = EntitiesCreator.GetStackToUpdate(m_BulletToShoot, m_Controller.m_GameMgr);
-					tempBullet = StackToUpdate.Pop();
-					tempBullet.transform.position = cRef.transform.position;
-					tempBullet.gameObject.SetActive(true);
+				foreach(CannonReferences cRef in m_Controller.m_CannonReferances){
+					ShootABullet(cRef, m_BulletToShoot);
 				}
 				m_NormalGroupingCount++;
 				if(m_NormalGroupingCount >= m_NormalGroupingAmount){

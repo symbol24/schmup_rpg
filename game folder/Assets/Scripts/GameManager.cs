@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
 	public int m_BulletAmount;
 	public ProjectileController[] m_ProjectilePrefabs;
 	public Stack<ProjectileController>[] m_ProjectileStacks;
+	public Stack<ProjectileController>[] m_PlayerProjectileStacks;
 
 	//game state enum
 	public enum gameState{
@@ -61,11 +62,6 @@ public class GameManager : MonoBehaviour {
 
 	
 	void Start(){
-		//creating bullets into stacks
-		m_ProjectileStacks = new Stack<ProjectileController>[m_ProjectilePrefabs.Length];
-		for(int i = 0; i < m_ProjectilePrefabs.Length; i++){
-			m_ProjectileStacks[i] = EntitiesCreator.CreatAStackOfBullets (m_ProjectilePrefabs[i], m_BulletAmount);
-		}
 
 		//creating the life icons at top of screen
 		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];

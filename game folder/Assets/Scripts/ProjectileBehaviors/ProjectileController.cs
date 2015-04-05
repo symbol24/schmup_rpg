@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ProjectileController : MonoBehaviour {
 	private GameManager m_GameManager;
-	public int m_DamageValue = 2;
+	public float m_DamageValue = 2.0f;
 	public int m_EnergyValue = 1;
 	public float m_Speed = 5.0f;
 	public string m_Target = "enemy";
@@ -31,16 +31,19 @@ public class ProjectileController : MonoBehaviour {
 			if(m_Type != "beam"){
 				//putting the bullets back into their respective STACK
 				if(gameObject.activeInHierarchy && !gameObject.GetComponent<Renderer>().isVisible){
-					pushBullet(this);
+					Destroy(this);
 				}
 			}
 		}
 	}
 
-	public void pushBullet(ProjectileController currentBullet){
-		Stack<ProjectileController> StackToUpdate = EntitiesCreator.GetStackToUpdate(currentBullet, m_GameManager);
-
-		currentBullet.gameObject.SetActive(false);
-		StackToUpdate.Push(this);
+	public void DestroyObjectAndBehaviors(){
+		gameObject.SetActive (false);
+		foreach (ProjectileBehavior behavior in m_ProjectileBehaviorInstances) {
+			if(behavior != null){
+				Destroy(behavior);
+			}
+		}
+		Destroy (gameObject);
 	}
 }

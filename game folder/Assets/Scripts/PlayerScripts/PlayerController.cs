@@ -53,7 +53,7 @@ public class PlayerController : BasePlayerController {
 				currentCannon.m_IsAvailable = true;
 			}else {
 				instanciatedCannons[i].gameObject.SetActive(false);
-				instanciatedCannons[i].m_IsAvailable = false;
+				instanciatedCannons[i].m_IsAvailable = true;
 			}
 		}
 	}
@@ -122,7 +122,7 @@ public class PlayerController : BasePlayerController {
 			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
 			SetPlayerCurrentHP( m_GameManager.Hit(tempBullet.m_DamageValue, GetPlayerCurrentHP(), GetPlayerArmour()));
 			CheckHealth();
-			tempBullet.pushBullet(tempBullet);
+			tempBullet.DestroyObjectAndBehaviors();
 		}
 	}
 

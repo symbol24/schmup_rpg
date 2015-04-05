@@ -13,7 +13,7 @@ public class ShieldController : EquipmentController {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Target == m_Owner) {
-			tempBullet.pushBullet(tempBullet);
+			tempBullet.DestroyObjectAndBehaviors();
 
 		}
 	}

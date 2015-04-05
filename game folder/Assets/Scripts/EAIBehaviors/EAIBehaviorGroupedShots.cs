@@ -25,12 +25,8 @@ public class EAIBehaviorGroupedShots : EAIBehaviors {
 	public override void UpdateBehavior() {
 		if (Time.time > m_NextGroupFire && Time.time > m_NextFire){
 			m_NextFire = Time.time + m_FireRate;
-			foreach(GameObject cRef in m_Controller.m_CannonReferances){
-				Stack<ProjectileController> StackToUpdate = EntitiesCreator.GetStackToUpdate(m_BulletToShoot, m_Controller.m_GameMgr);
-				tempBullet = StackToUpdate.Pop();
-				tempBullet.transform.position = new Vector2(cRef.transform.position.x, cRef.transform.position.y);
-				tempBullet.transform.rotation = cRef.transform.rotation;
-				tempBullet.gameObject.SetActive(true);
+			foreach(CannonReferences cRef in m_Controller.m_CannonReferances){
+				ShootABullet(cRef, m_BulletToShoot);
 			}
 			m_GroupShotCount++;
 			if(m_GroupShotCount == m_NumberOfGroupedShots){
@@ -39,4 +35,5 @@ public class EAIBehaviorGroupedShots : EAIBehaviors {
 			}
 		}
 	}
+	
 }
