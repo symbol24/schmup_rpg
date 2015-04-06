@@ -64,11 +64,11 @@ public class GameManager : MonoBehaviour {
 	void Start(){
 
 		//creating the life icons at top of screen
-		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];
-		for(int i = 0; i < m_NumberOfLives; i++){
-			GameObject tempLifeIcon = Instantiate(m_LifeIconPrefab, new Vector2(m_LifeIconPrefab.transform.position.x - i, m_LifeIconPrefab.transform.position.y), m_LifeIconPrefab.transform.rotation) as GameObject;
-			m_LifeIconsDisplayed[i] = tempLifeIcon;
-		}
+//		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];
+//		for(int i = 0; i < m_NumberOfLives; i++){
+//			GameObject tempLifeIcon = Instantiate(m_LifeIconPrefab, new Vector2(m_LifeIconPrefab.transform.position.x - i, m_LifeIconPrefab.transform.position.y), m_LifeIconPrefab.transform.rotation) as GameObject;
+//			m_LifeIconsDisplayed[i] = tempLifeIcon;
+//		}
 
 		//setting the game state to playing
 		m_CurrentState = gameState.playing;
@@ -102,6 +102,9 @@ public class GameManager : MonoBehaviour {
 		}else{
 			damage = 0;
 		}
+		if (hp - damage <= 0)
+			return 0;
+
 		return hp - damage;
 	}
 	
@@ -117,24 +120,6 @@ public class GameManager : MonoBehaviour {
 		EndGameMenu egm = GetComponent<EndGameMenu> ();
 		if (egm != null) {
 			egm.DisplayGameOverScreen(message);
-		}
-	}
-
-	public void SwitchShieldStatus(bool isShooting){
-		if(isShooting){
-			m_isShooting = isShooting;
-			m_PlayerShip.m_Shield.SetActive(false);
-			BoxCollider2D playerShipCollider = m_PlayerShip.GetComponent<BoxCollider2D>();
-			if(playerShipCollider != null){
-				playerShipCollider.enabled = true;
-			}
-		}else{
-			m_isShooting = isShooting;
-			m_PlayerShip.m_Shield.SetActive(true);
-			BoxCollider2D playerShipCollider = m_PlayerShip.GetComponent<BoxCollider2D>();
-			if(playerShipCollider != null){
-				playerShipCollider.enabled = false;
-			}
 		}
 	}
 

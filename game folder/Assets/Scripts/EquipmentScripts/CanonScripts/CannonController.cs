@@ -17,20 +17,19 @@ public class CannonController : EquipmentController {
 	public int m_ProjectileEnergyValue = 1;
 	private EnergySystemController m_EnergyBar;
 	public bool m_IsAvailable = false;
+	public string m_cannonTag = "playerCannonRef";
 
 	void Start(){
 		m_GameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
 		m_ProjectileEnergyValue = m_ProjectileToShootPrefab.m_EnergyValue;
 		m_EnergyBar = GameObject.FindObjectOfType(typeof(EnergySystemController)) as EnergySystemController;
+		m_ReferencePointForBullet = GameObject.FindGameObjectsWithTag (m_cannonTag);
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing){
-			if (((Input.GetKey(KeyCode.Space) || Input.GetKey(m_GameManager.m_ShootButton))) && m_EnergyBar.GetCurrentEnergy() >= m_ProjectileEnergyValue){
-				if(!m_GameManager.m_isShooting){
-					m_GameManager.SwitchShieldStatus(true);
-				}
+			if (((Input.GetKey(KeyCode.Space) || Input.GetKey(m_GameManager.m_ShootButton))) && m_EnergyBar.GetCurrentValue() >= m_ProjectileEnergyValue){
 				if(m_ProjectileToShootPrefab.m_Type == "beam"){
 					if(!m_FiringBeam){
 						m_BeamInstance = Instantiate(m_ProjectileToShootPrefab, transform.position, transform.rotation) as ProjectileController;
@@ -42,16 +41,11 @@ public class CannonController : EquipmentController {
 					}
 				}else{
 					if(Time.time > m_NextFire){
-					m_NextFire = Time.time + m_baseWeaponFireRate;
+					m_NextFire = Time.time + m_GameManager.m_PlayerShip.m_playerFireRate;
 					foreach(GameObject refer in m_ReferencePointForBullet){
 							ShotABullet(refer, m_ProjectileToShootPrefab);
 						}
 					}
-				}
-			}else{
-				if(m_GameManager.m_isShooting){
-					m_GameManager.SwitchShieldStatus(false);
-					m_FiringBeam = false;
 				}
 			}
 		}
@@ -59,6 +53,7 @@ public class CannonController : EquipmentController {
 
 	private void ShotABullet(GameObject refereance, ProjectileController bulletTemplate){
 		ProjectileController oneBullet = Instantiate(m_ProjectileToShootPrefab, refereance.transform.position, refereance.transform.rotation) as ProjectileController;
+		oneBullet.m_DamageValue = m_GameManager.m_PlayerShip.m_playerDamage;
 		m_EnergyBar.ChangeEnergyTotal ("substract", m_ProjectileEnergyValue);
 	}
 }
