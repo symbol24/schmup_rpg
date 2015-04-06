@@ -12,16 +12,13 @@ public class ShieldController : EquipmentController {
 		m_playerController.m_shieldBar.m_shield = this;
 	}
 
-	private void ShieldHit(ProjectileController bullet){
-		m_playerController.m_shieldBar.SetCurrentValue(m_playerController.m_GameManager.Hit(bullet.m_DamageValue, m_playerController.m_shieldBar.m_currentValue, m_shieldArmor));
-		m_playerController.m_shieldBar.CheckShieldHealth ();
-	}
-
 	void OnTriggerEnter2D(Collider2D coll) {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Target == m_Owner) {
-			ShieldHit(tempBullet);
+			int tempBulletDmg = tempBullet.m_damageType;
+			m_playerController.m_shieldBar.SetCurrentValue(DamageCalculators.ShieldHit(tempBullet.m_DamageValue, m_playerController.m_shieldBar.m_currentValue, m_shieldArmor, tempBulletDmg, m_damageType));
+			m_playerController.m_shieldBar.CheckShieldHealth ();
 			tempBullet.DestroyObjectAndBehaviors();
 		}
 	}

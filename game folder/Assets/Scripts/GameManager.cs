@@ -94,19 +94,6 @@ public class GameManager : MonoBehaviour {
 			SetGameOver(m_LoseMessage);
 		}
 	}
-
-	//hit and mitigate damage together yay!
-	public float Hit(float damage, float hp, float armor) {
-		if(damage > armor){
-			damage -= armor;
-		}else{
-			damage = 0;
-		}
-		if (hp - damage <= 0)
-			return 0;
-
-		return hp - damage;
-	}
 	
 	public void UpdateScore(float score){
 		m_TotalKills++;

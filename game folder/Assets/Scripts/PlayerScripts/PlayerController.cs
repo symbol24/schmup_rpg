@@ -186,7 +186,7 @@ public class PlayerController : BasePlayerController {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Owner == target) {
 			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
-			m_HPBar.SetCurrentValue( m_GameManager.Hit(tempBullet.m_DamageValue, m_HPBar.GetCurrentValue(), m_playerArmor));
+			m_HPBar.SetCurrentValue(DamageCalculators.Hit(tempBullet.m_DamageValue, m_HPBar.GetCurrentValue(), m_playerArmor));
 			CheckHealth();
 			tempBullet.DestroyObjectAndBehaviors();
 		}

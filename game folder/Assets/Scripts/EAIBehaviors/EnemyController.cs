@@ -97,7 +97,7 @@ public class EnemyController : MonoBehaviour {
 				}
 			}
 			Instantiate (m_BlueExplosion, tempBullet.transform.position, tempBullet.transform.rotation);
-			m_CurrentHP = m_GameMgr.Hit(tempBullet.m_DamageValue, m_CurrentHP, m_EaiArmor);
+			m_CurrentHP = DamageCalculators.Hit(tempBullet.m_DamageValue, m_CurrentHP, m_EaiArmor);
 			checkHealth();
 			tempBullet.DestroyObjectAndBehaviors();
 		}
