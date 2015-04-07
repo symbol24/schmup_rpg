@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class EntitiesCreator : MonoBehaviour {
 	public static Stack<ProjectileController> bullets = new Stack<ProjectileController>();
@@ -8,7 +10,7 @@ public class EntitiesCreator : MonoBehaviour {
 
 	public static Stack<ProjectileController> CreatAStackOfBullets(ProjectileController bulletPrefabToUse, int amountOfBullets){
 		bullets = new Stack<ProjectileController>();
-
+		print ("entities creator "+bulletPrefabToUse);
 		for(int i = 0; i < amountOfBullets; i++){
 			ProjectileController oneBullet = Instantiate(bulletPrefabToUse, bulletPrefabToUse.transform.position, bulletPrefabToUse.transform.rotation) as ProjectileController;
 			oneBullet.gameObject.SetActive(false);

@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class PlayerController : BasePlayerController {
 	public GameManager m_GameManager;
 
-
+	//boxcollider
+	private BoxCollider2D m_myCol;
 
 	//screen limiters
 	public float horLimit = 0.0f;
@@ -25,15 +28,21 @@ public class PlayerController : BasePlayerController {
 	//the cannons!
 	public GameObject cannonPoint;
 	public CannonController[] cannons;
-	public CannonController[] instanciatedCannons;
+	public CannonController[] instantiatedCannons;
 	public CannonController currentCannon;
 	public int cannonID;
 	public float cannonSelectionDelay = 0.2f;
 	private float cannonSelectionTimer = 0.0f;
 	private int cannonSelectionDirection = 0;
 
-	//the shields used for absorbtion effect
-	public GameObject m_Shield;
+	//equipment prefabs!
+	public EquipmentController[] m_listofEquipmentPrefabs;
+	private EquipmentController[] m_instantiatedEquipment;
+		
+	//UI energy, health and shield!
+	public EnergySystemController m_energyBar;
+	public HPSystemController m_HPBar;
+	public ShieldHPSystemController m_shieldBar;
 
 	//hit comparerererer
 	public string target;
@@ -42,20 +51,18 @@ public class PlayerController : BasePlayerController {
 		startingPosition = transform.position;
 		anim = GetComponent<Animator>();
 		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		
+		m_myCol = GetComponent<BoxCollider2D> () as BoxCollider2D;
 
-		//instantiating the first cannon
-		instanciatedCannons = new CannonController[cannons.Length];
-		for (int i = 0; i < cannons.Length; i++) {
-			instanciatedCannons[i] = Instantiate (cannons[i], cannonPoint.transform.position, cannonPoint.transform.rotation) as CannonController;
-			instanciatedCannons[i].transform.parent = transform;
-			if(i == cannonID) {
-				currentCannon = instanciatedCannons[i];
-				currentCannon.m_IsAvailable = true;
-			}else {
-				instanciatedCannons[i].gameObject.SetActive(false);
-				instanciatedCannons[i].m_IsAvailable = false;
-			}
-		}
+		//setup equipment
+		SetupTempEquipment (m_listofEquipmentPrefabs);
+		SetupCannons ();
+		CalculateStats ();
+		m_energyBar.SetStartValues (m_maxPlayerEnergy);
+		m_HPBar.SetStartValues (m_maxPlayerHP);
+		m_shieldBar.SetStartValues (m_maxPlayerShield);
+
+		SaveLoad.SavePlayer (this);
 	}
 	
 	void Update () {
@@ -77,8 +84,8 @@ public class PlayerController : BasePlayerController {
 			if(cannonSelectionDirection != -1) ChangeSelectedCannon(cannonSelectionDirection);
 
 			//move
-			velocity.x = m_GameManager.m_HorValue * GetPlayerSpeed() * Time.deltaTime;
-			velocity.y = m_GameManager.m_VertValue * GetPlayerSpeed() * Time.deltaTime;
+			velocity.x = m_GameManager.m_HorValue * m_playerMouvementSpeed * Time.deltaTime;
+			velocity.y = m_GameManager.m_VertValue * m_playerMouvementSpeed * Time.deltaTime;
 
 			//changing the ship from side to side and idle
 			if (m_GameManager.m_HorValue > 0.0f) {
@@ -102,28 +109,15 @@ public class PlayerController : BasePlayerController {
 
 	//checking health to change amount of shields and changing amount of lives if needed
 	public void CheckHealth(){
-		if(GetPlayerCurrentHP() <= 0){
-			SetPlayerCurrentHP(GetPlayerMaxHP());
-			StartCoroutine(m_GameManager.DeathExplosion(GetPlayerCurrentHP()));
-		}else{
-			m_Shield.SetActive (false);
+		if(m_HPBar.GetCurrentValue() <= 0){
+			m_HPBar.SetCurrentValue(m_maxPlayerHP);
+			StartCoroutine(m_GameManager.DeathExplosion(m_HPBar.GetCurrentValue()));
 		}
 	}
 
 	public void RepositionShip(){
 		transform.position = startingPosition;
 		currentCannon.transform.position = cannonPoint.transform.position;
-	}
-
-	void OnTriggerEnter2D(Collider2D coll) {
-		
-		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
-		if (tempBullet!= null && tempBullet.m_Owner == target) {
-			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
-			SetPlayerCurrentHP( m_GameManager.Hit(tempBullet.m_DamageValue, GetPlayerCurrentHP(), GetPlayerArmour()));
-			CheckHealth();
-			tempBullet.pushBullet(tempBullet);
-		}
 	}
 
 	//changing the equipped gun with the rpess of a button!
@@ -133,30 +127,71 @@ public class PlayerController : BasePlayerController {
 		if (direction == 0 && cannonID > 0) {
 			while(!foundCannon && cannonID > 0){
 				cannonID--;
-				if(instanciatedCannons[cannonID].m_IsAvailable) foundCannon = true;
+				if(instantiatedCannons[cannonID].m_IsAvailable) foundCannon = true;
 			}
 			if(!foundCannon) cannonID = previousID;
-		}else if(direction == 1 && cannonID < instanciatedCannons.Length-1){
-			while(!foundCannon && cannonID < (instanciatedCannons.Length-1)){
+		}else if(direction == 1 && cannonID < instantiatedCannons.Length-1){
+			while(!foundCannon && cannonID < (instantiatedCannons.Length-1)){
 				cannonID++;
-				if(instanciatedCannons[cannonID].m_IsAvailable) foundCannon = true;
+				if(instantiatedCannons[cannonID].m_IsAvailable) foundCannon = true;
 			}
 			if(!foundCannon) cannonID = previousID;
 		}
 		if (cannonID != previousID) {
 			currentCannon.gameObject.SetActive(false);
-			currentCannon = instanciatedCannons[cannonID];
+			currentCannon = instantiatedCannons[cannonID];
 			currentCannon.gameObject.SetActive(true);
+			WeaponSwitchUpdateValuesModifiers(instantiatedCannons[previousID], currentCannon);
 		}
 	}
 
 	public void ActivateCannon(int newCannonID){
-		instanciatedCannons [newCannonID].m_IsAvailable = true;
+		instantiatedCannons [newCannonID].m_IsAvailable = true;
 		cannonID = newCannonID;
 		currentCannon.gameObject.SetActive(false);
-		currentCannon = instanciatedCannons[cannonID];
+		currentCannon = instantiatedCannons[cannonID];
 		currentCannon.gameObject.SetActive(true);
 	}
 
+	private void SetupCannons(){
+		//instantiating the first cannon
+		instantiatedCannons = new CannonController[cannons.Length];
+		for (int i = 0; i < cannons.Length; i++) {
+			instantiatedCannons[i] = Instantiate (cannons[i], cannonPoint.transform.position, cannonPoint.transform.rotation) as CannonController;
+			instantiatedCannons[i].transform.parent = transform;
+			if(i == cannonID) {
+				currentCannon = instantiatedCannons[i];
+				currentCannon.m_IsAvailable = true;
+				UpdateValuesModifiers(currentCannon);
+			}else {
+				instantiatedCannons[i].gameObject.SetActive(false);
+				instantiatedCannons[i].m_IsAvailable = true;
+			}
+		}
+	}
 
+	private void SetupTempEquipment(EquipmentController[] listofEquip){
+		m_instantiatedEquipment = new EquipmentController[listofEquip.Length];
+		for(int i = 0; i < listofEquip.Length; i++){
+			m_instantiatedEquipment[i] = Instantiate(listofEquip[i], this.transform.position, this.transform.rotation) as EquipmentController;
+			m_instantiatedEquipment[i].Init(this);
+			m_instantiatedEquipment[i].transform.parent = transform;
+			UpdateValuesModifiers(m_instantiatedEquipment[i]);
+		}
+	}
+
+	public void UpdateCollider(bool status){
+		m_myCol.enabled = status;
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+		
+		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
+		if (tempBullet!= null && tempBullet.m_Owner == target) {
+			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
+			m_HPBar.SetCurrentValue(DamageCalculators.Hit(tempBullet.m_DamageValue, m_HPBar.GetCurrentValue(), m_playerArmor));
+			CheckHealth();
+			tempBullet.DestroyObjectAndBehaviors();
+		}
+	}
 }

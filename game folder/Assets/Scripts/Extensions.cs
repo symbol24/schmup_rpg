@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public static class Extensions
 {

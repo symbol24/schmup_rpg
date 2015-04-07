@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class HullController : EquipmentController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public override void Init(PlayerController player){
+		base.Init (player);
+		m_myType = equipmentType.hull;
 	}
 }

@@ -19,4 +19,9 @@ public class EAIBehaviors : MonoBehaviour{
 	public virtual void UpdateBehavior(){}
 	
 	public virtual void StartExplosions(int explosionCount){}
+
+	public void ShootABullet(CannonReferences refereance, ProjectileController bulletTemplate){
+		ProjectileController oneBullet = Instantiate(bulletTemplate, refereance.transform.position, refereance.transform.rotation) as ProjectileController;
+	}
+
 }

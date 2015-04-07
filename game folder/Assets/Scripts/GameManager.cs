@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class GameManager : MonoBehaviour {
 	//the player ship
@@ -10,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	public int m_BulletAmount;
 	public ProjectileController[] m_ProjectilePrefabs;
 	public Stack<ProjectileController>[] m_ProjectileStacks;
+	public Stack<ProjectileController>[] m_PlayerProjectileStacks;
 
 	//game state enum
 	public enum gameState{
@@ -61,18 +64,13 @@ public class GameManager : MonoBehaviour {
 
 	
 	void Start(){
-		//creating bullets into stacks
-		m_ProjectileStacks = new Stack<ProjectileController>[m_ProjectilePrefabs.Length];
-		for(int i = 0; i < m_ProjectilePrefabs.Length; i++){
-			m_ProjectileStacks[i] = EntitiesCreator.CreatAStackOfBullets (m_ProjectilePrefabs[i], m_BulletAmount);
-		}
 
 		//creating the life icons at top of screen
-		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];
-		for(int i = 0; i < m_NumberOfLives; i++){
-			GameObject tempLifeIcon = Instantiate(m_LifeIconPrefab, new Vector2(m_LifeIconPrefab.transform.position.x - i, m_LifeIconPrefab.transform.position.y), m_LifeIconPrefab.transform.rotation) as GameObject;
-			m_LifeIconsDisplayed[i] = tempLifeIcon;
-		}
+//		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];
+//		for(int i = 0; i < m_NumberOfLives; i++){
+//			GameObject tempLifeIcon = Instantiate(m_LifeIconPrefab, new Vector2(m_LifeIconPrefab.transform.position.x - i, m_LifeIconPrefab.transform.position.y), m_LifeIconPrefab.transform.rotation) as GameObject;
+//			m_LifeIconsDisplayed[i] = tempLifeIcon;
+//		}
 
 		//setting the game state to playing
 		m_CurrentState = gameState.playing;
@@ -98,16 +96,6 @@ public class GameManager : MonoBehaviour {
 			SetGameOver(m_LoseMessage);
 		}
 	}
-
-	//hit and mitigate damage together yay!
-	public float Hit(float damage, float hp, float armor) {
-		if(damage > armor){
-			damage -= armor;
-		}else{
-			damage = 0;
-		}
-		return hp - damage;
-	}
 	
 	public void UpdateScore(float score){
 		m_TotalKills++;
@@ -121,24 +109,6 @@ public class GameManager : MonoBehaviour {
 		EndGameMenu egm = GetComponent<EndGameMenu> ();
 		if (egm != null) {
 			egm.DisplayGameOverScreen(message);
-		}
-	}
-
-	public void SwitchShieldStatus(bool isShooting){
-		if(isShooting){
-			m_isShooting = isShooting;
-			m_PlayerShip.m_Shield.SetActive(false);
-			BoxCollider2D playerShipCollider = m_PlayerShip.GetComponent<BoxCollider2D>();
-			if(playerShipCollider != null){
-				playerShipCollider.enabled = true;
-			}
-		}else{
-			m_isShooting = isShooting;
-			m_PlayerShip.m_Shield.SetActive(true);
-			BoxCollider2D playerShipCollider = m_PlayerShip.GetComponent<BoxCollider2D>();
-			if(playerShipCollider != null){
-				playerShipCollider.enabled = false;
-			}
 		}
 	}
 

@@ -26,7 +26,7 @@ public class EAIBehaviorPatternTest : EAIBehaviors {
 		float myTime = 0.0f;
 
 		while(myTime < m_RotationTime){
-			foreach(GameObject cRef in m_Controller.m_CannonReferances){
+			foreach(CannonReferences cRef in m_Controller.m_CannonReferances){
 				cRef.transform.RotateAround(cRef.transform.position, cRef.transform.forward, Time.deltaTime*(m_EndRotation - m_StartRotation));
 			}
 			myTime += Time.deltaTime;
@@ -42,7 +42,7 @@ public class EAIBehaviorPatternTest : EAIBehaviors {
 		float myTime = 0.0f;
 		
 		while(myTime < m_RotationTime){
-			foreach(GameObject cRef in m_Controller.m_CannonReferances){
+			foreach(CannonReferences cRef in m_Controller.m_CannonReferances){
 				cRef.transform.RotateAround(cRef.transform.position, cRef.transform.forward, -Time.deltaTime*(m_EndRotation - m_StartRotation));
 			}
 			myTime += Time.deltaTime;
