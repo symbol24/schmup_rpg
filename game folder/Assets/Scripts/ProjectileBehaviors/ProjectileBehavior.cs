@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class ProjectileBehavior : MonoBehaviour {
 	protected ProjectileController m_Controller;

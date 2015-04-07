@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class PowerUpController : MonoBehaviour {
 	public int m_UnlockCannonID = 0;

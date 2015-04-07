@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class PlayerController : BasePlayerController {
 	public GameManager m_GameManager;
@@ -60,6 +62,7 @@ public class PlayerController : BasePlayerController {
 		m_HPBar.SetStartValues (m_maxPlayerHP);
 		m_shieldBar.SetStartValues (m_maxPlayerShield);
 
+		SaveLoad.SavePlayer (this);
 	}
 	
 	void Update () {

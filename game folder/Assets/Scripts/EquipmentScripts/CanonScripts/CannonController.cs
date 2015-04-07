@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class CannonController : EquipmentController {
 	private GameManager m_GameManager;
@@ -11,13 +13,17 @@ public class CannonController : EquipmentController {
 
 	public GameObject[] m_ReferencePointForBullet;
 	public ProjectileController m_ProjectileToShootPrefab;
-	private Stack<ProjectileController> m_StackToUse;
 	private ProjectileController m_BeamInstance;
 	private bool m_FiringBeam = false;
 	public int m_ProjectileEnergyValue = 1;
 	private EnergySystemController m_EnergyBar;
 	public bool m_IsAvailable = false;
 	public string m_cannonTag = "playerCannonRef";
+
+	public override void Init(PlayerController player){
+		base.Init (player);
+		m_myType = equipmentType.cannon;
+	}
 
 	void Start(){
 		m_GameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;

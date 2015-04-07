@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class ShieldController : EquipmentController {
 	public float m_regenerationDelay = 2.0f;
@@ -9,6 +11,7 @@ public class ShieldController : EquipmentController {
 
 	public override void Init(PlayerController player){
 		base.Init (player);
+		m_myType = equipmentType.shield;
 		m_playerController.m_shieldBar.m_shield = this;
 	}
 

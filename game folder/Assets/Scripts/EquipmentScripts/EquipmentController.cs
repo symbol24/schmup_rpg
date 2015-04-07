@@ -1,8 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml; 
+using System.Xml.Serialization; 
 
 public class EquipmentController : MonoBehaviour {
 	public PlayerController m_playerController;
+
+	public enum equipmentType{
+		cannon,
+		chassis,
+		engine,
+		hull,
+		shield
+	}
+
+	public equipmentType m_myType;
 
 	public int m_equipmentLevel = 1;
 	public float m_creditValue = 1.0f;
@@ -12,9 +24,9 @@ public class EquipmentController : MonoBehaviour {
 	//base values
 	public float[] m_baseValues = new float[7];
 //	public float m_baseDamage = 0.0f;
-	//	public float m_baseFireRate = 0.0f;
-	//	public float m_baseHealth = 0.0f;
-	//	public float m_baseArmour = 0.0f;
+//	public float m_baseFireRate = 0.0f;
+//	public float m_baseHealth = 0.0f;
+//	public float m_baseArmour = 0.0f;
 //	public float m_baseSpeed = 0.0f;
 //	public float m_baseEnergy = 0.0f;
 //	public float m_baseShield = 0.0f;
