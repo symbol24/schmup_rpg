@@ -4,10 +4,9 @@ using System.Xml;
 using System.Xml.Serialization; 
 
 public class ShieldController : EquipmentController {
+	public float m_shieldArmor = 0;
 	public float m_regenerationDelay = 2.0f;
 	public float m_timeToFull = 3.0f;
-	public float m_shieldArmor = 0;
-
 
 	public override void Init(PlayerController player){
 		base.Init (player);

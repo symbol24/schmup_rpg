@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Xml; 
-using System.Xml.Serialization; 
+using System.Xml.Serialization;
+using System; 
 
-public class EquipmentController : MonoBehaviour {
+[Serializable]
+public class EquipmentController : MonoBehaviour, ISavable<EquipmentData> {
 	public PlayerController m_playerController;
 
-	public enum equipmentType{
+	public enum equipmentType : int{
 		cannon,
 		chassis,
 		engine,
@@ -45,13 +47,29 @@ public class EquipmentController : MonoBehaviour {
 		m_playerController = player;
 	}
 
-	// Use this for initialization
-	void Start () {
+	public EquipmentData GetSavableObject()
+	{
+		var ret = new EquipmentData{
+			m_baseValues = m_baseValues,
+			m_Owner = m_Owner,
+			m_ValueModifiers = m_ValueModifiers,
+			m_creditValue = m_creditValue,
+			m_damageType = m_damageType,
+			m_equipmentLevel = m_equipmentLevel,
+			m_myType = m_myType,
+		};
+		return ret;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void LoadFrom(EquipmentData data)
+	{
+		m_baseValues = data.m_baseValues;
+		m_Owner = data.m_Owner;
+		m_ValueModifiers = data.m_ValueModifiers;
+		m_creditValue = data.m_creditValue;
+		m_damageType = data.m_damageType;
+		m_equipmentLevel = data.m_equipmentLevel;
+		m_myType = data.m_myType;
 	}
 
 }
