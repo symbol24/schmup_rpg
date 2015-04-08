@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <EquipmentData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <m_myType>chassis</m_myType>
+  <m_prefabName>chassis_test(Clone)</m_prefabName>
   <m_equipmentLevel>1</m_equipmentLevel>
   <m_creditValue>1</m_creditValue>
   <m_damageType>0</m_damageType>
@@ -23,4 +24,8 @@
     <float>0</float>
     <float>0.25</float>
   </m_ValueModifiers>
+  <m_baseWeaponDamage>1</m_baseWeaponDamage>
+  <m_baseWeaponFireRate>0.05</m_baseWeaponFireRate>
+  <m_regenerationDelay>2</m_regenerationDelay>
+  <m_timeToFull>3</m_timeToFull>
 </EquipmentData>

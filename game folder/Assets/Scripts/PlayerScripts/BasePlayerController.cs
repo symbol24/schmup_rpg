@@ -22,7 +22,13 @@ public class BasePlayerController : MonoBehaviour, IBasePlayerController {
 	public ShieldController m_usedShield;
 
 	void Awake(){
-		bpcInstance = this;
+		if (bpcInstance == null) {
+			bpcInstance = this;
+
+			DontDestroyOnLoad (this.gameObject);
+		} else {
+			Destroy(this.gameObject);
+		}
 	}
 
 }
