@@ -43,13 +43,14 @@ public class EquipmentController : MonoBehaviour, ISavable<EquipmentData> {
 //	public float m_shieldModifier = 1.0f;
 //	public float m_healthModifier = 1.0f;
 
-	public virtual void Init(PlayerController player){
+	public virtual void Init(PlayerController player, EquipmentData data){
 		m_playerController = player;
 	}
 
-	public EquipmentData GetSavableObject()
+	public virtual EquipmentData GetSavableObject()
 	{
 		var ret = new EquipmentData{
+			m_prefabName = this.gameObject.name,
 			m_baseValues = m_baseValues,
 			m_Owner = m_Owner,
 			m_ValueModifiers = m_ValueModifiers,
@@ -61,7 +62,7 @@ public class EquipmentController : MonoBehaviour, ISavable<EquipmentData> {
 		return ret;
 	}
 
-	public void LoadFrom(EquipmentData data)
+	public virtual void LoadFrom(EquipmentData data)
 	{
 		m_baseValues = data.m_baseValues;
 		m_Owner = data.m_Owner;

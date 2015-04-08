@@ -13,10 +13,10 @@ public class SaveLoad : MonoBehaviour {
 
 	public static void Save()
 	{
-		var savableObjects = FindObjectsOfType(typeof(ISavable<EquipmentData>)) as ISavable<EquipmentData>[];
-		foreach (var item in savableObjects) {
-			item.GetSavableObject().SaveObject(_FileName);
-		}
+//		var savableObjects = FindObjectsOfType(typeof(ISavable<EquipmentData>)) as ISavable<EquipmentData>[];
+//		foreach (var item in savableObjects) {
+//			item.GetSavableObject().SaveObject(_FileName);
+//		}
 	}
 //	public static PlayerData _playerData;
 //	private static string _FileLocation = "";

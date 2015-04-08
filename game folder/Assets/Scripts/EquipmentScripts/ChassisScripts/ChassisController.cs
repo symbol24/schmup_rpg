@@ -5,8 +5,8 @@ using System.Xml.Serialization;
 
 public class ChassisController : EquipmentController {
 
-	public override void Init(PlayerController player){
-		base.Init (player);
+	public override void Init(PlayerController player, EquipmentData data){
+		base.Init (player, data);
 		m_myType = equipmentType.chassis;
 	}
 }
