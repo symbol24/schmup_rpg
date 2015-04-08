@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Xml; 
-using System.Xml.Serialization; 
+using System.Xml.Serialization;
+using System.IO; 
 
 public static class Extensions
 {
@@ -34,6 +35,14 @@ public static class Extensions
         }
     }
 
+	public static void SaveObject<T>(this T objectToSerialize, string fileName)	{
+		string _FileLocation = Application.dataPath + fileName;
+		var serializer = new XmlSerializer(typeof(T));
+		using(var stream = new FileStream(_FileLocation, FileMode.Create))
+		{
+			serializer.Serialize(stream, objectToSerialize);
+		}
+	}
     
 
 }

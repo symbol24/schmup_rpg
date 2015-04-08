@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml; 
-using System.Xml.Serialization; 
+using System.Xml.Serialization;
+using System;
+using System.Linq; 
 
+[Serializable]
 public class PlayerController : BasePlayerController {
 	public GameManager m_GameManager;
 
@@ -27,8 +30,9 @@ public class PlayerController : BasePlayerController {
 
 	//the cannons!
 	public GameObject cannonPoint;
-	public CannonController[] cannons;
-	public CannonController[] instantiatedCannons;
+
+	[SerializeField] private CannonController[] cannons;
+	private CannonController[] instantiatedCannons;
 	public CannonController currentCannon;
 	public int cannonID;
 	public float cannonSelectionDelay = 0.2f;
@@ -36,7 +40,7 @@ public class PlayerController : BasePlayerController {
 	private int cannonSelectionDirection = 0;
 
 	//equipment prefabs!
-	public EquipmentController[] m_listofEquipmentPrefabs;
+	[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
 	private EquipmentController[] m_instantiatedEquipment;
 		
 	//UI energy, health and shield!
@@ -62,7 +66,10 @@ public class PlayerController : BasePlayerController {
 		m_HPBar.SetStartValues (m_maxPlayerHP);
 		m_shieldBar.SetStartValues (m_maxPlayerShield);
 
-		SaveLoad.SavePlayer (this);
+		//this = SaveLoad.LoadPlayer ();
+		//SaveLoad.SavePlayer (this);
+		m_instantiatedEquipment.First().GetSavableObject().SaveObject ("saveTest.xml");
+		SaveLoad.Save ();
 	}
 	
 	void Update () {

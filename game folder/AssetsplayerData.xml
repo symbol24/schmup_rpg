@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <PlayerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <m_currentCredits>0</m_currentCredits>
-  <m_experiencePoints>10000</m_experiencePoints>
+  <m_currentCredits>111</m_currentCredits>
+  <m_experiencePoints>10</m_experiencePoints>
   <Equipment>
     <EquipmentSaveVersion>
       <name>cannon_Test_type_3</name>
@@ -171,7 +171,7 @@
         <float>0</float>
         <float>0</float>
         <float>0</float>
-        <float>20</float>
+        <float>200</float>
       </BaseValues>
       <Modifiers>
         <float>0</float>

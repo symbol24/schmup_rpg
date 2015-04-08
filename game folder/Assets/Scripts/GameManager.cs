@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 public class GameManager : MonoBehaviour {
 	//the player ship
 	public PlayerController m_PlayerShip;
+	public PlayerController m_newPlayerShip;
 
 	//the player and enemy bullets
 	public int m_BulletAmount;
@@ -64,7 +65,8 @@ public class GameManager : MonoBehaviour {
 
 	
 	void Start(){
-
+//		m_PlayerShip = SaveLoad.LoadPlayer ();
+//		m_PlayerShip.CalculateStats ();
 		//creating the life icons at top of screen
 //		m_LifeIconsDisplayed = new GameObject[m_NumberOfLives];
 //		for(int i = 0; i < m_NumberOfLives; i++){

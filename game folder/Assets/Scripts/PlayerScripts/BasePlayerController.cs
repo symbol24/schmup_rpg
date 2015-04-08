@@ -3,12 +3,25 @@ using System.Collections;
 using System.Xml; 
 using System.Xml.Serialization; 
 
-public class BasePlayerController : MonoBehaviour {
+public class BasePlayerController : MonoBehaviour, IBasePlayerController {
 	//the base values compiled
-	public float[] m_playerBaseStatValues = new float[7];
+	[SerializeField] protected float[] m_playerBaseStatValues = new float[7];
 	
 	//the modifiers compiled
-	public float[] m_playerStatModifiers = new float[7];
+	[SerializeField] protected float[] m_playerStatModifiers = new float[7];
+
+	#region IBasePlayerController implementation
+
+	public float HP {
+		get {
+			return m_maxPlayerHP;
+		}
+		set {
+			m_maxPlayerHP = value;
+		}
+	}
+
+	#endregion
 	
 	//the caalculated info
 	public float m_playerDamage = 1.0f;
