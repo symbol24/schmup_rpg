@@ -12,13 +12,10 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 	public float m_currentCredits = 0.0f;
 	public float m_experiencePoints = 0.0f;
 	public int m_playerLevel = 1;
-	
-	public CannonController m_usedCannon1;
-	public CannonController m_usedCannon2;
-	public ChassisController m_usedChassis;
-	public HullController m_usedHull;
-	public EngineController m_usedEngine;
-	public ShieldController m_usedShield;
+
+	public CannonData[] m_Cannons;
+	public EquipmentData[] m_OtherEquipment;
+	public ShieldData m_Shield;
 
 	void Awake(){
 		if (pcInstance == null || pcInstance is PlayerContainerDummy) {
@@ -32,7 +29,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 }
 
 public interface iPlayerContainer{
-
+	//so lonely
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -42,11 +39,8 @@ public class PlayerContainerDummy: iPlayerContainer{
 	public float m_experiencePoints = 0.0f;
 	public int m_playerLevel = 1;
 	
-	public CannonController m_usedCannon1;
-	public CannonController m_usedCannon2;
-	public ChassisController m_usedChassis;
-	public HullController m_usedHull;
-	public EngineController m_usedEngine;
-	public ShieldController m_usedShield;
+	public CannonData[] m_Cannons;
+	public EquipmentData[] m_OtherEquipment;
+	public ShieldData m_Shield;
 
 }

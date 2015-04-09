@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Xml; 
 using System.Xml.Serialization; 
 
-public class CannonController : EquipmentController {
+public class CannonController : EquipmentController, ISavable<CannonData> {
 	private GameManager m_GameManager;
 
 	public float m_baseWeaponDamage = 1.0f;
@@ -23,28 +23,6 @@ public class CannonController : EquipmentController {
 	public override void Init(PlayerController player, EquipmentData data){
 		base.Init (player, data);
 		m_myType = equipmentType.cannon;
-	}
-
-	public override EquipmentData GetSavableObject(){
-		var ret = new EquipmentData{
-			m_prefabName = this.gameObject.name,
-			m_baseValues = m_baseValues,
-			m_Owner = m_Owner,
-			m_ValueModifiers = m_ValueModifiers,
-			m_creditValue = m_creditValue,
-			m_damageType = m_damageType,
-			m_equipmentLevel = m_equipmentLevel,
-			m_myType = m_myType,
-			m_baseWeaponDamage = m_baseWeaponDamage,
-			m_baseWeaponFireRate = m_baseWeaponFireRate,
-		};
-		return ret;
-	}
-
-	public override void LoadFrom(EquipmentData data){
-		base.LoadFrom (data);
-		m_baseWeaponFireRate = data.m_baseWeaponFireRate;
-		m_baseWeaponDamage = data.m_baseWeaponDamage;
 	}
 
 	void Start(){
@@ -84,4 +62,23 @@ public class CannonController : EquipmentController {
 		oneBullet.m_DamageValue = m_GameManager.m_PlayerShip.m_playerDamage;
 		m_EnergyBar.ChangeEnergyTotal ("substract", m_ProjectileEnergyValue);
 	}
+
+	#region ISavable implementation
+
+	public CannonData GetSavableObject ()
+	{
+		var ret = GetSavableObjectInternal<CannonData> ();
+		ret.m_baseWeaponDamage = m_baseWeaponDamage;
+		ret.m_baseWeaponFireRate = m_baseWeaponFireRate;
+		return ret;
+	}
+
+	public void LoadFrom (CannonData data)
+	{
+		LoadFromInternal (data);
+		m_baseWeaponDamage = data.m_baseWeaponDamage;
+		m_baseWeaponFireRate = data.m_baseWeaponFireRate;
+	}
+
+	#endregion
 }

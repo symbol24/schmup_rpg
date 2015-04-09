@@ -83,8 +83,8 @@ public class PlayerController : MonoBehaviour {
 
 		//this = SaveLoad.LoadPlayer ();
 		//SaveLoad.SavePlayer (this);
-		m_instantiatedEquipment.First().GetSavableObject().SaveObject ("saveTest.xml");
-		SaveLoad.Save ();
+		//m_instantiatedEquipment.First().GetSavableObject().SaveObject ("saveTest.xml");
+		//SaveLoad.Save ();
 	}
 	
 	void Update () {

@@ -15,11 +15,5 @@ public class EquipmentData {
 	public float[] m_baseValues = new float[7];
 	public float[] m_ValueModifiers = new float[7];
 	
-	//for cannon
-	public float m_baseWeaponDamage = 1.0f;
-	public float m_baseWeaponFireRate = 0.05F;
-	
-	//for shield
-	public float m_regenerationDelay = 2.0f;
-	public float m_timeToFull = 3.0f;
+
 }

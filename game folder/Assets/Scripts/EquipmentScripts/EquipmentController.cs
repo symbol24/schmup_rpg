@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System; 
 
 [Serializable]
-public class EquipmentController : MonoBehaviour, ISavable<EquipmentData> {
+public class EquipmentController : MonoBehaviour {
 	public PlayerController m_playerController;
 
 	public enum equipmentType : int{
@@ -47,22 +47,22 @@ public class EquipmentController : MonoBehaviour, ISavable<EquipmentData> {
 		m_playerController = player;
 	}
 
-	public virtual EquipmentData GetSavableObject()
+	protected virtual T GetSavableObjectInternal<T>() where T : EquipmentData
 	{
-		var ret = new EquipmentData{
-			m_prefabName = this.gameObject.name,
-			m_baseValues = m_baseValues,
-			m_Owner = m_Owner,
-			m_ValueModifiers = m_ValueModifiers,
-			m_creditValue = m_creditValue,
-			m_damageType = m_damageType,
-			m_equipmentLevel = m_equipmentLevel,
-			m_myType = m_myType,
-		};
+		var ret = Activator.CreateInstance<T> ();
+		ret.m_prefabName = this.gameObject.name;
+		ret.m_baseValues = m_baseValues;
+		ret.m_Owner = m_Owner;
+		ret.m_ValueModifiers = m_ValueModifiers;
+		ret.m_creditValue = m_creditValue;
+		ret.m_damageType = m_damageType;
+		ret.m_equipmentLevel = m_equipmentLevel;
+		ret.m_myType = m_myType;
+
 		return ret;
 	}
 
-	public virtual void LoadFrom(EquipmentData data)
+	protected virtual void LoadFromInternal(EquipmentData data)
 	{
 		m_baseValues = data.m_baseValues;
 		m_Owner = data.m_Owner;
