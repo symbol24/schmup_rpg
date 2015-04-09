@@ -167,13 +167,13 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public void ActivateCannon(int newCannonID){
-		instantiatedCannons [newCannonID].m_IsAvailable = true;
-		cannonID = newCannonID;
-		currentCannon.gameObject.SetActive(false);
-		currentCannon = instantiatedCannons[cannonID];
-		currentCannon.gameObject.SetActive(true);
-	}
+//	public void ActivateCannon(int newCannonID){
+//		instantiatedCannons [newCannonID].m_IsAvailable = true;
+//		cannonID = newCannonID;
+//		currentCannon.gameObject.SetActive(false);
+//		currentCannon = instantiatedCannons[cannonID];
+//		currentCannon.gameObject.SetActive(true);
+//	}
 
 	private void SetupCannons(){
 		//instantiating the first cannon

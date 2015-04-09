@@ -24,7 +24,7 @@ public class PowerUpController : MonoBehaviour {
 		ShieldController shield = col.gameObject.GetComponent<ShieldController>();
 		if(player != null || shield != null){
 			player = GameObject.FindObjectOfType(typeof(PlayerController)) as PlayerController;
-			player.ActivateCannon(m_UnlockCannonID);
+			//player.ActivateCannon(m_UnlockCannonID);
 		}
 		Destroy (gameObject);
 	}

@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour {
 //			m_LifeIconsDisplayed[i] = tempLifeIcon;
 //		}
 
+		//check if PlayerContainer and not Dummy
+		if(PlayerContainer.instance is PlayerContainer){
+			//setup instances of equipment
+		}
+
 		//setting the game state to playing
 		m_CurrentState = gameState.playing;
 
