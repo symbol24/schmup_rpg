@@ -1,15 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
-public class DummyCollider : MonoBehaviour {
-
+[RequireComponent(typeof(Collider2D))]
+public class DummyCollider : MonoBehaviour
+{
+    private Collider2D theCollider;
+    public event EventHandler<Collider2DEventArgs> ColliderEntered;
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+	    theCollider = GetComponent<Collider2D>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    private void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (ColliderEntered != null) ColliderEntered(this, new Collider2DEventArgs {Collider = coll});
+    }
+
 }
