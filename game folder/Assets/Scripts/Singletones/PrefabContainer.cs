@@ -2,8 +2,10 @@
 using System.Collections;
 
 public class PrefabContainer : MonoBehaviour {
+
 	[SerializeField] private EquipmentController[] m_ListofEquipments;
 	[SerializeField] private ProjectileController[] m_ListofBullets;
+	[SerializeField] private PlayerController m_playerControllerPrefab;
 
 	public EquipmentController GetEquipmentPerName(string name){
 		foreach (EquipmentController e in m_ListofEquipments) {
@@ -22,4 +24,9 @@ public class PrefabContainer : MonoBehaviour {
 		print ("Bullet prefab " + name + " not found");
 		return null;
 	}
+
+	public PlayerController GetPlayerController(){
+		return m_playerControllerPrefab;
+	}
 }
+

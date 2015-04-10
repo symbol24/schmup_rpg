@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
 	//the cannons!
 	public GameObject cannonPoint;
 
-	[SerializeField] private CannonController[] cannons;
+	//[SerializeField] private CannonController[] cannons;
 	private CannonController[] instantiatedCannons;
 	public CannonController currentCannon;
 	public int cannonID;
@@ -55,8 +55,10 @@ public class PlayerController : MonoBehaviour {
 	private int cannonSelectionDirection = 0;
 
 	//equipment prefabs!
-	[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
+	//[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
 	private EquipmentController[] m_instantiatedEquipment;
+
+	private ShieldController m_instantiatedShield;
 		
 	//UI energy, health and shield!
 	public EnergySystemController m_energyBar;
@@ -67,24 +69,31 @@ public class PlayerController : MonoBehaviour {
 	public string target;
 
 	void Start(){
-		startingPosition = transform.position;
-		anim = GetComponent<Animator>();
-		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
-		
-		m_myCol = GetComponent<BoxCollider2D> () as BoxCollider2D;
 
-		//setup equipment
-		SetupTempEquipment (m_listofEquipmentPrefabs);
-		SetupCannons ();
-		CalculateStats ();
-		m_energyBar.SetStartValues (m_maxPlayerEnergy);
-		m_HPBar.SetStartValues (m_maxPlayerHP);
-		m_shieldBar.SetStartValues (m_maxPlayerShield);
 
 		//this = SaveLoad.LoadPlayer ();
 		//SaveLoad.SavePlayer (this);
 		//m_instantiatedEquipment.First().GetSavableObject().SaveObject ("saveTest.xml");
 		//SaveLoad.Save ();
+	}
+
+	public void Init(){
+		startingPosition = transform.position;
+		anim = GetComponent<Animator>();
+		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		
+		m_myCol = GetComponent<BoxCollider2D> () as BoxCollider2D;
+		
+		//setup equipment
+		SetupEquipment ();
+		SetupCannons ();
+		CalculateStats ();
+		m_energyBar = FindObjectOfType<EnergySystemController> ();
+		m_HPBar = FindObjectOfType<HPSystemController> ();
+		m_shieldBar = FindObjectOfType<ShieldHPSystemController> ();
+		m_energyBar.SetStartValues (m_maxPlayerEnergy);
+		m_HPBar.SetStartValues (m_maxPlayerHP);
+		m_shieldBar.SetStartValues (m_maxPlayerShield);
 	}
 	
 	void Update () {
@@ -128,6 +137,19 @@ public class PlayerController : MonoBehaviour {
 			transform.position = new Vector3 (clampedLimitX, clampedLimitY, 0.0f);
 		}
 	}
+
+	public void SetCannons(CannonController[] newCannons){
+		instantiatedCannons = newCannons;
+	}
+
+	public void SetOtherEquipmenet(EquipmentController[] newEquip){
+		m_instantiatedEquipment = newEquip;
+	}
+
+	public void SetShield(ShieldController newShield){
+		m_instantiatedShield = newShield;
+		m_shieldBar = FindObjectOfType<ShieldHPSystemController> ();
+	}	
 
 	//checking health to change amount of shields and changing amount of lives if needed
 	public void CheckHealth(){
@@ -176,11 +198,10 @@ public class PlayerController : MonoBehaviour {
 //	}
 
 	private void SetupCannons(){
-		//instantiating the first cannon
-		instantiatedCannons = new CannonController[cannons.Length];
-		for (int i = 0; i < cannons.Length; i++) {
-			instantiatedCannons[i] = Instantiate (cannons[i], cannonPoint.transform.position, cannonPoint.transform.rotation) as CannonController;
+		//set the first cannon
+		for (int i = 0; i < instantiatedCannons.Length; i++) {
 			instantiatedCannons[i].transform.parent = transform;
+			instantiatedCannons[i].Init(this);
 			if(i == cannonID) {
 				currentCannon = instantiatedCannons[i];
 				currentCannon.m_IsAvailable = true;
@@ -192,30 +213,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	private void SetupTempEquipment(EquipmentController[] listofEquip){
-		m_instantiatedEquipment = new EquipmentController[listofEquip.Length];
-		for(int i = 0; i < listofEquip.Length; i++){
-			m_instantiatedEquipment[i] = Instantiate(listofEquip[i], this.transform.position, this.transform.rotation) as EquipmentController;
-			EquipmentData tempData = new EquipmentData();
-			m_instantiatedEquipment[i].Init(this, tempData);
+	private void SetupEquipment(){
+		for(int i = 0; i < m_instantiatedEquipment.Length; i++){
 			m_instantiatedEquipment[i].transform.parent = transform;
 			UpdateValuesModifiers(m_instantiatedEquipment[i]);
+			m_instantiatedEquipment[i].Init(this);
 		}
 	}
 
 	public void UpdateCollider(bool status){
 		m_myCol.enabled = status;
-	}
-
-	void OnTriggerEnter2D(Collider2D coll) {
-		
-		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
-		if (tempBullet!= null && tempBullet.m_Owner == target) {
-			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
-			m_HPBar.SetCurrentValue(DamageCalculators.Hit(tempBullet.m_DamageValue, m_HPBar.GetCurrentValue(), m_playerArmor));
-			CheckHealth();
-			tempBullet.DestroyObjectAndBehaviors();
-		}
 	}
 
 	public void UpdateValuesModifiers(EquipmentController thisEquipment){
@@ -255,5 +262,22 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		CalculateStats ();
+	}
+
+	public void SetValuesandModifiers(float[] values, float[] modifiers){
+		m_playerBaseStatValues = values;
+		m_playerStatModifiers = values;
+	}
+	
+	
+	void OnTriggerEnter2D(Collider2D coll) {
+		
+		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
+		if (tempBullet!= null && tempBullet.m_Owner == target) {
+			Instantiate (pinkExplosionPrefab, tempBullet.transform.position, tempBullet.transform.rotation);
+			m_HPBar.SetCurrentValue(DamageCalculators.Hit(tempBullet.m_DamageValue, m_HPBar.GetCurrentValue(), m_playerArmor));
+			CheckHealth();
+			tempBullet.DestroyObjectAndBehaviors();
+		}
 	}
 }

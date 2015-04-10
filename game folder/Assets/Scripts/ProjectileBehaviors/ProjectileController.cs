@@ -22,6 +22,7 @@ public class ProjectileController : MonoBehaviour {
 		for(int i = 0; i < m_ProjectileBehaviorPrefabs.Length; i++){
 			m_ProjectileBehaviorInstances[i] = Instantiate(m_ProjectileBehaviorPrefabs[i], transform.position, transform.rotation) as ProjectileBehavior;
 			m_ProjectileBehaviorInstances[i].Init(this);
+			m_ProjectileBehaviorInstances[i].transform.SetParent(transform);
 		}
 	}
 
@@ -34,7 +35,7 @@ public class ProjectileController : MonoBehaviour {
 			if(m_Type != "beam"){
 				//putting the bullets back into their respective STACK
 				if(gameObject.activeInHierarchy && !gameObject.GetComponent<Renderer>().isVisible){
-					Destroy(this);
+					Destroy(this.gameObject);
 				}
 			}
 		}
@@ -44,9 +45,9 @@ public class ProjectileController : MonoBehaviour {
 		gameObject.SetActive (false);
 		foreach (ProjectileBehavior behavior in m_ProjectileBehaviorInstances) {
 			if(behavior != null){
-				Destroy(behavior);
+				Destroy(behavior.gameObject);
 			}
 		}
-		Destroy (gameObject);
+		Destroy (this.gameObject);
 	}
 }

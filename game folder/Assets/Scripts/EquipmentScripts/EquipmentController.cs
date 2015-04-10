@@ -43,7 +43,8 @@ public class EquipmentController : MonoBehaviour {
 //	public float m_shieldModifier = 1.0f;
 //	public float m_healthModifier = 1.0f;
 
-	public virtual void Init(PlayerController player, EquipmentData data){
+
+	public virtual void Init(PlayerController player){
 		m_playerController = player;
 	}
 
@@ -62,7 +63,7 @@ public class EquipmentController : MonoBehaviour {
 		return ret;
 	}
 
-	protected virtual void LoadFromInternal(EquipmentData data)
+	public virtual void LoadFromInternal(EquipmentData data)
 	{
 		m_baseValues = data.m_baseValues;
 		m_Owner = data.m_Owner;

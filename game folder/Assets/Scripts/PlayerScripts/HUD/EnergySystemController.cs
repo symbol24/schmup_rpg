@@ -6,7 +6,11 @@ using System.Xml.Serialization;
 public class EnergySystemController : BaseBarSystemController {
 	public override void Start(){
 		base.Start ();
-		m_maxValue = m_player.m_maxPlayerEnergy;
+	}
+
+	public override void SetPlayerShip(PlayerController playerShip){
+		base.SetPlayerShip (playerShip);
+		m_maxValue = playerShip.m_maxPlayerEnergy;
 		m_currentValue = m_maxValue;
 	}
 

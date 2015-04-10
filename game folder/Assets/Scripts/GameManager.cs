@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 public class GameManager : MonoBehaviour {
 	//the player ship
 	public PlayerController m_PlayerShip;
-	public PlayerController m_newPlayerShip;
 
 	//the player and enemy bullets
 	public int m_BulletAmount;
@@ -57,8 +56,8 @@ public class GameManager : MonoBehaviour {
 	//for firing status and shield management
 	public bool m_isShooting = false;
 
-	//for the powerups!
-	public PowerUpController m_PowerUpPrefab;
+	//for the powerups! no longer used
+	//public PowerUpController m_PowerUpPrefab;
 
 	//next level!
 	public string m_NextLevel = "level1";
@@ -73,12 +72,6 @@ public class GameManager : MonoBehaviour {
 //			GameObject tempLifeIcon = Instantiate(m_LifeIconPrefab, new Vector2(m_LifeIconPrefab.transform.position.x - i, m_LifeIconPrefab.transform.position.y), m_LifeIconPrefab.transform.rotation) as GameObject;
 //			m_LifeIconsDisplayed[i] = tempLifeIcon;
 //		}
-
-		//check if PlayerContainer and not Dummy
-		if(PlayerContainer.instance is PlayerContainer){
-			//setup instances of equipment
-		}
-
 		//setting the game state to playing
 		m_CurrentState = gameState.playing;
 
@@ -93,6 +86,10 @@ public class GameManager : MonoBehaviour {
 		//get both controller and keyboard axis's
 		m_VertValue = Input.GetAxis("Vertical");
 		m_HorValue = Input.GetAxis("Horizontal");
+	}
+
+	public void SetPlayerShip(PlayerController playerShip){
+		m_PlayerShip = playerShip;
 	}
 
 	//reduce the amount of lives, remove a visible life icon and trigger endgame

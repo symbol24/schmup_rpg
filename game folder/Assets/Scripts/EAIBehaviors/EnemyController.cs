@@ -35,6 +35,7 @@ public class EnemyController : MonoBehaviour {
 		for(int i = 0; i < m_BehaviorsPrefabs.Length; i++){
 			m_BehaviorsInstances[i] = Instantiate(m_BehaviorsPrefabs[i], transform.position, transform.rotation) as EAIBehaviors;
 			m_BehaviorsInstances[i].Init(this);
+			m_BehaviorsInstances[i].transform.SetParent(transform);
 		}
 
 		foreach (EAIBehaviors behavior in m_BehaviorsInstances) {
@@ -74,10 +75,10 @@ public class EnemyController : MonoBehaviour {
 		m_GameMgr.UpdateScore(score);
 		foreach (EAIBehaviors behavior in m_BehaviorsInstances) {
 			if(behavior != null){
-				Destroy(behavior);
+				Destroy(behavior.gameObject);
 			}
 		}
-		Destroy (gameObject);
+		Destroy (this.gameObject);
 	}
 
 	

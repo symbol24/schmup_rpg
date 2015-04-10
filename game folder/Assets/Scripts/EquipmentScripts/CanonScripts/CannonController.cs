@@ -13,16 +13,13 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 
 	public GameObject[] m_ReferencePointForBullet;
 	public ProjectileController m_ProjectileToShootPrefab;
-	private ProjectileController m_BeamInstance;
-	private bool m_FiringBeam = false;
 	public int m_ProjectileEnergyValue = 1;
 	private EnergySystemController m_EnergyBar;
 	public bool m_IsAvailable = false;
 	public string m_cannonTag = "playerCannonRef";
 
-	public override void Init(PlayerController player, EquipmentData data){
-		base.Init (player, data);
-		m_myType = equipmentType.cannon;
+	public override void Init(PlayerController player){
+		base.Init (player);
 	}
 
 	void Start(){
@@ -36,21 +33,10 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing){
 			if (((Input.GetKey(KeyCode.Space) || Input.GetKey(m_GameManager.m_ShootButton))) && m_EnergyBar.GetCurrentValue() >= m_ProjectileEnergyValue){
-				if(m_ProjectileToShootPrefab.m_Type == "beam"){
-					if(!m_FiringBeam){
-						m_BeamInstance = Instantiate(m_ProjectileToShootPrefab, transform.position, transform.rotation) as ProjectileController;
-						m_BeamInstance.gameObject.SetActive(true);
-						m_FiringBeam = true;
-					}else{
-						m_BeamInstance.gameObject.SetActive(true);
-
-					}
-				}else{
-					if(Time.time > m_NextFire){
+				if(Time.time > m_NextFire){
 					m_NextFire = Time.time + m_GameManager.m_PlayerShip.m_playerFireRate;
 					foreach(GameObject refer in m_ReferencePointForBullet){
-							ShotABullet(refer, m_ProjectileToShootPrefab);
-						}
+						ShotABullet(refer, m_ProjectileToShootPrefab);
 					}
 				}
 			}
