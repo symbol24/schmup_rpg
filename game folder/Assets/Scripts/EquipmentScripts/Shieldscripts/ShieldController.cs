@@ -8,12 +8,11 @@ public class ShieldController : EquipmentController, ISavable<ShieldData> {
 	public float m_regenerationDelay = 2.0f;
 	public float m_timeToFull = 3.0f;
 
-	public Collider2D collider;
+	public Collider2D m_collider;
 
-	public override void Init(PlayerController player, EquipmentData data){
-		base.Init (player,data);
-		m_myType = equipmentType.shield;
-		m_playerController.m_shieldBar.m_shield = this;
+	public override void Init(PlayerController player){
+		base.Init (player);
+		player.m_shieldBar.m_shield = this;
 	}
 
 

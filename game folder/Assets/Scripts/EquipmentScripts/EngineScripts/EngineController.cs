@@ -4,9 +4,8 @@ using System.Xml;
 using System.Xml.Serialization; 
 
 public class EngineController : EquipmentController, ISavable<EquipmentData> {
-	public override void Init(PlayerController player, EquipmentData data){
-		base.Init (player, data);
-		m_myType = equipmentType.engine;
+	public override void Init(PlayerController player){
+		base.Init (player);
 	}
 
 	#region ISavable implementation

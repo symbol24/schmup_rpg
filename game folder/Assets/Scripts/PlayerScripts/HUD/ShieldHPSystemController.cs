@@ -9,8 +9,6 @@ public class ShieldHPSystemController : BaseBarSystemController {
 
 	public override void Start(){
 		base.Start ();
-		m_maxValue = m_player.m_maxPlayerShield;
-		m_currentValue = m_maxValue;
 	}
 
 	public override void Update(){
@@ -22,6 +20,18 @@ public class ShieldHPSystemController : BaseBarSystemController {
 		if (!m_isRegenarating && m_shield.m_shieldArmor > 0) {
 			m_shield.m_shieldArmor = 0; //reset armor
 		}
+	}
+
+	public override void SetPlayerShip(PlayerController playerShip){
+		base.SetPlayerShip (playerShip);
+		m_maxValue = playerShip.m_maxPlayerShield;
+		m_currentValue = m_maxValue;
+
+	}
+
+	public virtual void SetShieldController(ShieldController passing)
+	{
+		m_shield = passing;
 	}
 
 	public void CheckShieldHealth(){
