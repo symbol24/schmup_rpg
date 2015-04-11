@@ -99,14 +99,18 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing && !isDead){
 
+			if(m_GameManager.m_firebutton > 0){
+				currentCannon.FireForEachReference(m_playerDamage, m_playerFireRate);
+			}
+
 			//cannon selection
 			cannonSelectionDirection = -1;
-			if(Input.GetKeyDown(KeyCode.C) || Input.GetKey(m_GameManager.m_CannonSelectionButtons[0])){
+			if(m_GameManager.m_switchButtons[0] > 0){
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 0;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
 				}
-			}else if(Input.GetKeyDown(KeyCode.V) || Input.GetKey(m_GameManager.m_CannonSelectionButtons[1])){
+			}else if(m_GameManager.m_switchButtons[1] > 0){
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 1;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
@@ -155,7 +159,7 @@ public class PlayerController : MonoBehaviour {
 	public void CheckHealth(){
 		if(m_HPBar.GetCurrentValue() <= 0){
 			m_HPBar.SetCurrentValue(m_maxPlayerHP);
-			StartCoroutine(m_GameManager.DeathExplosion(m_HPBar.GetCurrentValue()));
+			StartCoroutine(m_GameManager.DeathExplosion(this, m_HPBar.GetCurrentValue()));
 		}
 	}
 

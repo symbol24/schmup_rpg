@@ -41,13 +41,13 @@ public class EntitiesCreator : MonoBehaviour {
 		return stars;
 	}
 	
-	public static Stack<ProjectileController> GetStackToUpdate(ProjectileController currentBullet, GameManager gameManager){
-		Stack<ProjectileController> StackToReturn = new Stack<ProjectileController>();
-		foreach(Stack<ProjectileController> StackToCheck in gameManager.m_ProjectileStacks){
-			if(currentBullet.m_Owner == StackToCheck.Peek().m_Owner && currentBullet.m_Type == StackToCheck.Peek().m_Type){
-				StackToReturn = StackToCheck;
-			}
-		}
-		return StackToReturn;
-	}
+//	public static Stack<ProjectileController> GetStackToUpdate(ProjectileController currentBullet, GameManager gameManager){
+//		Stack<ProjectileController> StackToReturn = new Stack<ProjectileController>();
+//		foreach(Stack<ProjectileController> StackToCheck in gameManager.m_ProjectileStacks){
+//			if(currentBullet.m_Owner == StackToCheck.Peek().m_Owner && currentBullet.m_Type == StackToCheck.Peek().m_Type){
+//				StackToReturn = StackToCheck;
+//			}
+//		}
+//		return StackToReturn;
+//	}
 }

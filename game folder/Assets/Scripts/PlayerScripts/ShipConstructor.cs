@@ -16,7 +16,7 @@ public class ShipConstructor : MonoBehaviour {
 		m_prefabs = FindObjectOfType(typeof(PrefabContainer)) as PrefabContainer;
 		m_manager = FindObjectOfType (typeof(GameManager)) as GameManager;
 		m_playerController = SetPlayerController ();
-		m_manager.SetPlayerShip (m_playerController);
+//		m_manager.SetPlayerShip (m_playerController);
 		m_playerController.m_energyBar.SetPlayerShip (m_playerController);
 		m_playerController.m_HPBar.SetPlayerShip (m_playerController);
 		m_playerController.m_shieldBar.SetPlayerShip (m_playerController);

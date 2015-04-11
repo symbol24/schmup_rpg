@@ -72,7 +72,7 @@ public class EnemyController : MonoBehaviour {
 
 	public void DestroyObjectAndBehaviors(float score){
 		gameObject.SetActive (false);
-		m_GameMgr.UpdateScore(score);
+//		m_GameMgr.UpdateScore(score);
 		foreach (EAIBehaviors behavior in m_BehaviorsInstances) {
 			if(behavior != null){
 				Destroy(behavior.gameObject);
