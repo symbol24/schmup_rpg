@@ -13,8 +13,12 @@ public interface IHPController
     /// </summary>
     /// <param name="playerStats"></param>
     /// <param name="shieldController"></param>
-    /// <param name="chassiCollider"></param>
-    void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassiCollider);
+    /// <param name="chassisCollider"></param>
+    void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassisCollider);
+    /// <summary>
+    /// PlayerStats received in the init
+    /// </summary>
+    IPlayerStats PlayerStats { get; }
     /// <summary>
     /// Hit Method, It can trigger Died or Values Changed Event
     /// </summary>

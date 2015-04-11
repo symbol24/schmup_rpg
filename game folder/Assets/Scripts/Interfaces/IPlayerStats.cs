@@ -10,4 +10,8 @@ public interface IPlayerStats
     float MouvementSpeed { get; }
     float MaxEnergy { get; }
     float MaxShield { get; }
+    /// <summary>
+    /// How long before the player recharges it shields
+    /// </summary>
+    float ShieldRechargeTime { get; }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using System.Collections;
 
@@ -9,7 +10,7 @@ public class BasicHPController : MonoBehaviour , IHPController
     private IPlayerStats _playerStats;
     private IShieldController _shieldController;
     private DummyCollider _shieldCollider { get { return _shieldController.Collider; } }
-    private DummyCollider _chassiCollider;
+    private DummyCollider _chassisCollider;
     public TargetEnum[] _targetsToTakeDamageFrom = {TargetEnum.Anything, TargetEnum.Player,};
     public bool IsHPBelowZero { get; private set; }
     public float CurrentHP { get; private set; }
@@ -23,16 +24,20 @@ public class BasicHPController : MonoBehaviour , IHPController
             _shieldCollider.theCollider.enabled = _currentShield != 0f;
         }
     }
+    private float currentTimeToRechargeShield;
+    public bool showDebugCalculations = false;
+    public bool mitigateShieldOverflow = false;
+    public IPlayerStats PlayerStats { get { return _playerStats; } }
 
     //Public Methods
-    public void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassiCollider)
+    public void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassisCollider)
     {
         _playerStats = playerStats;
         _shieldController = shieldController;
-        _chassiCollider = chassiCollider;
+        _chassisCollider = chassisCollider;
         CurrentHP = _playerStats.MaxHP;
         CurrentShield = _playerStats.MaxShield;
-        chassiCollider.ColliderEntered += chassiCollider_ColliderEntered;
+        chassisCollider.ColliderEntered += chassiCollider_ColliderEntered;
         _shieldCollider.ColliderEntered += ShieldColliderOnColliderEntered;
     }
     public bool TryHit(IProjectileController projectile)
@@ -41,20 +46,29 @@ public class BasicHPController : MonoBehaviour , IHPController
         if (_targetsToTakeDamageFrom.Any(c => c == projectile.Target))
         {
             ret = true;
-            if (projectile.EnergyValue > 0)
+            ResetRechargeTimer();
+            if (projectile.Damage != 0f && projectile.EnergyValue != 0f)
             {
-                HandleElementalDamage(projectile);
+                if (projectile.EnergyValue > 0)
+                {
+                    HandleElementalDamage(projectile);
+                }
+                HandleRegularDamage(projectile);
+                projectile.DestroyObjectAndBehaviors();
+                if (showDebugCalculations)
+                {
+                    Debug.Log(string.Format("After being hit, CurrentShields: {0}, CurrentHP is: {1}", CurrentShield, CurrentHP));
+                }
+                if (CurrentHP <= 0)
+                {
+                    if (Died != null) Died(this, new DeathReasonEventArgs {});
+                }
+                else if (ValuesChanged != null) ValuesChanged(this, EventArgs.Empty);
             }
-            HandleRegularDamage(projectile);
-            if (CurrentHP <= 0)
-            {
-                if (Died != null) Died(this, new DeathReasonEventArgs {});
-            }
-            else if (ValuesChanged != null) ValuesChanged(this, EventArgs.Empty);
         }
         return ret;
     }
-    
+
     //Events
     public event EventHandler<DeathReasonEventArgs> Died;
     public event EventHandler ValuesChanged;
@@ -75,31 +89,72 @@ public class BasicHPController : MonoBehaviour , IHPController
         }
     }
 
+    //UpdateMethod
+    void Update()
+    {
+        if (currentTimeToRechargeShield >= _playerStats.ShieldRechargeTime && 
+            CurrentShield <= _playerStats.MaxShield && _currentRechargingRoutine != null)
+        {
+            _currentRechargingRoutine = StartRecharging();
+            StartCoroutine(_currentRechargingRoutine);
+        }
+        currentTimeToRechargeShield += Time.deltaTime;
+    }
+
     //Helpers
     private void HandleRegularDamage(IProjectileController projectile)
     {
         if (projectile.Damage >= CurrentShield)
         {
+
             var residue = projectile.Damage - CurrentShield;
             CurrentShield = 0;
             CurrentHP -= residue;
+            if (showDebugCalculations)
+            {
+                Debug.Log(string.Format("Shield Overflow for normal damage. Residue for HP:{0}", residue));
+            }
         }
-        else CurrentHP -= projectile.Damage;
+        else
+        {
+            if (showDebugCalculations)
+                Debug.Log(string.Format("Applying all damage to shield. Damage{0}", projectile.Damage));
+            CurrentHP -= projectile.Damage;
+        }
     }
     private void HandleElementalDamage(IProjectileController projectile)
     {
         var elementalNetDamage = GetElementalDamage(projectile);
         if (elementalNetDamage > CurrentShield)
         {
+            if (showDebugCalculations) Debug.Log("Detected shield damage overflow");
             var residue = elementalNetDamage - CurrentShield;
-            var nonElementalResidue = (residue * (projectile.BonusAtt + _shieldController.BonusAtt)) /
+            var nonElementalResidue = (residue*(projectile.BonusAtt + _shieldController.BonusAtt))/
                                       elementalNetDamage;
             CurrentShield = 0;
-            CurrentHP -= CurrentHP;
+            if (showDebugCalculations)
+            {
+                Debug.Log(
+                    string.Format(
+                        "Elemental residue from elemental damage: {0}{1}Elemental corrected to nonElemental: {2}",
+                        residue,
+                        Environment.NewLine, nonElementalResidue));
+            }
+            if (!mitigateShieldOverflow)
+            {
+                if (showDebugCalculations) Debug.Log("Applying damageToHP");
+                CurrentHP -= residue;
+            }
+        }
+        else if (CurrentShield >= 0)
+        {
+            if (showDebugCalculations) Debug.Log("Detected enough shield for elemental damage");
+            CurrentShield -= elementalNetDamage;
         }
         else
         {
-            CurrentShield -= elementalNetDamage;
+            if(showDebugCalculations) Debug.Log("Detected no shield, damage going to HP");
+            CurrentHP -= projectile.EnergyValue;
         }
     }
     private float GetElementalDamage(IProjectileController projectile)
@@ -115,7 +170,37 @@ public class BasicHPController : MonoBehaviour , IHPController
             (projectile.DamageType == EnergyType.proton && _shieldController.EnergyType == EnergyType.plasma))
             bonusAtt = -bonusAtt;
         ret = bonusAtt * projectile.EnergyValue;
+        if (showDebugCalculations)
+        {
+            Debug.Log(
+                string.Format(
+                    "ProjectileType is:{3}{4}ShieldType is:{5}Bonus% for Elemental is: {0}{1}Projectile Energy Value is:{2}",
+                    bonusAtt, Environment.NewLine, ret, Enum.GetName(typeof (EnergyType), projectile.DamageType),
+                    Environment.NewLine, Enum.GetName(typeof (EnergyType), _shieldController)));
+        }
         return ret;
+    }
+    private void ResetRechargeTimer()
+    {
+        currentTimeToRechargeShield = 0f;
+        if (_currentRechargingRoutine != null)
+        {
+            StopCoroutine(_currentRechargingRoutine);
+            _currentRechargingRoutine = null;
+        }
+    }
+    private IEnumerator _currentRechargingRoutine;
+    private IEnumerator StartRecharging()
+    {
+        while (CurrentShield < _playerStats.MaxShield)
+        {
+            var increment = _playerStats.MaxShield/(_playerStats.ShieldRechargeTime/Time.deltaTime);
+            CurrentShield = increment + CurrentShield >= _playerStats.MaxShield
+                ? _playerStats.MaxShield
+                : increment + CurrentShield;
+            yield return null;
+        }
+        _currentRechargingRoutine = null;
     }
 
 }
