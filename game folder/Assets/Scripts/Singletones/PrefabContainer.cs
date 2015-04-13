@@ -6,6 +6,7 @@ public class PrefabContainer : MonoBehaviour {
 	[SerializeField] private EquipmentController[] m_ListofEquipments;
 	[SerializeField] private ProjectileController[] m_ListofBullets;
 	[SerializeField] private PlayerController m_playerControllerPrefab;
+	[SerializeField] private EnemyController[] m_listofEnemies;
 
 	public EquipmentController GetEquipmentPerName(string name){
 		foreach (EquipmentController e in m_ListofEquipments) {
@@ -27,6 +28,15 @@ public class PrefabContainer : MonoBehaviour {
 
 	public PlayerController GetPlayerController(){
 		return m_playerControllerPrefab;
+	}
+
+	public EnemyController GetEnemyPerName(string name){
+		foreach (EnemyController e in m_listofEnemies) {
+			if(e.gameObject.name == name)
+				return e;
+		}
+		print ("Enemy prefab " + name + " not found");
+		return null;
 	}
 }
 
