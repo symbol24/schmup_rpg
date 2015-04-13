@@ -17,10 +17,10 @@ public class ShipConstructor : MonoBehaviour {
 		m_manager = FindObjectOfType (typeof(GameManager)) as GameManager;
 		m_playerController = SetPlayerController ();
 //		m_manager.SetPlayerShip (m_playerController);
-		m_playerController.m_energyBar.SetPlayerShip (m_playerController);
-		m_playerController.m_HPBar.SetPlayerShip (m_playerController);
-		m_playerController.m_shieldBar.SetPlayerShip (m_playerController);
-		m_playerController.m_shieldBar.SetShieldController (m_shieldController);
+		//m_playerController.m_energyBar.SetPlayerShip (m_playerController);
+		//m_playerController.m_HPBar.SetPlayerShip (m_playerController);
+		//m_playerController.m_shieldBar.SetPlayerShip (m_playerController);
+		//m_playerController.m_shieldBar.SetShieldController (m_shieldController);
 	}
 	
 	// Update is called once per frame

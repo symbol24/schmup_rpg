@@ -14,7 +14,7 @@ public interface IHPController
     /// <param name="playerStats"></param>
     /// <param name="shieldController"></param>
     /// <param name="chassisCollider"></param>
-    void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassisCollider);
+    void Init(IPlayerStats playerStats, IShieldController shieldController, IChassisController chassisController);
     /// <summary>
     /// PlayerStats received in the init
     /// </summary>
@@ -38,5 +38,8 @@ public interface IHPController
     /// Event fired when player regenerates/loses HP or Shield
     /// </summary>
     event EventHandler ValuesChanged;
-
+    /// <summary>
+    /// This method will get everything up and running again. Useful when the player dies.
+    /// </summary>
+    void Reset();
 }

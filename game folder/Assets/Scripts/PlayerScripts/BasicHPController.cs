@@ -9,10 +9,11 @@ public class BasicHPController : MonoBehaviour , IHPController
     //Fields and Properties
     private IPlayerStats _playerStats;
     private IShieldController _shieldController;
-    private DummyCollider _shieldCollider { get { return _shieldController.Collider; } }
-    private DummyCollider _chassisCollider;
+    private IChassisController _chassisController;
+    private IDummyCollider _shieldCollider { get { return _shieldController.Collider; } }
+    private IDummyCollider _chassisCollider { get { return _chassisController.Collider; } }
     public TargetEnum[] _targetsToTakeDamageFrom = {TargetEnum.Anything, TargetEnum.Player,};
-    public bool IsHPBelowZero { get; private set; }
+    public bool IsHPBelowZero { get { return CurrentHP <= 0; } }
     public float CurrentHP { get; private set; }
     private float _currentShield;
     public float CurrentShield
@@ -30,15 +31,25 @@ public class BasicHPController : MonoBehaviour , IHPController
     public IPlayerStats PlayerStats { get { return _playerStats; } }
 
     //Public Methods
-    public void Init(IPlayerStats playerStats, IShieldController shieldController, DummyCollider chassisCollider)
+    public void Init(IPlayerStats playerStats, IShieldController shieldController, IChassisController chassisController)
     {
         _playerStats = playerStats;
         _shieldController = shieldController;
-        _chassisCollider = chassisCollider;
+        _chassisController = chassisController;
         CurrentHP = _playerStats.MaxHP;
         CurrentShield = _playerStats.MaxShield;
-        chassisCollider.ColliderEntered += chassiCollider_ColliderEntered;
+        _chassisCollider.ColliderEntered += chassiCollider_ColliderEntered;
         _shieldCollider.ColliderEntered += ShieldColliderOnColliderEntered;
+        var hpGUIBars = FindObjectsOfType<HPGUIBar>();
+        foreach (var hpGuiBar in hpGUIBars)
+        {
+            hpGuiBar.Init(this);
+        }
+        var shieldGUIBars = FindObjectsOfType<ShieldGUIBar>();
+        foreach (var shieldGuiBar in shieldGUIBars)
+        {
+            shieldGuiBar.Init(this);
+        }
     }
     public bool TryHit(IProjectileController projectile)
     {
@@ -72,6 +83,12 @@ public class BasicHPController : MonoBehaviour , IHPController
     //Events
     public event EventHandler<DeathReasonEventArgs> Died;
     public event EventHandler ValuesChanged;
+    public void Reset()
+    {
+        CurrentHP = _playerStats.MaxHP;
+        CurrentShield = _playerStats.MaxShield;
+    }
+
     private void ShieldColliderOnColliderEntered(object sender, Collider2DEventArgs collider2DEventArgs)
     {
         var test = collider2DEventArgs.Collider.gameObject.GetComponent<IProjectileController>();
@@ -92,8 +109,9 @@ public class BasicHPController : MonoBehaviour , IHPController
     //UpdateMethod
     void Update()
     {
-        if (currentTimeToRechargeShield >= _playerStats.ShieldRechargeTime && 
-            CurrentShield <= _playerStats.MaxShield && _currentRechargingRoutine != null)
+        if (currentTimeToRechargeShield >= _playerStats.ShieldRechargeDelay && 
+            CurrentShield < _playerStats.MaxShield && _currentRechargingRoutine == null &&
+            !IsHPBelowZero)
         {
             _currentRechargingRoutine = StartRecharging();
             StartCoroutine(_currentRechargingRoutine);
@@ -119,7 +137,7 @@ public class BasicHPController : MonoBehaviour , IHPController
         {
             if (showDebugCalculations)
                 Debug.Log(string.Format("Applying all damage to shield. Damage{0}", projectile.Damage));
-            CurrentHP -= projectile.Damage;
+            CurrentShield -= projectile.Damage;
         }
     }
     private void HandleElementalDamage(IProjectileController projectile)
@@ -198,6 +216,7 @@ public class BasicHPController : MonoBehaviour , IHPController
             CurrentShield = increment + CurrentShield >= _playerStats.MaxShield
                 ? _playerStats.MaxShield
                 : increment + CurrentShield;
+            if (ValuesChanged != null) ValuesChanged(this, EventArgs.Empty);
             yield return null;
         }
         _currentRechargingRoutine = null;

@@ -3,17 +3,17 @@ using System.Collections;
 using System.Xml; 
 using System.Xml.Serialization; 
 
-public class ShieldController : EquipmentController, ISavable<ShieldData> {
+[RequireComponent(typeof(DummyCollider))]
+public class ShieldController : EquipmentController, ISavable<ShieldData>, IShieldController {
 	public float m_shieldArmor = 0;
 	public float m_regenerationDelay = 2.0f;
 	public float m_timeToFull = 3.0f;
+    public float m_elementalFactor = 0f;
+    public EnergyType m_energyType;
 
+    #region MovedtoHPController
+    /*
 	public Collider2D m_collider;
-
-	public override void Init(PlayerController player){
-		base.Init (player);
-		player.m_shieldBar.m_shield = this;
-	}
 
 
 	void OnTriggerEnter2D(Collider2D coll) {
@@ -21,15 +21,16 @@ public class ShieldController : EquipmentController, ISavable<ShieldData> {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Target == m_Owner) {
 			int tempBulletDmg = tempBullet.m_damageType;
-			m_playerController.m_shieldBar.SetCurrentValue(DamageCalculators.ShieldHit(tempBullet.m_DamageValue, m_playerController.m_shieldBar.m_currentValue, m_shieldArmor, tempBulletDmg, m_damageType));
-			m_playerController.m_shieldBar.CheckShieldHealth ();
+			//m_playerController.m_shieldBar.SetCurrentValue(DamageCalculators.ShieldHit(tempBullet.m_DamageValue, m_playerController.m_shieldBar.m_currentValue, m_shieldArmor, tempBulletDmg, m_damageType));
+			//m_playerController.m_shieldBar.CheckShieldHealth ();
 			tempBullet.DestroyObjectAndBehaviors();
 		}
-	}
+	}*/
+    #endregion MovedtoHPController
+    
+    #region ISavable implementation
 
-	#region ISavable implementation
-
-	public ShieldData GetSavableObject ()
+    public ShieldData GetSavableObject ()
 	{
 		var ret = GetSavableObjectInternal <ShieldData>();
 		ret.m_regenerationDelay = m_regenerationDelay;
@@ -45,4 +46,20 @@ public class ShieldController : EquipmentController, ISavable<ShieldData> {
 	}
 
 	#endregion
+
+    private IDummyCollider _collider;
+    public IDummyCollider Collider
+    {
+        get
+        {
+            if (_collider == null)
+            {
+                _collider = GetComponent<IDummyCollider>();
+            }
+            return _collider;
+        }
+    }
+
+    public EnergyType EnergyType { get { return m_energyType; } }
+    public float BonusAtt { get { return m_elementalFactor; } }
 }

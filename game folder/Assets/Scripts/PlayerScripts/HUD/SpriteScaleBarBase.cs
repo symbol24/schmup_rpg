@@ -14,6 +14,6 @@ public abstract class SpriteScaleBarBase : MonoBehaviour
     {
         float percent = (currentValue / maxValue) * originalObjectScale.x;
         var newScale = new Vector3(percent, _objectToScale.transform.localScale.y, _objectToScale.transform.localScale.z);
-        gameObject.transform.localScale = newScale;
+        _objectToScale.transform.localScale = newScale;
     }
 }

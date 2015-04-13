@@ -6,7 +6,7 @@ public interface IShieldController
     /// <summary>
     /// ColliderContainer to root the ontrigger event
     /// </summary>
-    DummyCollider Collider { get; }
+    IDummyCollider Collider { get; }
     /// <summary>
     /// Type of the shield
     /// </summary>
