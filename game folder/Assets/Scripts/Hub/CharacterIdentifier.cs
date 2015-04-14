@@ -5,5 +5,9 @@ public enum CharacterIdentifier
 {
     Bartender,
     ShadyGuy,
-    Player
+    Player,
+    RandomGuy1,
+    RandomGuy2,
+    Mechanic,
+    ShopKeeper,
 }

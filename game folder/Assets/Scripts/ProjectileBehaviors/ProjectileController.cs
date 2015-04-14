@@ -24,6 +24,7 @@ public class ProjectileController : MonoBehaviour, IProjectileController
     private GameManager m_GameManager;
 	public ProjectileBehavior[] m_ProjectileBehaviorPrefabs;
 	public ProjectileBehavior[] m_ProjectileBehaviorInstances;
+    public GameObject m_explosion;
 
 	void Start(){
 		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
@@ -52,13 +53,14 @@ public class ProjectileController : MonoBehaviour, IProjectileController
 
     
 
-    public void DestroyObjectAndBehaviors(){
+    public void DestroyObjectAndBehaviors(bool executeDestruction = false){
 		gameObject.SetActive (false);
 		foreach (ProjectileBehavior behavior in m_ProjectileBehaviorInstances) {
 			if(behavior != null){
 				Destroy(behavior.gameObject);
 			}
 		}
-		Destroy (this.gameObject);
+        if (executeDestruction) Instantiate(m_explosion, transform.position, transform.rotation);
+		Destroy (gameObject);
 	}
 }

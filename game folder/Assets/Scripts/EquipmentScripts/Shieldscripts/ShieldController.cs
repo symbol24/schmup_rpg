@@ -62,4 +62,6 @@ public class ShieldController : EquipmentController, ISavable<ShieldData>, IShie
 
     public EnergyType EnergyType { get { return m_energyType; } }
     public float BonusAtt { get { return m_elementalFactor; } }
+    public Renderer[] _visualComponents;
+    public Renderer[] VisualComponents { get { return _visualComponents; } }
 }
