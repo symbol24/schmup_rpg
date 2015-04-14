@@ -28,5 +28,5 @@ public interface IProjectileController
     /// <summary>
     /// Destroy bullet if it was used
     /// </summary>
-    void DestroyObjectAndBehaviors();
+    void DestroyObjectAndBehaviors(bool executeDestruction);
 }

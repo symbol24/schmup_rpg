@@ -13,7 +13,7 @@ public class DummyCollider : MonoBehaviour, IDummyCollider
             if (_thecollider == null)
             {
                 _thecollider = GetComponent<Collider2D>();
-                if (_thecollider == null) Debug.LogError(string.Format("NO COLLIDER FOUND{0}", gameObject.name));
+                if (_thecollider == null) Debug.LogError(string.Format("NO COLLIDER FOUND {0}", gameObject.name));
             }
             return _thecollider;
         }

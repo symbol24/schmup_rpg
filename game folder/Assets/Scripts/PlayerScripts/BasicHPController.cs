@@ -22,12 +22,21 @@ public class BasicHPController : MonoBehaviour , IHPController
         private set
         {
             _currentShield = value;
-            _shieldCollider.theCollider.enabled = _currentShield != 0f;
+            bool shieldAboveZero = _currentShield > 0f;
+            if (_shieldCollider.theCollider.enabled != shieldAboveZero)
+            {
+                _shieldCollider.theCollider.enabled = shieldAboveZero;
+                foreach (var visualComponent in _shieldController.VisualComponents)
+                {
+                    visualComponent.enabled = shieldAboveZero;
+                }
+            }
         }
     }
     private float currentTimeToRechargeShield;
     public bool showDebugCalculations = false;
     public bool mitigateShieldOverflow = false;
+    public bool invincibleWhileRecharging = true;
     public IPlayerStats PlayerStats { get { return _playerStats; } }
 
     //Public Methods
@@ -57,27 +66,32 @@ public class BasicHPController : MonoBehaviour , IHPController
         if (_targetsToTakeDamageFrom.Any(c => c == projectile.Target))
         {
             ret = true;
-            ResetRechargeTimer();
-            if (projectile.Damage != 0f && projectile.EnergyValue != 0f)
+            if (_currentRechargingRoutine == null || !invincibleWhileRecharging)
             {
-                if (projectile.EnergyValue > 0)
+                ResetRechargeTimer();
+                if (projectile.Damage != 0f && projectile.EnergyValue != 0f)
                 {
-                    HandleElementalDamage(projectile);
+                    if (projectile.EnergyValue > 0)
+                    {
+                        HandleElementalDamage(projectile);
+                    }
+                    HandleRegularDamage(projectile);
+                    if (showDebugCalculations)
+                    {
+                        Debug.Log(string.Format("After being hit, CurrentShields: {0}, CurrentHP is: {1}", CurrentShield,
+                            CurrentHP));
+                    }
+                    if (CurrentHP <= 0)
+                    {
+                        if (Died != null) Died(this, new DeathReasonEventArgs {});
+                    }
+                    else if (ValuesChanged != null) ValuesChanged(this, EventArgs.Empty);
                 }
-                HandleRegularDamage(projectile);
-                projectile.DestroyObjectAndBehaviors();
-                if (showDebugCalculations)
-                {
-                    Debug.Log(string.Format("After being hit, CurrentShields: {0}, CurrentHP is: {1}", CurrentShield, CurrentHP));
-                }
-                if (CurrentHP <= 0)
-                {
-                    if (Died != null) Died(this, new DeathReasonEventArgs {});
-                }
-                else if (ValuesChanged != null) ValuesChanged(this, EventArgs.Empty);
             }
+            if(CurrentShield > 0) projectile.DestroyObjectAndBehaviors(false);
+            else projectile.DestroyObjectAndBehaviors(true);
         }
-        return ret;
+        return ret; //Only explosions with the ship.
     }
 
     //Events

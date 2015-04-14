@@ -15,4 +15,10 @@ public interface IShieldController
     /// Bonus muliplier or "how" elemental your type is. This value varies from 0 to 1
     /// </summary>
     float BonusAtt { get; }
+    /// <summary>
+    /// Visual components in case they need to be deactivated
+    /// </summary>
+    Renderer[] VisualComponents { get; }
+    
+    
 }
