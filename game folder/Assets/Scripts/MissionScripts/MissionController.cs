@@ -101,8 +101,9 @@ public class MissionController : MonoBehaviour {
 		Vector3 pos = new Vector3 (x, m_spawnerY, 0);
 
 		EnemyController prefab = m_prefabDatabase.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
-		m_enemySpawner.SetEnemyToSpawn (prefab, enemy[m_currentEnemytoSpawn].m_spawnCount);
+
 		EnemySpawnController toSpawn = Instantiate (m_enemySpawner, pos, transform.rotation) as EnemySpawnController;
+		toSpawn.SetEnemyToSpawn (prefab, enemy[m_currentEnemytoSpawn].m_spawnCount, enemy[m_currentEnemytoSpawn].m_spawnDelay);
 
 		m_currentEnemytoSpawn++;
 		if(m_currentEnemytoSpawn >= MissionContainer.instance.m_listOfMissionEnemies.Length)

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class EAIBehaviorBossDeath : EAIBehaviors {
@@ -63,7 +63,7 @@ public class EAIBehaviorBossDeath : EAIBehaviors {
 				thisSpwnController.RestartState();
 			}
 		}
-		m_Controller.DestroyObjectAndBehaviors(m_Controller.m_ScoreValue);
+		m_Controller.DestroyObjectAndBehaviors(m_Controller.m_experienceValue);
 		yield return null;
 	}
 }

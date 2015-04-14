@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviour {
 	//next level!
 	public string m_NextLevel = "Hub";
 
+	public float m_limiterX = 4.9f;
+
 	
 	void Start(){
 //		m_PlayerShip = SaveLoad.LoadPlayer ();

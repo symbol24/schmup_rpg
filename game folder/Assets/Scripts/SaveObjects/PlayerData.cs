@@ -6,7 +6,7 @@ using System;
 public class PlayerData {
 	public float m_currentCredits = 0.0f;
 	public float m_experiencePoints = 0.0f;
-	public int m_playerLevel = 1;
+	public float m_playerLevel = 1;
 
 	public EquipmentData m_cannon1;
 	public EquipmentData m_cannon2;

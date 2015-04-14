@@ -182,6 +182,40 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		}
 	}
 
+	private float _m_credits;
+	public float m_credits
+	{
+		get { return _m_credits; }
+		set
+		{
+			if (_m_credits != value)
+			{
+				_m_credits = value;
+				if (CreditsChanged != null)
+				{
+					CreditsChanged(this, new floatEventArgs { NewValue = value });
+				}
+			}
+		}
+	}
+
+	private float _m_level;
+	public float m_level
+	{
+		get { return _m_level; }
+		set
+		{
+			if (_m_level != value)
+			{
+				_m_level = value;
+				if (LevelChanged != null)
+				{
+					LevelChanged(this, new floatEventArgs { NewValue = value });
+				}
+			}
+		}
+	}
+
     #region IPlayerStats Implementation
     public float Damage { get { return m_playerDamage; } }
     public event EventHandler<floatEventArgs> DamageChanged;
@@ -203,6 +237,10 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	public event EventHandler<floatEventArgs> ShieldRechargeDelayChanged;
 	public float Experience { get { return m_experience; } }
 	public event EventHandler<floatEventArgs> ExperienceChanged;
+	public float Credits { get { return m_credits; } }
+	public event EventHandler<floatEventArgs> CreditsChanged;
+	public float Level { get { return m_level; } }
+	public event EventHandler<floatEventArgs> LevelChanged;
 
     #endregion IPlayerStats Implementation
 
@@ -270,7 +308,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		startingPosition = transform.position;
 		anim = GetComponent<Animator>();
 		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
-		
+		horLimit = m_GameManager.m_limiterX;
 		m_myCol = GetComponent<BoxCollider2D> ();
 		
 		//setup equipment
@@ -458,14 +496,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		m_maxPlayerShield =  m_playerBaseStatValues[6] + (m_playerBaseStatValues[6] * m_playerStatModifiers[6]);
 	    m_regenerationDelay = m_instantiatedShield.m_regenerationDelay;
 
-		print ("m_playerDamage: " + m_playerDamage);
-		print ("m_playerFireRate: " + m_playerFireRate);
-		print ("m_maxPlayerHP: " + m_maxPlayerHP);
-		print ("m_playerArmor: " + m_playerArmor);
-		print ("m_playerMouvementSpeed: " + m_playerMouvementSpeed);
-		print ("m_maxPlayerEnergy: " + m_maxPlayerEnergy);
-		print ("m_maxPlayerShield: " + m_maxPlayerShield);
-	    print("m_regenerationDelay: " + m_regenerationDelay);
+		PrintStats ();
 	}
 	
 	public void WeaponSwitchUpdateValuesModifiers(EquipmentController oldWeapon, EquipmentController newWeapon){
@@ -489,6 +520,21 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	
 	public void AddExp(float newExp){
 		m_experience += newExp;
+	}
+
+	private void PrintStats(){
+		print ("m_level " + m_level);
+		print ("m_experience " + m_experience);
+		print ("m_credits " + m_credits);
+		print ("m_playerDamage: " + m_playerDamage);
+		print ("m_playerFireRate: " + m_playerFireRate);
+		print ("m_maxPlayerHP: " + m_maxPlayerHP);
+		print ("m_playerArmor: " + m_playerArmor);
+		print ("m_playerMouvementSpeed: " + m_playerMouvementSpeed);
+		print ("m_maxPlayerEnergy: " + m_maxPlayerEnergy);
+		print ("m_maxPlayerShield: " + m_maxPlayerShield);
+		print ("m_regenerationDelay: " + m_regenerationDelay);
+		print ("m_TimeToFullShieldRecharge " + m_TimeToFullShieldRecharge);
 	}
 
 	/*void OnTriggerEnter2D(Collider2D coll) {

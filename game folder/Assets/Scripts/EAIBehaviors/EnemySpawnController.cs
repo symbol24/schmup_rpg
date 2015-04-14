@@ -7,7 +7,7 @@ public class EnemySpawnController : MonoBehaviour {
 	public EnemyController m_EAIPrefab;
 	public int m_AmountToSpawn = 1;
 	private int m_EnemyCounter = 0;
-	private float m_SpawnRate = 0.5f;
+	private float m_SpawnRate = 0.0f;
 	private float m_NextSpawn = 0.0f;
 	private float m_SpawnAtY = 5.5f;
 	private float m_Speed = 0.8f;
@@ -43,14 +43,15 @@ public class EnemySpawnController : MonoBehaviour {
 					case SpawnerState.spawning:
 						if(m_GameManager != null && m_GameManager.m_CurrentState == GameManager.gameState.playing){
 							//spawn enemies
-							if (Time.time > m_NextSpawn && m_EnemyCounter <= m_AmountToSpawn ){
-								m_NextSpawn = Time.time + m_SpawnRate;
-								EnemyController eaiClone = Instantiate(m_EAIPrefab, transform.position, transform.rotation) as EnemyController;
-								eaiClone.gameObject.SetActive(true);
-								m_EnemyCounter++;
-							}
-							if(m_EnemyCounter == m_AmountToSpawn)
-								m_SpawnerState = SpawnerState.dying;
+						if (Time.time > m_NextSpawn && m_EnemyCounter <= m_AmountToSpawn ){
+							print ("Spawn rate " + m_SpawnRate);
+							m_NextSpawn = Time.time + m_SpawnRate;
+							EnemyController eaiClone = Instantiate(m_EAIPrefab, transform.position, transform.rotation) as EnemyController;
+							eaiClone.gameObject.SetActive(true);
+							m_EnemyCounter++;
+						}
+						if(m_EnemyCounter >= m_AmountToSpawn)
+							m_SpawnerState = SpawnerState.dying;
 						}
 					break;
 
@@ -75,8 +76,9 @@ public class EnemySpawnController : MonoBehaviour {
 		m_SpawnerState = m_PreviousState;
 	}
 
-	public void SetEnemyToSpawn(EnemyController enemy, int Amount){
+	public void SetEnemyToSpawn(EnemyController enemy, int Amount, float delay){
 		m_EAIPrefab = enemy;
 		m_AmountToSpawn = Amount;
+		m_SpawnRate = delay;
 	}
 }

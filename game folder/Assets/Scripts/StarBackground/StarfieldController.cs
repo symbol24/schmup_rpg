@@ -31,9 +31,10 @@ public class StarfieldController : MonoBehaviour {
 	void Start () {
 		levelName = Application.loadedLevelName;
 		if(levelName == "MainMenu"){
-			mainMenuMgr = GameObject.Find ("MainMenuObj").GetComponent<MainMenuController> ();
+			mainMenuMgr = FindObjectOfType<MainMenuController> ();
 		}else{
-			gameMgr = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+			gameMgr = FindObjectOfType<GameManager> ();
+			maxX = gameMgr.m_limiterX;
 		}
 
 		starsTop = EntitiesCreator.CreatAStackOfStars (0, starPrefab, starCount, starColors, starSpeed, starScale, maxX, maxY);

@@ -11,4 +11,5 @@ public class EnemyData {
 	public float m_baseArmour;
 	public float m_spawnDelay;
 	public int m_spawnCount;
+	public float m_experienceValue;
 }

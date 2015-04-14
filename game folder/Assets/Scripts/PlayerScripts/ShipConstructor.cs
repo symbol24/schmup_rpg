@@ -31,6 +31,9 @@ public class ShipConstructor : MonoBehaviour {
 	PlayerController SetPlayerController ()
 	{
 		PlayerController ret = Instantiate (m_prefabs.GetPlayerController(), transform.position, transform.rotation) as PlayerController;
+		ret.m_experience = m_playerContainer.m_experience;
+		ret.m_credits = m_playerContainer.m_credits;
+		ret.m_level = m_playerContainer.m_level;
 		ret.SetCannons(GetInstancedCannons(m_playerContainer));
 		ret.SetOtherEquipmenet (GetInstancedEquipment (m_playerContainer));
 		ret.SetShield (m_shieldController);

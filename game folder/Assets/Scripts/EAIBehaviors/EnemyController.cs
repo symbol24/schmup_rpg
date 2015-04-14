@@ -6,12 +6,13 @@ using System;
 public class EnemyController : MonoBehaviour {
 
 	public GameManager m_GameMgr;
+	private PlayerController m_playerController;
 	private MissionController m_missionController;
 	public float m_LimiterY = -4.9f;
 	public float m_EaiHP = 1;
 	public float m_CurrentHP;
 	public float m_EaiArmor = 0;
-	public float m_ScoreValue = 100;
+	public float m_experienceValue = 100;
 	public GameObject m_BlueExplosion;
 	public string m_Target = "player";
 	public ProjectileController m_ProjectileToShoot;
@@ -27,8 +28,9 @@ public class EnemyController : MonoBehaviour {
 	public bool m_IsDying = false;
 
 	void Start(){
-		m_GameMgr = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		m_GameMgr = FindObjectOfType<GameManager> ();
 		m_missionController = FindObjectOfType<MissionController> ();
+		m_playerController = FindObjectOfType<PlayerController> ();
 
 		//Get cannon references
 		m_CannonReferances = GetCannonReferences ();
@@ -69,10 +71,7 @@ public class EnemyController : MonoBehaviour {
 			if(m_DeathBehavior != null && m_DeathBehavior.m_BehaviorDeathType == "boss")
 				m_DeathBehavior.StartExplosions(50);
 			else{
-				if(Died != null){
-					Died(this, new ScoreEventArgs{score = m_ScoreValue});
-				}
-				DestroyObjectAndBehaviors(m_ScoreValue);
+				DestroyObjectAndBehaviors(m_experienceValue);
 			}
 		}
 	}
@@ -85,10 +84,9 @@ public class EnemyController : MonoBehaviour {
 				Destroy(behavior.gameObject);
 			}
 		}
+		m_playerController.AddExp(m_experienceValue);
 		Destroy (this.gameObject);
 	}
-
-	public event EventHandler<ScoreEventArgs> Died;
 	
 	public void OnTriggerEnter2D(Collider2D coll) {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
