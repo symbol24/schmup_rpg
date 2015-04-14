@@ -6,13 +6,13 @@ using System.Xml.Serialization;
 
 public class GameManager : MonoBehaviour {
 	//the player ship
-	public PlayerController m_PlayerShip;
+	//public PlayerController m_PlayerShip;
 
 	//the player and enemy bullets
-	public int m_BulletAmount;
-	public ProjectileController[] m_ProjectilePrefabs;
-	public Stack<ProjectileController>[] m_ProjectileStacks;
-	public Stack<ProjectileController>[] m_PlayerProjectileStacks;
+//	public int m_BulletAmount;
+//	public ProjectileController[] m_ProjectilePrefabs;
+//	public Stack<ProjectileController>[] m_ProjectileStacks;
+//	public Stack<ProjectileController>[] m_PlayerProjectileStacks;
 
 	//game state enum
 	public enum gameState{
@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour {
 	
 	//life icons top left of screen
 	public int m_NumberOfLives;
-	public GameObject m_LifeIconPrefab;
-	public GameObject[] m_LifeIconsDisplayed;
+//	public GameObject m_LifeIconPrefab;
+//	public GameObject[] m_LifeIconsDisplayed;
 
 	//explosions when dead
 	public GameObject longPinkExplosionPrefab;
@@ -34,18 +34,21 @@ public class GameManager : MonoBehaviour {
 	public float deathControlDelay;
 
 	//score info
-	public GUIText m_ScoreGUI;
-	public float m_TotalScore = 0;
-	private float m_TotalKills = 0;
-	public float m_TargetScore;
+//	public GUIText m_ScoreGUI;
+//	public float m_TotalScore = 0;
+//	private float m_TotalKills = 0;
+//	public float m_TargetScore;
 
 	//controls
-	public KeyCode m_PauseButton;
-	public KeyCode m_ConfirmButton;
-	public KeyCode m_ShootButton;
-	public KeyCode[] m_CannonSelectionButtons;
 	public float m_VertValue;
 	public float m_HorValue;
+	public float m_firebutton;
+	public float m_altFireButton;
+	public float[] m_switchButtons = new float[2];
+	public float m_pauseButton;
+	public float m_backButton;
+	
+	//menu dely timer
 	public float m_MenuDelayTimer = 0.0f;
 	public float m_MenuDeadSpot = 0.1f;
 
@@ -60,7 +63,7 @@ public class GameManager : MonoBehaviour {
 	//public PowerUpController m_PowerUpPrefab;
 
 	//next level!
-	public string m_NextLevel = "level1";
+	public string m_NextLevel = "Hub";
 
 	
 	void Start(){
@@ -86,11 +89,17 @@ public class GameManager : MonoBehaviour {
 		//get both controller and keyboard axis's
 		m_VertValue = Input.GetAxis("Vertical");
 		m_HorValue = Input.GetAxis("Horizontal");
+		m_firebutton = Input.GetAxis("Fire");
+		m_altFireButton = Input.GetAxis("Alt Fire");
+		m_switchButtons[0] = Input.GetAxis("Switch Left");
+		m_switchButtons[1] = Input.GetAxis("Switch Right");
+		m_pauseButton = Input.GetAxis("Pause");
+		m_backButton = Input.GetAxis("Back");
 	}
-
-	public void SetPlayerShip(PlayerController playerShip){
-		m_PlayerShip = playerShip;
-	}
+//
+//	public void SetPlayerShip(PlayerController playerShip){
+//		m_PlayerShip = playerShip;
+//	}
 
 	//reduce the amount of lives, remove a visible life icon and trigger endgame
 	public void DecreaseLives(){
@@ -101,11 +110,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	
-	public void UpdateScore(float score){
-		m_TotalKills++;
-		m_TotalScore += score;
-		m_ScoreGUI.text = m_TotalScore.ToString ();
-	}
+//	public void UpdateScore(float score){
+//		m_TotalKills++;
+//		m_TotalScore += score;
+//		m_ScoreGUI.text = m_TotalScore.ToString ();
+//	}
 
 	//endgame process
 	public void SetGameOver(string message){
@@ -120,11 +129,11 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel(m_NextLevel);
 	}
 
-	public IEnumerator DeathExplosion(float currentHP){
+	public IEnumerator DeathExplosion(PlayerController player, float currentHP){
 		m_CurrentState = gameState.dead;
-		Transform transformForExplosion = m_PlayerShip.transform;
-		m_PlayerShip.GetComponent<Renderer>().enabled = false;
-		m_PlayerShip.currentCannon.gameObject.SetActive (false);
+		Transform transformForExplosion = player.transform;
+		player.GetComponent<Renderer>().enabled = false;
+		player.currentCannon.gameObject.SetActive (false);
 		GameObject explosion;
 		for(int i = 0; i < numberOfExplosions; i++){
 			float xOffset = (Random.Range(-explosionOffset, explosionOffset));
@@ -136,9 +145,9 @@ public class GameManager : MonoBehaviour {
 		yield return new WaitForSeconds(deathControlDelay);
 		DecreaseLives();
 		if(m_NumberOfLives > 0){
-			m_PlayerShip.RepositionShip();
-			m_PlayerShip.GetComponent<Renderer>().enabled = true;
-			m_PlayerShip.currentCannon.gameObject.SetActive (true);
+			player.RepositionShip();
+			player.GetComponent<Renderer>().enabled = true;
+			player.currentCannon.gameObject.SetActive (true);
 			m_CurrentState = gameState.playing;
 		}
 	}

@@ -31,21 +31,24 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 
 	// Update is called once per frame
 	void Update () {
-		if(m_GameManager.m_CurrentState == GameManager.gameState.playing){
-			if (((Input.GetKey(KeyCode.Space) || Input.GetKey(m_GameManager.m_ShootButton))) && m_EnergyBar.GetCurrentValue() >= m_ProjectileEnergyValue){
-				if(Time.time > m_NextFire){
-					m_NextFire = Time.time + m_GameManager.m_PlayerShip.m_playerFireRate;
-					foreach(GameObject refer in m_ReferencePointForBullet){
-						ShotABullet(refer, m_ProjectileToShootPrefab);
-					}
-				}
-			}
-		}
+
 	}
 
-	private void ShotABullet(GameObject refereance, ProjectileController bulletTemplate){
+	public void FireForEachReference(float damage, float delay){
+		if(Time.time > m_NextFire && m_EnergyBar.GetCurrentValue() >= m_ProjectileEnergyValue){
+				m_NextFire = Time.time + delay;
+				
+				foreach(GameObject refer in m_ReferencePointForBullet){
+					ShotABullet(refer, m_ProjectileToShootPrefab, damage);
+				}
+			}
+
+
+	}
+
+	private void ShotABullet(GameObject refereance, ProjectileController bulletTemplate, float damage){
 		ProjectileController oneBullet = Instantiate(m_ProjectileToShootPrefab, refereance.transform.position, refereance.transform.rotation) as ProjectileController;
-		oneBullet.m_DamageValue = m_GameManager.m_PlayerShip.m_playerDamage;
+		oneBullet.m_DamageValue = damage;
 		m_EnergyBar.ChangeEnergyTotal ("substract", m_ProjectileEnergyValue);
 	}
 

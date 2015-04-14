@@ -43,6 +43,11 @@ public static class Extensions
 			serializer.Serialize(stream, objectToSerialize);
 		}
 	}
-    
+
+    public static Vector3 Clone(this Vector3 toClone)
+    {
+        var ret = new Vector3(toClone.x, toClone.y, toClone.z);
+        return ret;
+    }
 
 }

@@ -7,7 +7,7 @@ using System;
 using System.Linq; 
 
 [Serializable]
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour, IPlayerStats {
 	public GameManager m_GameManager;
 
 	//the base values compiled
@@ -16,14 +16,197 @@ public class PlayerController : MonoBehaviour {
 	//the modifiers compiled
 	[SerializeField] protected float[] m_playerStatModifiers = new float[7];
 
-	//the calculated info
-	public float m_playerDamage = 1.0f;
-	public float m_playerFireRate = 1.0f;
-	public float m_maxPlayerHP = 1.0f;
-	public float m_playerArmor = 0.0f;
-	public float m_playerMouvementSpeed = 5.0f;
-	public float m_maxPlayerEnergy = 10.0f;
-	public float m_maxPlayerShield = 10.0f;
+    #region CalculatedPlayerStats
+    //the calculated info
+    private float _m_playerDamage = 1.0f;
+    public float m_playerDamage
+    {
+        get { return _m_playerDamage; }
+        set
+        {
+            if (_m_playerDamage != value)
+            {
+                _m_playerDamage = value;
+                if (DamageChanged != null) DamageChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_playerFireRate = 1.0f;
+    public float m_playerFireRate
+    {
+        get
+        {
+            return _m_playerFireRate;
+        }
+        set
+        {
+            if (_m_playerFireRate != value)
+            {
+                _m_playerFireRate = value;
+                if (FireRateChanged != null) FireRateChanged(this, new floatEventArgs() {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_maxPlayerHP = 1.0f;
+    public float m_maxPlayerHP
+    {
+        get
+        {
+            return _m_maxPlayerHP;
+        }
+        set
+        {
+            if (_m_maxPlayerHP != value)
+            {
+                _m_maxPlayerHP = value;
+                if (MaxHPChanged != null) MaxHPChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_playerArmor = 0;
+    public float m_playerArmor
+    {
+        get
+        {
+            return _m_playerArmor;
+        }
+        set
+        {
+            if (_m_playerArmor != value)
+            {
+                _m_playerArmor = value;
+                if (ArmorChanged != null) ArmorChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_playerMouvementSpeed = 5.0f;
+    public float m_playerMouvementSpeed
+    {
+        get
+        {
+            return _m_playerMouvementSpeed;
+        }
+        set
+        {
+            if (_m_playerMouvementSpeed != value)
+            {
+                _m_playerMouvementSpeed = value;
+                if (MouvementSpeedChanged != null) MouvementSpeedChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_maxPlayerEnergy = 10.0f;
+    public float m_maxPlayerEnergy
+    {
+        get
+        {
+            return _m_maxPlayerEnergy;
+        }
+        set
+        {
+            if (_m_maxPlayerEnergy != value)
+            {
+                _m_maxPlayerEnergy = value;
+                if (MaxEnergyChanged != null) MaxEnergyChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_maxPlayerShield = 10.0f;
+    public float m_maxPlayerShield
+    {
+        get { return _m_maxPlayerShield; }
+        set
+        {
+            if (_m_maxPlayerShield != value)
+            {
+                _m_maxPlayerShield = value;
+                if (MaxShieldChanged != null) MaxShieldChanged(this, new floatEventArgs {NewValue = value});
+            }
+        }
+    }
+
+    private float _m_regenerationDelay;
+    public float m_regenerationDelay
+    {
+        get { return _m_regenerationDelay; }
+        set
+        {
+            if (_m_regenerationDelay != value)
+            {
+                _m_regenerationDelay = value;
+                if (ShieldRechargeDelayChanged != null)
+                {
+                    ShieldRechargeDelayChanged(this, new floatEventArgs { NewValue = value });
+                }
+            }
+        }
+    }
+
+    private float _m_timeToFullShieldRecharge;
+    public float m_TimeToFullShieldRecharge
+    {
+        get { return _m_timeToFullShieldRecharge; }
+        set
+        {
+            if (_m_timeToFullShieldRecharge != value)
+            {
+                _m_timeToFullShieldRecharge = value;
+                if (ShieldRechargeTimeChanged != null)
+                {
+                    ShieldRechargeTimeChanged(this, new floatEventArgs { NewValue = value });
+                }
+            }
+        }
+    }
+
+	private float _m_experience;
+	public float m_experience
+	{
+		get { return _m_experience; }
+		set
+		{
+			if (_m_experience != value)
+			{
+				_m_experience = value;
+				if (ExperienceChanged != null)
+				{
+					ExperienceChanged(this, new floatEventArgs { NewValue = value });
+				}
+			}
+		}
+	}
+
+    #region IPlayerStats Implementation
+    public float Damage { get { return m_playerDamage; } }
+    public event EventHandler<floatEventArgs> DamageChanged;
+    public float FireRate { get { return m_playerFireRate; } }
+    public event EventHandler<floatEventArgs> FireRateChanged;
+    public float MaxHP { get { return m_maxPlayerHP; } }
+    public event EventHandler<floatEventArgs> MaxHPChanged;
+    public float Armor { get { return m_playerArmor; } }
+    public event EventHandler<floatEventArgs> ArmorChanged;
+    public float MouvementSpeed { get { return m_playerMouvementSpeed; } }
+    public event EventHandler<floatEventArgs> MouvementSpeedChanged;
+    public float MaxEnergy { get { return m_maxPlayerEnergy; } }
+    public event EventHandler<floatEventArgs> MaxEnergyChanged;
+    public float MaxShield { get { return m_maxPlayerShield; } }
+    public event EventHandler<floatEventArgs> MaxShieldChanged;
+    public float ShieldRechargeTime { get { return m_regenerationDelay; } }
+    public event EventHandler<floatEventArgs> ShieldRechargeTimeChanged;
+    public float ShieldRechargeDelay { get { return m_regenerationDelay; } }
+	public event EventHandler<floatEventArgs> ShieldRechargeDelayChanged;
+	public float Experience { get { return m_experience; } }
+	public event EventHandler<floatEventArgs> ExperienceChanged;
+
+    #endregion IPlayerStats Implementation
+
+    #endregion CalculatedPlayerStats
 
 	//boxcollider
 	private BoxCollider2D m_myCol;
@@ -57,15 +240,21 @@ public class PlayerController : MonoBehaviour {
 	//equipment prefabs!
 	//[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
 	private EquipmentController[] m_instantiatedEquipment;
-
 	private ShieldController m_instantiatedShield;
-		
-	//UI energy, health and shield!
-	public EnergySystemController m_energyBar;
-	public HPSystemController m_HPBar;
-	public ShieldHPSystemController m_shieldBar;
 
-	//hit comparerererer
+    #region ChangedForHPController
+    //UI energy, health and shield!
+	/*
+    public EnergySystemController m_energyBar;
+	public HPSystemController m_HPBar;
+	public ShieldHPSystemController m_shieldBar;*/
+    #endregion ChangedForHPController
+    public IHPController m_HPController;
+
+
+    
+
+    //hit comparerererer
 	public string target;
 
 	void Start(){
@@ -82,31 +271,50 @@ public class PlayerController : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
 		
-		m_myCol = GetComponent<BoxCollider2D> () as BoxCollider2D;
+		m_myCol = GetComponent<BoxCollider2D> ();
 		
 		//setup equipment
 		SetupEquipment ();
 		SetupCannons ();
 		CalculateStats ();
+	    m_HPController = GetComponent<IHPController>();
+        if(m_HPController == null) Debug.LogError("No IHPControllerFound in " + gameObject.name);
+	    var chassisController =
+	        m_instantiatedEquipment.Single(c => c.m_myType == EquipmentController.equipmentType.chassis) as
+	            IChassisController;	    
+	    m_HPController.Init(this, m_instantiatedShield, chassisController);
+        m_HPController.Died += m_HPController_Died;
+
+	    #region ChangedForHPController
+
+	    /*
 		m_energyBar = FindObjectOfType<EnergySystemController> ();
 		m_HPBar = FindObjectOfType<HPSystemController> ();
 		m_shieldBar = FindObjectOfType<ShieldHPSystemController> ();
 		m_energyBar.SetStartValues (m_maxPlayerEnergy);
 		m_HPBar.SetStartValues (m_maxPlayerHP);
-		m_shieldBar.SetStartValues (m_maxPlayerShield);
+		m_shieldBar.SetStartValues (m_maxPlayerShield);*/
+
+	    #endregion ChangedForHPController
 	}
+
+    
 	
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing && !isDead){
 
+			if(m_GameManager.m_firebutton > 0){
+				currentCannon.FireForEachReference(m_playerDamage, m_playerFireRate);
+			}
+
 			//cannon selection
 			cannonSelectionDirection = -1;
-			if(Input.GetKeyDown(KeyCode.C) || Input.GetKey(m_GameManager.m_CannonSelectionButtons[0])){
+			if(m_GameManager.m_switchButtons[0] > 0){
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 0;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
 				}
-			}else if(Input.GetKeyDown(KeyCode.V) || Input.GetKey(m_GameManager.m_CannonSelectionButtons[1])){
+			}else if(m_GameManager.m_switchButtons[1] > 0){
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 1;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
@@ -148,18 +356,26 @@ public class PlayerController : MonoBehaviour {
 
 	public void SetShield(ShieldController newShield){
 		m_instantiatedShield = newShield;
-		m_shieldBar = FindObjectOfType<ShieldHPSystemController> ();
+		//m_shieldBar = FindObjectOfType<ShieldHPSystemController> ();
 	}	
 
-	//checking health to change amount of shields and changing amount of lives if needed
+
+    void m_HPController_Died(object sender, DeathReasonEventArgs e)
+    {
+        StartCoroutine(m_GameManager.DeathExplosion(this, m_HPController.CurrentHP));
+    }
+
+    #region ChangedforHPController
+    //checking health to change amount of shields and changing amount of lives if needed
 	public void CheckHealth(){
-		if(m_HPBar.GetCurrentValue() <= 0){
-			m_HPBar.SetCurrentValue(m_maxPlayerHP);
-			StartCoroutine(m_GameManager.DeathExplosion(m_HPBar.GetCurrentValue()));
+		if(m_HPController.CurrentHP <= 0){
+			//m_HPBar.SetCurrentValue(m_maxPlayerHP);
+			StartCoroutine(m_GameManager.DeathExplosion(this, m_HPController.CurrentHP));
 		}
 	}
+    #endregion ChangedforHPController
 
-	public void RepositionShip(){
+    public void RepositionShip(){
 		transform.position = startingPosition;
 		currentCannon.transform.position = cannonPoint.transform.position;
 	}
@@ -240,7 +456,8 @@ public class PlayerController : MonoBehaviour {
 		m_playerMouvementSpeed =  m_playerBaseStatValues[4] + (m_playerBaseStatValues[4] * m_playerStatModifiers[4]);
 		m_maxPlayerEnergy =  m_playerBaseStatValues[5] + (m_playerBaseStatValues[5] * m_playerStatModifiers[5]);
 		m_maxPlayerShield =  m_playerBaseStatValues[6] + (m_playerBaseStatValues[6] * m_playerStatModifiers[6]);
-		
+	    m_regenerationDelay = m_instantiatedShield.m_regenerationDelay;
+
 		print ("m_playerDamage: " + m_playerDamage);
 		print ("m_playerFireRate: " + m_playerFireRate);
 		print ("m_maxPlayerHP: " + m_maxPlayerHP);
@@ -248,6 +465,7 @@ public class PlayerController : MonoBehaviour {
 		print ("m_playerMouvementSpeed: " + m_playerMouvementSpeed);
 		print ("m_maxPlayerEnergy: " + m_maxPlayerEnergy);
 		print ("m_maxPlayerShield: " + m_maxPlayerShield);
+	    print("m_regenerationDelay: " + m_regenerationDelay);
 	}
 	
 	public void WeaponSwitchUpdateValuesModifiers(EquipmentController oldWeapon, EquipmentController newWeapon){
@@ -269,8 +487,11 @@ public class PlayerController : MonoBehaviour {
 		m_playerStatModifiers = values;
 	}
 	
-	
-	void OnTriggerEnter2D(Collider2D coll) {
+	public void AddExp(float newExp){
+		m_experience += newExp;
+	}
+
+	/*void OnTriggerEnter2D(Collider2D coll) {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
 		if (tempBullet!= null && tempBullet.m_Owner == target) {
@@ -279,5 +500,7 @@ public class PlayerController : MonoBehaviour {
 			CheckHealth();
 			tempBullet.DestroyObjectAndBehaviors();
 		}
-	}
+	}*/
+
+    
 }

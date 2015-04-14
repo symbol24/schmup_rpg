@@ -32,7 +32,7 @@ public class EndGameMenu : MonoBehaviour {
 				m_MenuTimer = Time.time + m_GameManager.m_MenuDelayTimer;//to add a delay in input to prevent inputs taht are too quick
 				MoveEndGameSelector(m_GameManager.m_VertValue);
 			}
-			if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(m_GameManager.m_ConfirmButton)){
+			if(m_GameManager.m_firebutton > 0){
 				ConfirmEndGameSelect();
 			}
 		}
@@ -62,7 +62,7 @@ public class EndGameMenu : MonoBehaviour {
 	public void DisplayGameOverScreen(string GameOverMessage){
 		
 		m_EndGameMessage.text = GameOverMessage;
-		m_EndGameScore.text = m_GameManager.m_TotalScore.ToString ();
+		//m_EndGameScore.text = m_GameManager.m_TotalScore.ToString ();
 	}
 
 }

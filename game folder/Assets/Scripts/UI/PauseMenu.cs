@@ -21,21 +21,23 @@ public class PauseMenu : MonoBehaviour {
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing){
 			//pause the game on button press
-			if(Input.GetKeyDown("p") || Input.GetKeyDown(m_GameManager.m_PauseButton)){
+			if(m_GameManager.m_pauseButton > 0 && Time.time > m_MenuTimer){
+				m_MenuTimer = Time.time + m_GameManager.m_MenuDelayTimer;
 				m_GameManager.m_CurrentState = PauseGame(m_GameManager.m_CurrentState);
 			}
 		}else if(m_GameManager.m_CurrentState == GameManager.gameState.paused){
 		//pause menu controls
-			if(m_MenuTimer < Time.time && (m_GameManager.m_VertValue > m_GameManager.m_MenuDeadSpot || m_GameManager.m_VertValue < -m_GameManager.m_MenuDeadSpot)){
+			if(m_MenuTimer < Time.time){
 				m_MenuTimer = Time.time + m_GameManager.m_MenuDelayTimer;//to add a delay in input to prevent inputs taht are too quick
 				MovePauseSelector(m_GameManager.m_VertValue);
 			}
-			if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(m_GameManager.m_ConfirmButton)){
+			if(m_GameManager.m_firebutton > 0){
 				ConfirmPauseSelect();
 			}
 			
 			//open and close pause menu
-			if(Input.GetKeyDown("p") || Input.GetKeyDown(m_GameManager.m_PauseButton)){
+			if(m_GameManager.m_pauseButton > 0 && Time.time > m_MenuTimer){
+
 				m_GameManager.m_CurrentState = PauseGame(m_GameManager.m_CurrentState);
 			}
 		}

@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class EnemyController : MonoBehaviour {
 
 	public GameManager m_GameMgr;
+	private MissionController m_missionController;
 	public float m_LimiterY = -4.9f;
 	public float m_EaiHP = 1;
 	public float m_CurrentHP;
@@ -26,6 +28,7 @@ public class EnemyController : MonoBehaviour {
 
 	void Start(){
 		m_GameMgr = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		m_missionController = FindObjectOfType<MissionController> ();
 
 		//Get cannon references
 		m_CannonReferances = GetCannonReferences ();
@@ -65,14 +68,18 @@ public class EnemyController : MonoBehaviour {
 			m_IsDying = true;
 			if(m_DeathBehavior != null && m_DeathBehavior.m_BehaviorDeathType == "boss")
 				m_DeathBehavior.StartExplosions(50);
-			else
+			else{
+				if(Died != null){
+					Died(this, new ScoreEventArgs{score = m_ScoreValue});
+				}
 				DestroyObjectAndBehaviors(m_ScoreValue);
+			}
 		}
 	}
 
 	public void DestroyObjectAndBehaviors(float score){
 		gameObject.SetActive (false);
-		m_GameMgr.UpdateScore(score);
+//		m_GameMgr.UpdateScore(score);
 		foreach (EAIBehaviors behavior in m_BehaviorsInstances) {
 			if(behavior != null){
 				Destroy(behavior.gameObject);
@@ -81,6 +88,7 @@ public class EnemyController : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 
+	public event EventHandler<ScoreEventArgs> Died;
 	
 	public void OnTriggerEnter2D(Collider2D coll) {
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();
@@ -112,4 +120,13 @@ public class EnemyController : MonoBehaviour {
 		}
 		return cannonRefs;
 	}
+
+	public void LoadFromInternal(EnemyData data){
+
+	}
+}
+
+public class ScoreEventArgs : EventArgs{
+	public float score{ get; set;}
+
 }
