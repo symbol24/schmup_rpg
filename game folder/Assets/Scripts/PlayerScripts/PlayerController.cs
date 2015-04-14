@@ -165,6 +165,23 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         }
     }
 
+	private float _m_experience;
+	public float m_experience
+	{
+		get { return _m_experience; }
+		set
+		{
+			if (_m_experience != value)
+			{
+				_m_experience = value;
+				if (ExperienceChanged != null)
+				{
+					ExperienceChanged(this, new floatEventArgs { NewValue = value });
+				}
+			}
+		}
+	}
+
     #region IPlayerStats Implementation
     public float Damage { get { return m_playerDamage; } }
     public event EventHandler<floatEventArgs> DamageChanged;
@@ -183,7 +200,9 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
     public float ShieldRechargeTime { get { return m_regenerationDelay; } }
     public event EventHandler<floatEventArgs> ShieldRechargeTimeChanged;
     public float ShieldRechargeDelay { get { return m_regenerationDelay; } }
-    public event EventHandler<floatEventArgs> ShieldRechargeDelayChanged;
+	public event EventHandler<floatEventArgs> ShieldRechargeDelayChanged;
+	public float Experience { get { return m_experience; } }
+	public event EventHandler<floatEventArgs> ExperienceChanged;
 
     #endregion IPlayerStats Implementation
 
@@ -468,7 +487,10 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		m_playerStatModifiers = values;
 	}
 	
-	
+	public void AddExp(float newExp){
+		m_experience += newExp;
+	}
+
 	/*void OnTriggerEnter2D(Collider2D coll) {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();

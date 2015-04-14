@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
+[Serializable]
 public class MissionContainer : MonoBehaviour, iMissionContainer {
 	private static iMissionContainer mInstance;
 	
 	public static iMissionContainer instance{
 		get{ return mInstance ?? (mInstance = new MissionContainerDummy());}
 	}
+	public MissionController.MissionType MissionType;
+	public MissionController.MissionType m_MissionType{ get{ return MissionType; } set{ MissionType = value; } }
 
-	public MissionController.MissionType m_missionType;
-	public int m_playerLevel;
-	public EnemyData[] m_listOfMissionEnemies;
-	public BossData m_bossEnemy;
+	public int playerLevel;
+	public int m_playerLevel{ get{ return playerLevel; } set{ playerLevel = value; } }
+
+	public EnemyData[] listofEnemies;
+	public EnemyData[] m_listOfMissionEnemies{ get{ return listofEnemies; } set{ listofEnemies = value; } }
+
+	public BossData[] listofBosses;
+	public BossData[] m_listofBosses{ get{ return listofBosses; } set{ listofBosses = value; } }
+
+	public EquipmentData[] rewardEquipment;
+	public EquipmentData[] m_rewardEquipment{ get{ return rewardEquipment; } set{ rewardEquipment = value; } }
 
 
 	void Awake(){
@@ -25,11 +36,19 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
 	}
 }
 
-public interface iMissionContainer{
 
+public interface iMissionContainer{
+	MissionController.MissionType m_MissionType { get; set; }
+	int m_playerLevel { get; set; }
+	EnemyData[] m_listOfMissionEnemies { get; set; }
+	BossData[] m_listofBosses { get; set; }
+	EquipmentData[] m_rewardEquipment { get; set; }
 }
 
 public class MissionContainerDummy : iMissionContainer{
-	public MissionController.MissionType m_missionType;
-	public int m_playerLevel;
+	public MissionController.MissionType m_MissionType{ get; set; }
+	public int m_playerLevel{ get; set; }
+	public EnemyData[] m_listOfMissionEnemies{ get; set; }
+	public BossData[] m_listofBosses{ get; set; }
+	public EquipmentData[] m_rewardEquipment{ get; set; }
 }

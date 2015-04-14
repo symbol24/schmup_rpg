@@ -74,4 +74,9 @@ public class EnemySpawnController : MonoBehaviour {
 	public void RestartState(){
 		m_SpawnerState = m_PreviousState;
 	}
+
+	public void SetEnemyToSpawn(EnemyController enemy, int Amount){
+		m_EAIPrefab = enemy;
+		m_AmountToSpawn = Amount;
+	}
 }
