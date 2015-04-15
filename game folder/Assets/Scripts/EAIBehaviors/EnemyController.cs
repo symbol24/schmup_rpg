@@ -84,7 +84,11 @@ public class EnemyController : MonoBehaviour {
 				Destroy(behavior.gameObject);
 			}
 		}
-		m_playerController.AddExp(m_experienceValue);
+		m_playerController.AddExp(score);
+		if(score > 0)
+			m_missionController.IncrementKillCount ();
+
+		m_missionController.DecreaseSpawnCount ();
 		Destroy (this.gameObject);
 	}
 	
@@ -106,7 +110,7 @@ public class EnemyController : MonoBehaviour {
 			Instantiate (m_BlueExplosion, tempBullet.transform.position, tempBullet.transform.rotation);
 			m_CurrentHP = DamageCalculators.Hit(tempBullet.m_DamageValue, m_CurrentHP, m_EaiArmor);
 			checkHealth();
-			tempBullet.DestroyObjectAndBehaviors();
+			tempBullet.DestroyObjectAndBehaviors(false);
 		}
 	}
 

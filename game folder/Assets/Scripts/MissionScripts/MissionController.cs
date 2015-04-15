@@ -14,6 +14,8 @@ public class MissionController : MonoBehaviour {
 	private enum SpawnStatus{
 		waiting,
 		spawningEnemies,
+		waitToSpawnBoss,
+		waitToSpawnMore,
 		spawningBoss,
 		fighting,
 	}
@@ -23,6 +25,8 @@ public class MissionController : MonoBehaviour {
 	private PrefabContainer m_prefabDatabase;
 
 	private PlayerController m_playerController;
+
+	private GameManager m_gameManager;
 
 	[SerializeField] private float m_minSpawnDelay = 0.0f;
 	[SerializeField] private float m_maxSpawnDelay = 0.0f;
@@ -37,7 +41,7 @@ public class MissionController : MonoBehaviour {
 
 	public float m_spawnerX, m_spawnerY;
 
-	private int m_totalSpawnCount;
+	private int m_killCount;
 	private int m_currentSpawnCount;
 	public int m_delaySpawnCount;
 	public int m_bossSpawnCount;
@@ -45,8 +49,8 @@ public class MissionController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		m_prefabDatabase = FindObjectOfType<PrefabContainer> ();
-
-
+		m_gameManager = FindObjectOfType<GameManager> ();
+		m_spawnerX = m_gameManager.m_limiterX;
 		GetMIssionInfo ();
 
 		m_spawnStatus = SpawnStatus.spawningEnemies;
@@ -110,7 +114,25 @@ public class MissionController : MonoBehaviour {
 			m_currentEnemytoSpawn = 0;
 	}
 
-	public void IncrementSpawnCount(int c){
+	public void IncrementSpawnCount(){
+		m_currentSpawnCount++;
 
+		if (m_currentSpawnCount >= m_delaySpawnCount) {
+			m_spawnStatus = SpawnStatus.waitToSpawnMore;
+		}
+	}
+
+	public void DecreaseSpawnCount(){
+		m_currentSpawnCount--;
+		if (m_currentSpawnCount >= m_delaySpawnCount && m_spawnStatus == SpawnStatus.waitToSpawnMore) {
+			m_spawnStatus = SpawnStatus.spawningEnemies;
+		}
+	}
+
+	public void IncrementKillCount(){
+		m_killCount++;
+		if (m_killCount >= m_bossSpawnCount) {
+			m_spawnStatus = SpawnStatus.waitToSpawnBoss;
+		}
 	}
 }

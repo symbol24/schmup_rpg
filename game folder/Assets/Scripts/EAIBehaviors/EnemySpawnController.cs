@@ -3,6 +3,7 @@ using System.Collections;
 
 public class EnemySpawnController : MonoBehaviour {
 	private GameManager m_GameManager;
+	private MissionController m_missionController;
 
 	public EnemyController m_EAIPrefab;
 	public int m_AmountToSpawn = 1;
@@ -23,8 +24,9 @@ public class EnemySpawnController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		m_GameManager = FindObjectOfType<GameManager> ();
 		m_SpawnerState = SpawnerState.moving;
+		m_missionController = FindObjectOfType<MissionController> ();
 	}
 	
 	// Update is called once per frame
@@ -48,6 +50,7 @@ public class EnemySpawnController : MonoBehaviour {
 							m_NextSpawn = Time.time + m_SpawnRate;
 							EnemyController eaiClone = Instantiate(m_EAIPrefab, transform.position, transform.rotation) as EnemyController;
 							eaiClone.gameObject.SetActive(true);
+							m_missionController.IncrementSpawnCount();
 							m_EnemyCounter++;
 						}
 						if(m_EnemyCounter >= m_AmountToSpawn)

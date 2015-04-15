@@ -53,7 +53,7 @@ public class ProjectileController : MonoBehaviour, IProjectileController
 
     
 
-    public void DestroyObjectAndBehaviors(bool executeDestruction = false){
+    public void DestroyObjectAndBehaviors(bool executeDestruction){
 		gameObject.SetActive (false);
 		foreach (ProjectileBehavior behavior in m_ProjectileBehaviorInstances) {
 			if(behavior != null){

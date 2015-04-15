@@ -308,7 +308,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		startingPosition = transform.position;
 		anim = GetComponent<Animator>();
 		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
-		horLimit = m_GameManager.m_limiterX;
+		horLimit = m_GameManager.m_limiterX - 0.2f;
 		m_myCol = GetComponent<BoxCollider2D> ();
 		
 		//setup equipment
