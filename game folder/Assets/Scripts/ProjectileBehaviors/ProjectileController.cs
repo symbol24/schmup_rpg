@@ -8,7 +8,7 @@ public class ProjectileController : MonoBehaviour, IProjectileController
 {
     #region BaseStats
     public float m_DamageValue = 2.0f;
-    public int m_damageType = 0;
+    public EnergyType m_damageType = 0;
     public int m_EnergyValue = 1;
     public float m_Speed = 5.0f;
     public string m_Target = "enemy";
@@ -16,7 +16,7 @@ public class ProjectileController : MonoBehaviour, IProjectileController
     public string m_Type = "";
     public float m_bonusAtt = 0f;
     public float Damage { get { return m_DamageValue; } }
-    public EnergyType DamageType { get { return (EnergyType)m_damageType; } }
+    public EnergyType DamageType { get { return (EnergyType)m_damageType; } set { m_damageType = value; } }
     public int EnergyValue { get { return m_EnergyValue; } }
     public float BonusAtt { get { return m_bonusAtt; } }
     public TargetEnum Target { get { return m_Target == "enemy" ? TargetEnum.Enemies : TargetEnum.Player; } }

@@ -12,9 +12,14 @@ public class ShipConstructor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_playerContainer = FindObjectOfType(typeof(PlayerContainer)) as PlayerContainer;
-		m_prefabs = FindObjectOfType(typeof(PrefabContainer)) as PrefabContainer;
-		m_manager = FindObjectOfType (typeof(GameManager)) as GameManager;
+		m_playerContainer = FindObjectOfType<PlayerContainer>();
+        if(m_playerContainer == null){
+            print("PlayerContainer missing!");
+            Application.LoadLevel("loader");
+        }
+
+		m_prefabs = FindObjectOfType<PrefabContainer>();
+		m_manager = FindObjectOfType<GameManager>();
 		m_playerController = SetPlayerController ();
 //		m_manager.SetPlayerShip (m_playerController);
 		//m_playerController.m_energyBar.SetPlayerShip (m_playerController);

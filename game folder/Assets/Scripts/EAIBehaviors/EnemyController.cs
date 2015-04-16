@@ -26,7 +26,7 @@ public class EnemyController : MonoBehaviour {
 	public GameObject m_HealthBar;
 	public int m_CannonUpgradeID = 1;
 	public bool m_IsDying = false;
-    public int m_damageType;
+    public EnergyType m_damageType;
     public float m_baseDamage;
     public int m_shieldType;
     public float m_baseShield;
