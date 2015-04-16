@@ -20,6 +20,7 @@ public class EnemySpawnController : MonoBehaviour {
 	}
 	private SpawnerState m_SpawnerState;
 	private SpawnerState m_PreviousState;
+    private EnemyData m_enemyData;
 
 
 	// Use this for initialization
@@ -46,9 +47,9 @@ public class EnemySpawnController : MonoBehaviour {
 						if(m_GameManager != null && m_GameManager.m_CurrentState == GameManager.gameState.playing){
 							//spawn enemies
 						if (Time.time > m_NextSpawn && m_EnemyCounter <= m_AmountToSpawn ){
-							print ("Spawn rate " + m_SpawnRate);
 							m_NextSpawn = Time.time + m_SpawnRate;
 							EnemyController eaiClone = Instantiate(m_EAIPrefab, transform.position, transform.rotation) as EnemyController;
+                            eaiClone.LoadFromInternal(m_enemyData);
 							eaiClone.gameObject.SetActive(true);
 							m_missionController.IncrementSpawnCount();
 							m_EnemyCounter++;
@@ -79,7 +80,8 @@ public class EnemySpawnController : MonoBehaviour {
 		m_SpawnerState = m_PreviousState;
 	}
 
-	public void SetEnemyToSpawn(EnemyController enemy, int Amount, float delay){
+	public void SetEnemyToSpawn(EnemyData data, EnemyController enemy, int Amount, float delay){
+        m_enemyData = data;
 		m_EAIPrefab = enemy;
 		m_AmountToSpawn = Amount;
 		m_SpawnRate = delay;

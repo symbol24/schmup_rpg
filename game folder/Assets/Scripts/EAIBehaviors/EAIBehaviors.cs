@@ -22,6 +22,8 @@ public class EAIBehaviors : MonoBehaviour{
 
 	public void ShootABullet(CannonReferences refereance, ProjectileController bulletTemplate){
 		ProjectileController oneBullet = Instantiate(bulletTemplate, refereance.transform.position, refereance.transform.rotation) as ProjectileController;
+        oneBullet.m_DamageValue = m_Controller.m_damageType;
+        oneBullet.m_damageType = m_Controller.m_damageType;
 	}
 
 }

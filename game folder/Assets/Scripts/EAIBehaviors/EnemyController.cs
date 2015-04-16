@@ -26,6 +26,10 @@ public class EnemyController : MonoBehaviour {
 	public GameObject m_HealthBar;
 	public int m_CannonUpgradeID = 1;
 	public bool m_IsDying = false;
+    public int m_damageType;
+    public float m_baseDamage;
+    public int m_shieldType;
+    public float m_baseShield;
 
 	void Start(){
 		m_GameMgr = FindObjectOfType<GameManager> ();
@@ -125,6 +129,13 @@ public class EnemyController : MonoBehaviour {
 
 	public void LoadFromInternal(EnemyData data){
 
+        m_damageType = data.m_damageType;
+        m_EaiHP = data.m_baseHP;
+        m_baseDamage = data.m_baseDamage;
+        m_EaiArmor = data.m_baseArmour;
+        m_experienceValue = data.m_experienceValue;
+        m_shieldType = data.m_shieldType;
+        m_baseShield = data.m_baseShield;
 	}
 }
 

@@ -12,25 +12,32 @@ public class MissionController : MonoBehaviour {
 	private MissionType m_missionType;
 
 	private enum SpawnStatus{
+		intro,
 		waiting,
 		spawningEnemies,
 		waitToSpawnBoss,
-		waitToSpawnMore,
 		spawningBoss,
-		fighting,
+		outro,
 	}
+    private SpawnStatus m_spawnStatus;
+    private SpawnStatus nextStatus;
 
-	private SpawnStatus m_spawnStatus;
-
+	//the global
 	private PrefabContainer m_prefabDatabase;
 
-	private PlayerController m_playerController;
-
+    //the manage
 	private GameManager m_gameManager;
 
+    //the player
+    private PlayerController m_playerController;
+
+    //spawn delay timer stuff
 	[SerializeField] private float m_minSpawnDelay = 0.0f;
 	[SerializeField] private float m_maxSpawnDelay = 0.0f;
-	private float m_spawnTimer = 0.0f;
+	private float m_Timer = 0.0f;
+
+    //intro delay
+    [SerializeField] private float m_introDelay;
 
 	private int m_currentEnemytoSpawn = 0;
 	private EnemyController[] m_listofEnemies;
@@ -51,32 +58,73 @@ public class MissionController : MonoBehaviour {
 		m_prefabDatabase = FindObjectOfType<PrefabContainer> ();
 		m_gameManager = FindObjectOfType<GameManager> ();
 		m_spawnerX = m_gameManager.m_limiterX;
-		GetMIssionInfo ();
-
-		m_spawnStatus = SpawnStatus.spawningEnemies;
+		GetMissionInfo ();
+        m_Timer = Time.time + m_introDelay;
+		m_spawnStatus = SpawnStatus.intro;
+        DisplayIntro();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		switch (m_spawnStatus) {
+		case SpawnStatus.intro:
+                if (m_Timer <= Time.time) {
+
+                    nextStatus = SpawnStatus.spawningEnemies;
+
+                    //empty exploration goes to outro
+                    if (MissionContainer.instance.m_isMissionEmpty)
+                        nextStatus = SpawnStatus.outro;
+
+				    m_spawnStatus = nextStatus;
+                }
+			break;
 		case SpawnStatus.waiting:
+                //do nothing
 			break;
 		case SpawnStatus.spawningEnemies:
-			if(m_spawnTimer <= Time.time){
+			if(m_Timer <= Time.time && m_currentSpawnCount < m_delaySpawnCount){
 				SpawnEnemySpawnController (MissionContainer.instance.m_listOfMissionEnemies);
 				float delay = Random.Range(m_minSpawnDelay, m_maxSpawnDelay);
-				m_spawnTimer = Time.time + delay;
+				m_Timer = Time.time + delay;
 
 			}
+			break;
+		case SpawnStatus.waitToSpawnBoss:
+			if(m_currentSpawnCount <=0)
+				m_spawnStatus = SpawnStatus.spawningBoss;
 			break;
 		case SpawnStatus.spawningBoss:
 			SpawnEnemySpawnController (MissionContainer.instance.m_listofBosses);
 			m_spawnStatus = SpawnStatus.waiting;
 			break;
+        case SpawnStatus.outro:
+            //ask to return to hub
+            break;
 		}
 	}
 
-	private void GetMIssionInfo(){
+    private void DisplayIntro(){
+        //implement mission intro stuff
+        print("Misison Type = " + m_missionType);
+        switch (m_missionType)
+        {
+            case MissionType.bounty:
+                //do somthing to show the mission has a boss to kill
+                //there may or may not be rewards
+                break;
+            case MissionType.exploration:
+                //show if there is something here or not
+                //there may or may not be rewards
+                break;
+            case MissionType.scavange:
+                //show that the goal is to retrive rewards
+                //tehre may or may not be a boss
+                break;
+        }
+    }
+
+	private void GetMissionInfo(){
 		//enemyspawner prefab
 		m_enemySpawner = m_prefabDatabase.GetEnemySpawner();
 
@@ -107,7 +155,7 @@ public class MissionController : MonoBehaviour {
 		EnemyController prefab = m_prefabDatabase.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
 
 		EnemySpawnController toSpawn = Instantiate (m_enemySpawner, pos, transform.rotation) as EnemySpawnController;
-		toSpawn.SetEnemyToSpawn (prefab, enemy[m_currentEnemytoSpawn].m_spawnCount, enemy[m_currentEnemytoSpawn].m_spawnDelay);
+		toSpawn.SetEnemyToSpawn (enemy[m_currentEnemytoSpawn], prefab, enemy[m_currentEnemytoSpawn].m_spawnCount, enemy[m_currentEnemytoSpawn].m_spawnDelay);
 
 		m_currentEnemytoSpawn++;
 		if(m_currentEnemytoSpawn >= MissionContainer.instance.m_listOfMissionEnemies.Length)
@@ -116,22 +164,15 @@ public class MissionController : MonoBehaviour {
 
 	public void IncrementSpawnCount(){
 		m_currentSpawnCount++;
-
-		if (m_currentSpawnCount >= m_delaySpawnCount) {
-			m_spawnStatus = SpawnStatus.waitToSpawnMore;
-		}
 	}
 
 	public void DecreaseSpawnCount(){
 		m_currentSpawnCount--;
-		if (m_currentSpawnCount >= m_delaySpawnCount && m_spawnStatus == SpawnStatus.waitToSpawnMore) {
-			m_spawnStatus = SpawnStatus.spawningEnemies;
-		}
 	}
 
 	public void IncrementKillCount(){
 		m_killCount++;
-		if (m_killCount >= m_bossSpawnCount) {
+		if (m_missionType == MissionType.bounty && m_killCount >= m_bossSpawnCount) {
 			m_spawnStatus = SpawnStatus.waitToSpawnBoss;
 		}
 	}
