@@ -280,6 +280,9 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	private EquipmentController[] m_instantiatedEquipment;
 	private ShieldController m_instantiatedShield;
 
+    //INVENTORY!
+    private EquipmentData[] m_inventory;
+
     #region ChangedForHPController
     //UI energy, health and shield!
 	/*

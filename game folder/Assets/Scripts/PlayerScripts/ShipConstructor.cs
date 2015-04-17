@@ -8,6 +8,7 @@ public class ShipConstructor : MonoBehaviour {
 	private GameManager m_manager;
 	private CannonController[] m_cannons = new CannonController[2];
 	private EquipmentController[] m_otherEquipment = new EquipmentController[4];
+    private EquipmentData[] m_inventory;
 	private ShieldController m_shieldController;
 
 	// Use this for initialization
