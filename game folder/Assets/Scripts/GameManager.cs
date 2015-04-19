@@ -131,6 +131,10 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel(m_NextLevel);
 	}
 
+    public void UpdateGameState(gameState state){
+        m_CurrentState = state;
+    }
+
 	public IEnumerator DeathExplosion(PlayerController player, float currentHP){
 		m_CurrentState = gameState.dead;
 		Transform transformForExplosion = player.transform;

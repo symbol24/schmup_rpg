@@ -154,6 +154,8 @@ public class MissionController : MonoBehaviour {
 
 		EnemyController prefab = m_prefabDatabase.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
 
+        if (enemy[m_currentEnemytoSpawn] == null) m_currentEnemytoSpawn = 0;
+
 		EnemySpawnController toSpawn = Instantiate (m_enemySpawner, pos, transform.rotation) as EnemySpawnController;
 		toSpawn.SetEnemyToSpawn (enemy[m_currentEnemytoSpawn], prefab, enemy[m_currentEnemytoSpawn].m_spawnCount, enemy[m_currentEnemytoSpawn].m_spawnDelay);
 
