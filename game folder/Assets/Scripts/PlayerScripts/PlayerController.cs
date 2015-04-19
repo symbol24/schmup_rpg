@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Xml; 
 using System.Xml.Serialization;
 using System;
-using System.Linq; 
+using System.Linq;
+using UnityEngine.UI; 
 
 [Serializable]
 public class PlayerController : MonoBehaviour, IPlayerStats {
 	public GameManager m_GameManager;
+    private Canvas m_canvas;
+    private PlayerInfo m_playerInfo;
 
 	//the base values compiled
 	[SerializeField] protected float[] m_playerBaseStatValues = new float[7];
@@ -281,7 +284,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	private ShieldController m_instantiatedShield;
 
     //INVENTORY!
-    private EquipmentData[] m_inventory;
+    public EquipmentData[] m_inventory;
 
     #region ChangedForHPController
     //UI energy, health and shield!
@@ -310,7 +313,9 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	public void Init(){
 		startingPosition = transform.position;
 		anim = GetComponent<Animator>();
-		m_GameManager = GameObject.Find ("GameManagerObj").GetComponent<GameManager> ();
+		m_GameManager = FindObjectOfType<GameManager> ();
+        m_canvas = FindObjectOfType<Canvas>();
+        m_playerInfo = FindObjectOfType<PlayerInfo>();
 		horLimit = m_GameManager.m_limiterX - 0.2f;
 		m_myCol = GetComponent<BoxCollider2D> ();
 		
@@ -318,6 +323,10 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		SetupEquipment ();
 		SetupCannons ();
 		CalculateStats ();
+        m_playerInfo.UpdateStats(this);
+        m_playerInfo.UpdateEquipmentNames(this);
+
+        //HP
 	    m_HPController = GetComponent<IHPController>();
         if(m_HPController == null) Debug.LogError("No IHPControllerFound in " + gameObject.name);
 	    var chassisController =
@@ -478,6 +487,10 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		}
 	}
 
+    public void SetInventory(EquipmentData[] data) {
+        m_inventory = data;
+    }
+
 	public void UpdateCollider(bool status){
 		m_myCol.enabled = status;
 	}
@@ -500,6 +513,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	    m_regenerationDelay = m_instantiatedShield.m_regenerationDelay;
 
 		PrintStats ();
+        m_playerInfo.UpdateStats(this);
 	}
 	
 	public void WeaponSwitchUpdateValuesModifiers(EquipmentController oldWeapon, EquipmentController newWeapon){
@@ -540,6 +554,13 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		print ("m_TimeToFullShieldRecharge " + m_TimeToFullShieldRecharge);
 	}
 
+    public CannonController[] GetCannons(){
+        return instantiatedCannons;
+    }
+
+    public EquipmentController[] GetOtherEquipment(){
+        return m_instantiatedEquipment;
+    }
 	/*void OnTriggerEnter2D(Collider2D coll) {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();

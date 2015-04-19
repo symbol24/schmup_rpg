@@ -8,7 +8,6 @@ public class ShipConstructor : MonoBehaviour {
 	private GameManager m_manager;
 	private CannonController[] m_cannons = new CannonController[2];
 	private EquipmentController[] m_otherEquipment = new EquipmentController[4];
-    private EquipmentData[] m_inventory;
 	private ShieldController m_shieldController;
 
 	// Use this for initialization
@@ -43,6 +42,7 @@ public class ShipConstructor : MonoBehaviour {
 		ret.SetCannons(GetInstancedCannons(m_playerContainer));
 		ret.SetOtherEquipmenet (GetInstancedEquipment (m_playerContainer));
 		ret.SetShield (m_shieldController);
+        ret.SetInventory(m_playerContainer.m_inventory);
 		ret.Init ();
 		return ret;
 	}

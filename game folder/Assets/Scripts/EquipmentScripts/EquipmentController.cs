@@ -16,6 +16,7 @@ public class EquipmentController : MonoBehaviour {
 		shield
 	}
 
+    public string m_equipmentName;
 	public equipmentType m_myType;
 
 	public int m_equipmentLevel = 1;
@@ -72,6 +73,7 @@ public class EquipmentController : MonoBehaviour {
 		m_damageType = data.m_damageType;
 		m_equipmentLevel = data.m_equipmentLevel;
 		m_myType = data.m_myType;
+        m_equipmentName = data.m_equipmentName;
 	}
 
 }
