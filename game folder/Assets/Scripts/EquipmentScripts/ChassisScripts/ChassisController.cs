@@ -5,8 +5,17 @@ using System.Xml;
 using System.Xml.Serialization; 
 
 [RequireComponent(typeof(DummyCollider))]
-public class ChassisController : EquipmentController, ISavable<EquipmentData>, IChassisController
+public class ChassisController : EquipmentController, ISavable<ChassisData>, IChassisController
 {
+    public enum ChassisSize
+    {
+        small,
+        medium,
+        large
+    }
+
+    public ChassisSize m_chassisSize = ChassisSize.small;
+
     private IDummyCollider _collider;
     public IDummyCollider Collider
     {
@@ -27,14 +36,15 @@ public class ChassisController : EquipmentController, ISavable<EquipmentData>, I
 
 	#region ISavable implementation
 
-	public EquipmentData GetSavableObject ()
+    public ChassisData GetSavableObject()
 	{
-		return GetSavableObjectInternal <EquipmentData>();
+		return GetSavableObjectInternal <ChassisData>();
 	}
 
-	public void LoadFrom (EquipmentData data)
+    public void LoadFrom(ChassisData data)
 	{
 		LoadFromInternal (data);
+        //m_chassisSize = data.m_chassisSize;
 	}
 
 	#endregion

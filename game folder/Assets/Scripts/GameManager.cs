@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	//game state enum
 	public enum gameState{
-		playing, paused, gameover, dead
+		playing, paused, gameover, dead, inventory
 	}
 	public gameState m_CurrentState;
 

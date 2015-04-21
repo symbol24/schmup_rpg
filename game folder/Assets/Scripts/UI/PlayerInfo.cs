@@ -7,20 +7,38 @@ public class PlayerInfo : MonoBehaviour {
         Text temp = GameObject.Find("dmgValue").GetComponent<Text>();
         temp.text = player.m_playerDamage.ToString();
 
+      //  temp = GameObject.Find("largeDmgValue").GetComponent<Text>();
+      //  temp.text = player.m_playerDamage.ToString();
+
         temp = GameObject.Find("frValue").GetComponent<Text>();
         temp.text = player.m_playerFireRate.ToString();
+
+      //  temp = GameObject.Find("largeFrValue").GetComponent<Text>();
+      //  temp.text = player.m_playerFireRate.ToString();
 
         temp = GameObject.Find("hpValue").GetComponent<Text>();
         temp.text = player.m_maxPlayerHP.ToString();
 
+      //  temp = GameObject.Find("largeHpValue").GetComponent<Text>();
+      //  temp.text = player.m_maxPlayerHP.ToString();
+
         temp = GameObject.Find("armorValue").GetComponent<Text>();
         temp.text = player.m_playerArmor.ToString();
+
+     //   temp = GameObject.Find("largeArmorValue").GetComponent<Text>();
+      //  temp.text = player.m_playerArmor.ToString();
 
         temp = GameObject.Find("speedValue").GetComponent<Text>();
         temp.text = player.m_playerMouvementSpeed.ToString();
 
+       // temp = GameObject.Find("largeSpeedValue").GetComponent<Text>();
+       // temp.text = player.m_playerMouvementSpeed.ToString();
+
         temp = GameObject.Find("energyValue").GetComponent<Text>();
         temp.text = player.m_maxPlayerEnergy.ToString();
+
+      //  temp = GameObject.Find("largeEnergyValue").GetComponent<Text>();
+       // temp.text = player.m_maxPlayerEnergy.ToString();
     }
 
     public void UpdateEquipmentNames(PlayerController player)
@@ -31,20 +49,38 @@ public class PlayerInfo : MonoBehaviour {
         Text temp = GameObject.Find("cannonTxt1").GetComponent<Text>();
         temp.text = cannons[0].m_equipmentName;
 
+     //   temp = GameObject.Find("cannonTxt1 1").GetComponent<Text>();
+     //   temp.text = cannons[0].m_equipmentName;
+
         temp = GameObject.Find("cannonTxt2").GetComponent<Text>();
         temp.text = cannons[1].m_equipmentName;
+
+      //  temp = GameObject.Find("cannonTxt2 1").GetComponent<Text>();
+     //   temp.text = cannons[1].m_equipmentName;
 
         temp = GameObject.Find("chassisTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.chassis);
 
+      //  temp = GameObject.Find("chassisTxt 1").GetComponent<Text>();
+      //  temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.chassis);
+
         temp = GameObject.Find("engineTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.engine);
+
+     //   temp = GameObject.Find("engineTxt 1").GetComponent<Text>();
+     //   temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.engine);
 
         temp = GameObject.Find("hullTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.hull);
 
+       // temp = GameObject.Find("hullTxt 1").GetComponent<Text>();
+      //  temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.hull);
+
         temp = GameObject.Find("shieldTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.shield);
+
+        //temp = GameObject.Find("shieldTxt 1").GetComponent<Text>();
+       // temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.shield);
     }
 
     private string GetEquipmentName(EquipmentController[] equips, EquipmentController.equipmentType type){
