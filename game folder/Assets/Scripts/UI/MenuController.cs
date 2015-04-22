@@ -6,11 +6,28 @@ using UnityEngine.EventSystems;
 public class MenuController : MonoBehaviour {
     private GameManager m_GameManager;
     private EventSystem m_eventSystem;
-    public Menu m_PauseMenu;
-    public Menu m_StatusandInventoryMenu;
+    private PlayerController m_playerController;
     private float delay = 0.5f;
     private float m_time = 0.0f;
     private Menu m_currentActiveMenu;
+    public enum MenuType: int
+    {
+        baseMenu = 0,
+        status = 1,
+        cannons = 2,
+        chassis = 3,
+        hull = 4,
+        engine = 5,
+        shield = 6,
+        options = 7
+    }
+
+    [SerializeField] private Menu m_PauseMenu;
+    [SerializeField] private Menu m_StatusandInventoryMenu;
+    [SerializeField] private PlayerStatusMenu m_playerStatusMenu;
+    [SerializeField] private EquipmentMenu m_equipmentMenu;
+    [SerializeField] private OptionsMenu m_optionsMenu;
+    
 
     void Start(){
         m_GameManager = FindObjectOfType<GameManager>();
@@ -32,6 +49,7 @@ public class MenuController : MonoBehaviour {
         else if (m_GameManager.m_CurrentState == GameManager.gameState.playing && m_GameManager.m_backButton > 0 && Time.time >= m_time)
         {
             ShowMenu(m_StatusandInventoryMenu);
+            CheckIfFirstTimeOpen();
             m_GameManager.UpdateGameState(GameManager.gameState.inventory);
             m_time = Time.time + delay;
 
@@ -54,14 +72,41 @@ public class MenuController : MonoBehaviour {
         menu.gameObject.SetActive(false);
     }
 
-    public void SwitchMenu(Menu newMenu)
+    private void CheckIfFirstTimeOpen()
+    {
+        if (m_currentActiveMenu == null)
+        {
+            SwitchMenu(1);
+        }
+    }
+
+    public void SwitchMenu(int type)
     {
         if (m_currentActiveMenu != null)
             m_currentActiveMenu.gameObject.SetActive(false);
 
-        m_currentActiveMenu = newMenu;
+        MenuType menuType = (MenuType)type;
 
-        newMenu.gameObject.SetActive(true);
-        //m_eventSystem.SetSelectedGameObject(newMenu.m_firstButton);
+        m_playerController = FindObjectOfType<PlayerController>();
+
+        switch (menuType)
+        {
+            case MenuType.baseMenu:
+                break;
+            case MenuType.status:
+                m_playerStatusMenu.gameObject.SetActive(true);
+                m_playerStatusMenu.UpdateLargePlayerInfo(m_playerController);
+                m_currentActiveMenu = m_playerStatusMenu;
+                break;
+            case MenuType.options:
+                m_optionsMenu.gameObject.SetActive(true);
+                m_currentActiveMenu = m_optionsMenu;
+                break;
+            default:
+                m_equipmentMenu.gameObject.SetActive(true);
+                m_equipmentMenu.Init(menuType, m_playerController);
+                m_currentActiveMenu = m_equipmentMenu;
+                break;
+        }
     }
 }
