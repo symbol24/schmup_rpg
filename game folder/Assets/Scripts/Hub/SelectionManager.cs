@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
@@ -11,66 +12,73 @@ public class SelectionManager : MonoBehaviour
     public float timeToFade = 2f;
     public float timeBeforePicFadeout = 2f;
     private ButtonContainer currentActiveButton;
+    private DialogueQueue _dialogueQueue;
 
 	// Use this for initialization
 	void Start ()
 	{
         var disorganizedToggles = FindObjectsOfType<ButtonContainer>();
-	    availableChecks = disorganizedToggles.OrderBy(c => c.MainToggle.transform.position.x).ToArray();
+	    availableChecks = disorganizedToggles.OrderBy(c => c.MainButton.transform.position.x).ToArray();
 	    foreach (var availableCheck in availableChecks)
 	    {
-	        //availableCheck.MainToggle.isOn = false;
-            availableCheck.ToggleChanged += AvailableCheckOnToggleChanged;
-	        if (availableCheck.MainToggle.isOn)
-	        {
-                if(currentActiveButton != null) Debug.LogError("There are 2 current active buttons");
-	            currentActiveButton = availableCheck;
-	        }
+            availableCheck.ButtonPressed += availableCheck_ButtonPressed;
 	    }
+        availableChecks.First().OnClick();
+	    EventSystem.current.SetSelectedGameObject(availableChecks.First().gameObject);
+	    _dialogueQueue = FindObjectOfType<DialogueQueue>();
+        _dialogueQueue.QueueEmptied += DialogueQueueOnQueueEmptied;
+	    _dialogueQueue.QueueStarted += DialogueQueueOnQueueStarted;
+	}
+
+    private void DialogueQueueOnQueueStarted(object sender, EventArgs eventArgs)
+    {
+        currentActiveButton.ButtonsInteractible = false;
+    }
+    private void DialogueQueueOnQueueEmptied(object sender, EventArgs eventArgs)
+    {
+        currentActiveButton.ButtonsInteractible = true;
+    }
+
+    void Update()
+    {
         
-	}
+    }
 
-    
-    private void AvailableCheckOnToggleChanged(object sender, EventArgs eventArgs)
+
+    #region HandlingTransitions
+    private bool _inButtonPressProgress = false;
+    void availableCheck_ButtonPressed(object sender, EventArgs e)
     {
-        var containerReceived = sender as ButtonContainer;
-        if (containerReceived != null)
+        if (_inButtonPressProgress) return;
+        _inButtonPressProgress = true;
+        var button = (ButtonContainer) sender;
+        var currentButtonInstanceID = button.GetInstanceID();
+        if (currentActiveButton != null && currentButtonInstanceID == currentActiveButton.GetInstanceID())
         {
-            var currentButtonInstanceID = containerReceived.GetInstanceID();
-            if (currentButtonInstanceID == currentActiveButton.GetInstanceID())
-            {
-                currentActiveButton.MainToggle.isOn = true;
-                return;
-            }
-            if (containerReceived.MainToggle.isOn)
-            {
-                currentActiveButton = containerReceived;
-                StartCoroutine(CoroutineDelayed(() => containerReceived.StartFadeIn(timeToFade),
-                    timeBeforePicFadeout));
-                foreach (var buttonContainer in availableChecks)
-                {
-                    if (currentButtonInstanceID != buttonContainer.GetInstanceID())
-                    {
-                        buttonContainer.MainToggle.isOn = false;
-                    }
-                }
-            }
-            else
-            {
-                containerReceived.StartFadeout(timeToFade);
-            }
-
+            return;
         }
+        if (currentActiveButton != null)
+        {
+            currentActiveButton.StartFadeout(timeToFade);
+            currentActiveButton.FinishedFadeOut += currentActiveButton_FinishedFadeOut;
+        }
+        else
+        {
+            button.StartFadeIn(timeToFade);
+            _inButtonPressProgress = false;
+        }
+        currentActiveButton = button;
     }
-
-    // Update is called once per frame
-	void Update () {
-	
-	}
-
-    private IEnumerator CoroutineDelayed(Action toDo, float time)
+    void currentActiveButton_FinishedFadeOut(object sender, EventArgs e)
     {
-        yield return new WaitForSeconds(time);
-        toDo.Invoke();
+        var button = (ButtonContainer) sender;
+        button.FinishedFadeOut -= currentActiveButton_FinishedFadeOut;
+        currentActiveButton.StartFadeIn(timeToFade);
+        currentActiveButton.FinishedFadeIn += currentActiveButton_FinishedFadeIn;
     }
+    void currentActiveButton_FinishedFadeIn(object sender, EventArgs e)
+    {
+        _inButtonPressProgress = false;
+    }
+    #endregion HandlingTransitions
 }

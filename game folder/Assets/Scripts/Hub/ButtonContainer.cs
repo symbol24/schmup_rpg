@@ -7,37 +7,67 @@ using UnityEngine.UI;
 
 public class ButtonContainer : MonoBehaviour 
 {
-    public Toggle MainToggle { get; private set; }
-    public event EventHandler ToggleChanged;
+    public Button MainButton { get; private set; }
+    public event EventHandler ButtonPressed;
+    public event EventHandler FinishedFadeIn;
+    public event EventHandler FinishedFadeOut;
     public Graphic[] _uiElementsToCarryAlong;
     public Graphic[] UIElements { get { return _uiElementsToCarryAlong; } }
+    public Stack<Button> PossibleSpriteButtons;
+
+    private bool _buttonsInteractible = true;
+    public bool ButtonsInteractible
+    {
+        get { return _buttonsInteractible; }
+        set
+        {
+            if (_buttonsInteractible != value)
+            {
+                _buttonsInteractible = value;
+                MainButton.interactable = _buttonsInteractible;
+                foreach (var possibleSpriteButton in PossibleSpriteButtons)
+                {
+                    possibleSpriteButton.interactable = _buttonsInteractible;
+                }
+            }
+        }
+    }
 
 	// Use this for initialization
 	void Awake ()
 	{
-	    MainToggle = GetComponentInChildren<Toggle>();
-        MainToggle.onValueChanged.AddListener(MainToggle_OnValueChanged);
-	    previousToggleValue = MainToggle.isOn;
-        if(previousToggleValue) StartFadeout(0);
-        else StartFadeIn(0);
+	    MainButton = GetComponentInChildren<Button>();
+        MainButton.onClick.AddListener(OnClick);
         if(_uiElementsToCarryAlong == null) _uiElementsToCarryAlong = new Graphic[0];
+        PossibleSpriteButtons = new Stack<Button>();
+	    foreach (var uiElement in UIElements)
+	    {
+	        var button = uiElement.GetComponent<Button>();
+            if(button != null) PossibleSpriteButtons.Push(button);
+	    }
+	    HideAllUIElementsEverything();
 
 	}
 
-    private bool previousToggleValue;
-    private void MainToggle_OnValueChanged(bool changedTo)
+    public void OnClick()
     {
-        if (previousToggleValue != changedTo)
+        if (ButtonsInteractible)
         {
-            previousToggleValue = changedTo;
-            if (ToggleChanged != null) ToggleChanged(this, EventArgs.Empty);
+            if (ButtonPressed != null) ButtonPressed(this, EventArgs.Empty);
         }
     }
 
 
+
+    #region HandlingTransitions
+    private bool previousToggleValue = false;
     private Stack<IEnumerator> _fadeinCoroutines = new Stack<IEnumerator>();
     public void StartFadeIn(float time)
     {
+        foreach (var possibleSpriteButton in PossibleSpriteButtons)
+        {
+            possibleSpriteButton.interactable = true;
+        }
         if (_fadeoutCoroutines.Any())
         {
             StopCoroutines(_fadeoutCoroutines);
@@ -45,13 +75,18 @@ public class ButtonContainer : MonoBehaviour
         }
         foreach (var uiElement in UIElements)
         {
-            _fadeinCoroutines.Push(uiElement.FadeIn(time));
+            _fadeinCoroutines.Push(FadeIn(uiElement,time));
         }
         StartCoroutines(_fadeinCoroutines);
     }
     private Stack<IEnumerator> _fadeoutCoroutines = new Stack<IEnumerator>();
     public void StartFadeout(float time)
     {
+        foreach (var possibleSpriteButton in PossibleSpriteButtons)
+        {
+            possibleSpriteButton.interactable = false;
+        }
+
         if (_fadeinCoroutines.Any())
         {
             StopCoroutines(_fadeinCoroutines);
@@ -59,7 +94,7 @@ public class ButtonContainer : MonoBehaviour
         }
         foreach (var uiElement in UIElements)
         {
-            _fadeoutCoroutines.Push(uiElement.FadeOut(time));
+            _fadeoutCoroutines.Push(FadeOut(uiElement,time));
         }
         StartCoroutines(_fadeoutCoroutines);
     }
@@ -78,4 +113,40 @@ public class ButtonContainer : MonoBehaviour
             StartCoroutine(enumerator);
         }
     }
+
+    public IEnumerator FadeIn(Graphic gUIText, float fadeTimer)
+    {
+        float speed = 1.0f / fadeTimer;
+        for (float t = 0.0f; t < 1.0; t += Time.deltaTime * speed)
+        {
+            float a = Mathf.Lerp(0.0f, 1.0f, t);
+            Color faded = gUIText.color;
+            faded.a = a;
+            gUIText.color = faded;
+            yield return 0;
+        }
+        if (FinishedFadeIn != null) FinishedFadeIn(this, EventArgs.Empty);
+    }
+    public IEnumerator FadeOut(Graphic gUIText, float fadeTimer)
+    {
+        float speed = 1.0f / fadeTimer;
+        for (float t = 0.0f; t < 1.0; t += Time.deltaTime * speed)
+        {
+            float a = Mathf.Lerp(1.0f, 0.0f, t);
+            Color faded = gUIText.color;
+            faded.a = a;
+            gUIText.color = faded;
+            yield return 0;
+        }
+        if (FinishedFadeOut != null) FinishedFadeOut(this, EventArgs.Empty);
+    }
+
+    private void HideAllUIElementsEverything()
+    {
+        foreach (var uiElement in UIElements)
+        {
+            uiElement.color = new Color(uiElement.color.r, uiElement.color.g, uiElement.color.b, 0);
+        }
+    }
+    #endregion HandlingTransitions
 }
