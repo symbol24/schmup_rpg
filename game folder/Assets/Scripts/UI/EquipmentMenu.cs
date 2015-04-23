@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class EquipmentMenu : Menu {
     PlayerController m_playerController;
     [SerializeField] GameObject m_buttonPrefab;
+    GameObject[] m_buttonList;
 
     public void Init(MenuController.MenuType type, PlayerController player)
     {
@@ -22,35 +23,40 @@ public class EquipmentMenu : Menu {
         int amount = CountEquipmentAmount(m_playerController.m_inventory, equipType);
 
         if(amount > 12) {
-            float height = amount * 45;
+            float height = amount * 65;
             Vector2 newRect = new Vector2(scRectTransform.rect.width, height);
             scRectTransform.sizeDelta = newRect;
         }
 
-        //DestroyChildren(scRect.transform);
+        if (m_buttonList != null) DestroyChildren(m_buttonList);
+
+        m_buttonList = new GameObject[amount];
+        int i = 0;
 
         foreach (EquipmentData e in m_playerController.m_inventory)
         {
             if (e.m_myType == equipType)
             {
-                GameObject button = Instantiate(m_buttonPrefab);
-                button.name = e.m_equipmentName;
-                RectTransform temp = button.GetComponent<RectTransform>();
+                m_buttonList[i] = Instantiate(m_buttonPrefab);
+                m_buttonList[i].name = e.m_equipmentName;
+                RectTransform temp = m_buttonList[i].GetComponent<RectTransform>();
                 temp.SetParent(scRectTransform, false);
                 Text txt = temp.transform.GetComponentInChildren<Text>();
                 txt.text = e.m_equipmentName;
+                i++;
             }
         }
 
     }
 
-    private void DestroyChildren(Transform fromThis)
+    private void DestroyChildren(GameObject[] fromThis)
     {
-        GameObject[] list = fromThis.GetComponentsInChildren<GameObject>();
-
-        if (list != null && list.Length > 0)
+        if (fromThis != null && fromThis.Length > 0)
         {
-            foreach (GameObject g in list) Destroy(g);
+            foreach (GameObject bt in fromThis)
+            {
+                Destroy(bt);
+            }
         }
     }
 
