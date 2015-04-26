@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 public class CannonController : EquipmentController, ISavable<CannonData> {
 	private GameManager m_GameManager;
+    private PrefabContainer m_prefabContainer;
 
 	public float m_baseWeaponDamage = 1.0f;
 	public float m_baseWeaponFireRate = 0.05F;
@@ -13,6 +14,7 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 
 	public GameObject[] m_ReferencePointForBullet;
 	public ProjectileController m_ProjectileToShootPrefab;
+    private string m_bulletPrefabName;
 	public int m_ProjectileEnergyValue = 1;
 	private EnergySystemController m_EnergyBar;
 	public bool m_IsAvailable = false;
@@ -23,10 +25,12 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 	}
 
 	void Start(){
-		m_GameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
+		m_GameManager = FindObjectOfType<GameManager>();
 		m_ProjectileEnergyValue = m_ProjectileToShootPrefab.m_EnergyValue;
-		m_EnergyBar = GameObject.FindObjectOfType(typeof(EnergySystemController)) as EnergySystemController;
+		m_EnergyBar = FindObjectOfType<EnergySystemController>();
 		m_ReferencePointForBullet = GameObject.FindGameObjectsWithTag (m_cannonTag);
+        m_prefabContainer = FindObjectOfType<PrefabContainer>();
+        SetBullet();
 	}
 
 	// Update is called once per frame
@@ -57,17 +61,20 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 	public CannonData GetSavableObject ()
 	{
 		var ret = GetSavableObjectInternal<CannonData> ();
-		ret.m_baseWeaponDamage = m_baseWeaponDamage;
-		ret.m_baseWeaponFireRate = m_baseWeaponFireRate;
+        ret.m_bulletPrefabName = m_ProjectileToShootPrefab.name;
 		return ret;
 	}
 
 	public void LoadFrom (CannonData data)
 	{
 		LoadFromInternal (data);
-		m_baseWeaponDamage = data.m_baseWeaponDamage;
-		m_baseWeaponFireRate = data.m_baseWeaponFireRate;
+        m_bulletPrefabName = data.m_bulletPrefabName;
 	}
 
 	#endregion
+
+    public void SetBullet()
+    {
+        m_ProjectileToShootPrefab = m_prefabContainer.GetBulletPerName(m_bulletPrefabName);
+    }
 }

@@ -10,7 +10,7 @@ public class EquipmentData {
 	public string m_prefabName = "";
 	public int m_equipmentLevel = 1;
 	public float m_creditValue = 1.0f;
-	public int m_damageType = 0;
+	public EnergyType m_damageType = EnergyType.proton;
 	public string m_Owner = "player";
 	
 	public float[] m_baseValues = new float[7];

@@ -66,42 +66,44 @@ public class MissionController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		switch (m_spawnStatus) {
-		case SpawnStatus.intro:
-                if (m_Timer <= Time.time) {
+        if (m_gameManager.m_CurrentState == GameManager.gameState.playing) {
+		    switch (m_spawnStatus) {
+		    case SpawnStatus.intro:
+                    if (m_Timer <= Time.time) {
 
-                    nextStatus = SpawnStatus.spawningEnemies;
+                        nextStatus = SpawnStatus.spawningEnemies;
 
-                    //empty exploration goes to outro
-                    if (MissionContainer.instance.m_isMissionEmpty)
-                        nextStatus = SpawnStatus.outro;
+                        //empty exploration goes to outro
+                        if (MissionContainer.instance.m_isMissionEmpty)
+                            nextStatus = SpawnStatus.outro;
 
-				    m_spawnStatus = nextStatus;
-                }
-			break;
-		case SpawnStatus.waiting:
-                //do nothing
-			break;
-		case SpawnStatus.spawningEnemies:
-			if(m_Timer <= Time.time && m_currentSpawnCount < m_delaySpawnCount){
-				SpawnEnemySpawnController (MissionContainer.instance.m_listOfMissionEnemies);
-				float delay = Random.Range(m_minSpawnDelay, m_maxSpawnDelay);
-				m_Timer = Time.time + delay;
+				        m_spawnStatus = nextStatus;
+                    }
+			    break;
+		    case SpawnStatus.waiting:
+                    //do nothing
+			    break;
+		    case SpawnStatus.spawningEnemies:
+			    if(m_Timer <= Time.time && m_currentSpawnCount < m_delaySpawnCount){
+				    SpawnEnemySpawnController (MissionContainer.instance.m_listOfMissionEnemies);
+				    float delay = Random.Range(m_minSpawnDelay, m_maxSpawnDelay);
+				    m_Timer = Time.time + delay;
 
-			}
-			break;
-		case SpawnStatus.waitToSpawnBoss:
-			if(m_currentSpawnCount <=0)
-				m_spawnStatus = SpawnStatus.spawningBoss;
-			break;
-		case SpawnStatus.spawningBoss:
-			SpawnEnemySpawnController (MissionContainer.instance.m_listofBosses);
-			m_spawnStatus = SpawnStatus.waiting;
-			break;
-        case SpawnStatus.outro:
-            //ask to return to hub
-            break;
-		}
+			    }
+			    break;
+		    case SpawnStatus.waitToSpawnBoss:
+			    if(m_currentSpawnCount <=0)
+				    m_spawnStatus = SpawnStatus.spawningBoss;
+			    break;
+		    case SpawnStatus.spawningBoss:
+			    SpawnEnemySpawnController (MissionContainer.instance.m_listofBosses);
+			    m_spawnStatus = SpawnStatus.waiting;
+			    break;
+            case SpawnStatus.outro:
+                //ask to return to hub
+                break;
+		    }
+        }
 	}
 
     private void DisplayIntro(){

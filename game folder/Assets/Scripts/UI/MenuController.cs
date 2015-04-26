@@ -10,6 +10,7 @@ public class MenuController : MonoBehaviour {
     private float delay = 0.5f;
     private float m_time = 0.0f;
     private Menu m_currentActiveMenu;
+    private Menu m_currentActiveInfo;
     public enum MenuType: int
     {
         baseMenu = 0,
@@ -26,6 +27,11 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private Menu m_StatusandInventoryMenu;
     [SerializeField] private PlayerStatusMenu m_playerStatusMenu;
     [SerializeField] private EquipmentMenu m_equipmentMenu;
+    [SerializeField] private Menu m_cannonInfo;
+    [SerializeField] private Menu m_chassisInfo;
+    [SerializeField] private Menu m_hullInfo;
+    [SerializeField] private Menu m_engineInfo;
+    [SerializeField] private Menu m_shieldInfo;
     [SerializeField] private OptionsMenu m_optionsMenu;
     
 
@@ -85,6 +91,9 @@ public class MenuController : MonoBehaviour {
         if (m_currentActiveMenu != null)
             m_currentActiveMenu.gameObject.SetActive(false);
 
+        if (m_currentActiveInfo != null)
+            m_currentActiveInfo.gameObject.SetActive(false);
+
         MenuType menuType = (MenuType)type;
 
         m_playerController = FindObjectOfType<PlayerController>();
@@ -106,6 +115,31 @@ public class MenuController : MonoBehaviour {
                 m_equipmentMenu.gameObject.SetActive(true);
                 m_equipmentMenu.Init(menuType, m_playerController);
                 m_currentActiveMenu = m_equipmentMenu;
+                if (menuType == MenuType.cannons)
+                {
+                    m_cannonInfo.gameObject.SetActive(true);
+                    m_currentActiveInfo = m_cannonInfo;
+                }
+                else if (menuType == MenuType.chassis)
+                {
+                    m_chassisInfo.gameObject.SetActive(true);
+                    m_currentActiveInfo = m_chassisInfo;
+                }
+                else if (menuType == MenuType.hull)
+                {
+                    m_hullInfo.gameObject.SetActive(true);
+                    m_currentActiveInfo = m_hullInfo;
+                }
+                else if (menuType == MenuType.engine)
+                {
+                    m_engineInfo.gameObject.SetActive(true);
+                    m_currentActiveInfo = m_engineInfo;
+                }
+                else if (menuType == MenuType.shield)
+                {
+                    m_shieldInfo.gameObject.SetActive(true);
+                    m_currentActiveInfo = m_shieldInfo;
+                }
                 break;
         }
     }

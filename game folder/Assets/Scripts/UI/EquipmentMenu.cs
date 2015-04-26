@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class EquipmentMenu : Menu {
     PlayerController m_playerController;
@@ -43,6 +44,7 @@ public class EquipmentMenu : Menu {
                 temp.SetParent(scRectTransform, false);
                 Text txt = temp.transform.GetComponentInChildren<Text>();
                 txt.text = e.m_equipmentName;
+                m_buttonList[i].GetComponent<EquipmentButton>().Init();
                 i++;
             }
         }
