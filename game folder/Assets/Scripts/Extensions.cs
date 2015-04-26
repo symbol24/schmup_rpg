@@ -50,4 +50,24 @@ public static class Extensions
         return ret;
     }
 
+    public static bool randomBoolean ()
+    {
+        if (Random.value >= 0.5)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static void DestroyChildren(GameObject[] fromThis)
+    {
+        if (fromThis != null && fromThis.Length > 0)
+        {
+            foreach (GameObject bt in fromThis)
+            {
+               MonoBehaviour.Destroy(bt);
+            }
+        }
+    }
+
 }

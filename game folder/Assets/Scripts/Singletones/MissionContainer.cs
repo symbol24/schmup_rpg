@@ -9,11 +9,15 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
 	public static iMissionContainer instance{
 		get{ return mInstance ?? (mInstance = new MissionContainerDummy());}
 	}
+
+    public string MissionCoordinates;
+    public string m_missionCoordinates { get{ return MissionCoordinates; } set{MissionCoordinates = value;} }
+
 	public MissionController.MissionType MissionType;
 	public MissionController.MissionType m_MissionType{ get{ return MissionType; } set{ MissionType = value; } }
 
-	public int playerLevel;
-	public int m_playerLevel{ get{ return playerLevel; } set{ playerLevel = value; } }
+	public float playerLevel;
+	public float m_playerLevel{ get{ return playerLevel; } set{ playerLevel = value; } }
 
     public bool isMissionEmpty;
     public bool m_isMissionEmpty { get { return isMissionEmpty; } set { isMissionEmpty = value; } }
@@ -40,18 +44,22 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
 }
 
 
-public interface iMissionContainer{
+public interface iMissionContainer
+{
+    string m_missionCoordinates { get; set; }
 	MissionController.MissionType m_MissionType { get; set; }
-	int m_playerLevel { get; set; }
+	float m_playerLevel { get; set; }
     bool m_isMissionEmpty { get; set; }
 	EnemyData[] m_listOfMissionEnemies { get; set; }
     EnemyData[] m_listofBosses { get; set; }
 	EquipmentData[] m_rewardEquipment { get; set; }
 }
 
-public class MissionContainerDummy : iMissionContainer{
+public class MissionContainerDummy : iMissionContainer
+{
+    public string m_missionCoordinates { get; set; }
 	public MissionController.MissionType m_MissionType{ get; set; }
-    public int m_playerLevel { get; set; }
+    public float m_playerLevel { get; set; }
     public bool m_isMissionEmpty { get; set; }
 	public EnemyData[] m_listOfMissionEnemies{ get; set; }
     public EnemyData[] m_listofBosses { get; set; }

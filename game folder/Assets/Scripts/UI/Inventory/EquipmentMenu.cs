@@ -23,13 +23,14 @@ public class EquipmentMenu : Menu {
         EquipmentController.equipmentType equipType = GetType(m_menuType);
         int amount = CountEquipmentAmount(m_playerController.m_inventory, equipType);
 
-        if(amount > 12) {
+        if (amount > 12)
+        {
             float height = amount * 65;
             Vector2 newRect = new Vector2(scRectTransform.rect.width, height);
             scRectTransform.sizeDelta = newRect;
         }
 
-        if (m_buttonList != null) DestroyChildren(m_buttonList);
+        if (m_buttonList != null) Extensions.DestroyChildren(m_buttonList);
 
         m_buttonList = new GameObject[amount];
         int i = 0;
@@ -49,17 +50,6 @@ public class EquipmentMenu : Menu {
             }
         }
 
-    }
-
-    private void DestroyChildren(GameObject[] fromThis)
-    {
-        if (fromThis != null && fromThis.Length > 0)
-        {
-            foreach (GameObject bt in fromThis)
-            {
-                Destroy(bt);
-            }
-        }
     }
 
     private EquipmentController.equipmentType GetType(MenuController.MenuType type)

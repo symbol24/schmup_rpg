@@ -137,6 +137,22 @@ public class EnemyController : MonoBehaviour {
         m_shieldType = data.m_shieldType;
         m_baseShield = data.m_baseShield;
 	}
+
+    public EnemyData SaveData()
+    {
+        EnemyData ret = new EnemyData();
+
+        ret.m_damageType = m_damageType;
+        ret.m_baseHP = m_EaiHP;
+        ret.m_baseDamage = m_baseDamage;
+        ret.m_baseArmour = m_EaiArmor;
+        ret.m_experienceValue = m_experienceValue;
+        ret.m_shieldType = m_shieldType;
+        ret.m_baseShield = m_baseShield;
+        ret.m_PrefabName = gameObject.name;
+
+        return ret;
+    }
 }
 
 public class ScoreEventArgs : EventArgs{
