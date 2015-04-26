@@ -303,7 +303,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 	void Start(){
 
-
 		//this = SaveLoad.LoadPlayer ();
 		//SaveLoad.SavePlayer (this);
 		//m_instantiatedEquipment.First().GetSavableObject().SaveObject ("saveTest.xml");
@@ -321,7 +320,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		
 		//setup equipment
 		SetupEquipment ();
-		SetupCannons ();
+        SetupCannons();
 		CalculateStats ();
         m_playerInfo.UpdateStats(this);
         m_playerInfo.UpdateEquipmentNames(this);
@@ -452,6 +451,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 			currentCannon = instantiatedCannons[cannonID];
 			currentCannon.gameObject.SetActive(true);
 			WeaponSwitchUpdateValuesModifiers(instantiatedCannons[previousID], currentCannon);
+            SetBulletImg();
 		}
 	}
 
@@ -478,6 +478,13 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 			}
 		}
 	}
+
+    public void SetBulletImg()
+    {
+        Image img = GameObject.Find("projectileImg").GetComponent<Image>();
+        SpriteRenderer cannonSprite = currentCannon.m_ProjectileToShootPrefab.GetComponent<SpriteRenderer>();
+        img.sprite = cannonSprite.sprite;
+    }
 
 	private void SetupEquipment(){
 		for(int i = 0; i < m_instantiatedEquipment.Length; i++){

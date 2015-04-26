@@ -7,19 +7,18 @@ public class EquipmentButton : MonoBehaviour {
 
     PlayerController m_playerController;
     EquipmentController.equipmentType myType;
+    EquipmentData toDisplay;
 
     public void Init()
     {
         m_playerController = FindObjectOfType<PlayerController>();
         myType = m_playerController.m_inventory[GetEquipmentID()].m_myType;
+        toDisplay = GetEquipment();
         SetOnClick();
     }
 
     private void UpdateCannonInfo()
     {
-        int index = GetEquipmentID();
-        EquipmentData toDisplay = m_playerController.m_inventory[index];
-
         Text txt = GameObject.Find("cannonInfoTitle").GetComponentInChildren<Text>();
         txt.text = toDisplay.m_equipmentName;
 
@@ -37,6 +36,58 @@ public class EquipmentButton : MonoBehaviour {
 
         txt = GameObject.Find("cannonEU").GetComponentInChildren<Text>();
         txt.text = "Not implemented yey";
+    }
+
+    private void UpdateChassisInfo()
+    {
+        Text txt = GameObject.Find("chassisInfoTitle").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_equipmentName;
+
+        txt = GameObject.Find("chassisHealth").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_baseValues[2].ToString();
+
+        txt = GameObject.Find("chassisSpeed").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_baseValues[4].ToString();
+
+        //needs sprite modif
+    }
+
+    private void UpdateHullInfo()
+    {
+        Text txt = GameObject.Find("hullInfoTitle").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_equipmentName;
+
+        txt = GameObject.Find("hullArmor").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_baseValues[3].ToString();
+    }
+
+    private void UpdateEngineInfo()
+    {
+        Text txt = GameObject.Find("engineInfoTitle").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_equipmentName;
+
+        txt = GameObject.Find("engineEnergy").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_baseValues[5].ToString();
+    }
+
+    private void UpdateShieldInfo()
+    {
+        Text txt = GameObject.Find("shieldInfoTitle").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_equipmentName;
+
+        txt = GameObject.Find("shieldType").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_damageType.ToString();
+
+        txt = GameObject.Find("shieldHealth").GetComponentInChildren<Text>();
+        txt.text = toDisplay.m_baseValues[6].ToString();
+
+        //need sprite for shield as well
+    }
+
+    private EquipmentData GetEquipment()
+    {
+        int index = GetEquipmentID();
+        return m_playerController.m_inventory[index];
     }
 
     private int GetEquipmentID()
@@ -68,12 +119,16 @@ public class EquipmentButton : MonoBehaviour {
                 UpdateCannonInfo();
                 break;
             case EquipmentController.equipmentType.chassis:
+                UpdateChassisInfo();
                 break;
             case EquipmentController.equipmentType.engine:
+                UpdateEngineInfo();
                 break;
             case EquipmentController.equipmentType.hull:
+                UpdateHullInfo();
                 break;
             case EquipmentController.equipmentType.shield:
+                UpdateShieldInfo();
                 break;
         }
     }

@@ -31,6 +31,7 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 		m_ReferencePointForBullet = GameObject.FindGameObjectsWithTag (m_cannonTag);
         m_prefabContainer = FindObjectOfType<PrefabContainer>();
         SetBullet();
+        m_playerController.SetBulletImg();
 	}
 
 	// Update is called once per frame
