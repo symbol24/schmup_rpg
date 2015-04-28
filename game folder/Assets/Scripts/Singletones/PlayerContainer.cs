@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 	private static iPlayerContainer pcInstance;
@@ -16,7 +17,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 	public CannonData[] m_Cannons;
 	public EquipmentData[] m_OtherEquipment;
 	public ShieldData m_Shield;
-    public EquipmentData[] m_inventory;
+    public List<EquipmentData> m_inventory;
 
 	void Awake(){
 		if (pcInstance == null || pcInstance is PlayerContainerDummy) {

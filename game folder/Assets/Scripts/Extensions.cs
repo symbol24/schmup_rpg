@@ -59,7 +59,7 @@ public static class Extensions
         return false;
     }
 
-    public static void DestroyChildren(GameObject[] fromThis)
+    public static void DestroyChildren(this GameObject[] fromThis)
     {
         if (fromThis != null && fromThis.Length > 0)
         {

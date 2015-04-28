@@ -12,6 +12,6 @@ public class EnemyData {
 	public float m_spawnDelay;
 	public int m_spawnCount;
 	public float m_experienceValue;
-    public int m_shieldType;
+    public EnergyType m_shieldType;
     public float m_baseShield;
 }

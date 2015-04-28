@@ -10,4 +10,5 @@ public class MissionData {
     public EnemyData[] m_listOfMissionEnemies { get; set; }
     public EnemyData[] m_listofBosses { get; set; }
     public EquipmentData[] m_rewardEquipment { get; set; }
+    public float m_scavangeTimer { get; set; }
 }

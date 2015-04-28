@@ -17,6 +17,9 @@ public class MissionGenerator : MonoBehaviour {
     [SerializeField] private GameObject btnBounty;
     private GameObject[] m_buttonList;
     [SerializeField] int m_amountOfMissions = 10;
+    [SerializeField] int enemyAmount = 3;
+    [SerializeField] int bossAmount = 1;
+    [SerializeField] int rewardAmount = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -53,15 +56,16 @@ public class MissionGenerator : MonoBehaviour {
         ret.m_playerLevel = m_playerController.m_level;
 
         bool isEmpty = false;
-        EnemyData[] enemyData = new EnemyData[0];
-        EnemyData[] bossData = new EnemyData[0];
-        EquipmentData[] reward = new EquipmentData[0];
+        EnemyData[] enemyData = new EnemyData[enemyAmount];
+        EnemyData[] bossData = new EnemyData[bossAmount];
+        EquipmentData[] reward = new EquipmentData[rewardAmount];
         
         switch (type)
         {
             case MissionController.MissionType.bounty:
                 isEmpty = false;
-                enemyData = GetEnemyList(ret.m_playerLevel);
+                GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
+                GetEnemyList(bossData, ret.m_playerLevel, "boss");
                 break;
             case MissionController.MissionType.exploration:
                 isEmpty = Extensions.randomBoolean();
@@ -69,15 +73,18 @@ public class MissionGenerator : MonoBehaviour {
                 {
                     case true:
                         enemyData = new EnemyData[0];
+                        bossData = new EnemyData[0];
                         break;
                     case false:
-                        enemyData = GetEnemyList(ret.m_playerLevel);
+                        GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
                         break;
                 }
                 break;
             case MissionController.MissionType.scavange:
                 isEmpty = false;
-                enemyData = GetEnemyList(ret.m_playerLevel);
+                ret.m_scavangeTimer = (float)Random.Range(45, 60);
+                GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
+                bossData = new EnemyData[0];
                 break;
         }
 
@@ -91,17 +98,16 @@ public class MissionGenerator : MonoBehaviour {
 
     
 
-    private EnemyData[] GetEnemyList(float playerLevel)
+    private void GetEnemyList(EnemyData[] enemies, float playerLevel, string type)
     {
-        EnemyData[] ret = new EnemyData[3];
-        for (int i = 0; i < ret.Length; i++)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            ret[i] = m_prefabs.GetRandomEnemy("enemy");
-            ret[i] = GenerateStatsForEnemy(ret[i]);
-
+            enemies[i] = m_prefabs.GetRandomEnemy(type);
+            if (type == "enemy")
+                enemies[i] = GenerateStatsForEnemy(enemies[i]);
+            else
+                enemies[i] = GenerateStatsForBoss(enemies[i]);
         }
-
-        return ret;
     }
 
     private EnemyData GenerateStatsForEnemy(EnemyData ret)
@@ -111,6 +117,19 @@ public class MissionGenerator : MonoBehaviour {
         ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
         ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl);
         ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl);
+        ret.m_spawnCount = Random.Range(3, 5);
+        ret.m_spawnDelay = (float)System.Math.Round(Random.Range(0.35f, 1.5f), 2);
+        return ret;
+    }
+
+    private EnemyData GenerateStatsForBoss(EnemyData ret)
+    {
+        int lvl = m_playerController.m_level;
+        ret = GenerateStatsForEnemy(ret);
+        ret.m_baseShield = StatCalculator.CalculateBaseShield(lvl);
+        ret.m_shieldType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
+        ret.m_spawnCount = 1;
+        ret.m_spawnDelay = 0;
         return ret;
     }
 
@@ -118,7 +137,7 @@ public class MissionGenerator : MonoBehaviour {
     {
         GameObject toUse;
         if (m_buttonList != null)
-            Extensions.DestroyChildren(m_buttonList);
+            m_buttonList.DestroyChildren();
 
         m_buttonList = new GameObject[m_missions.Length];
 
@@ -168,5 +187,6 @@ public class MissionGenerator : MonoBehaviour {
         m_missionContainer.m_MissionType = mission.m_MissionType;
         m_missionContainer.m_playerLevel = mission.m_playerLevel;
         m_missionContainer.m_rewardEquipment = mission.m_rewardEquipment;
+        m_missionContainer.m_scavangeTimer = mission.m_scavangeTimer;
     }
 }

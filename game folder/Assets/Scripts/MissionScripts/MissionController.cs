@@ -155,6 +155,7 @@ public class MissionController : MonoBehaviour {
 		Vector3 pos = new Vector3 (x, m_spawnerY, 0);
 
 		EnemyController prefab = m_prefabDatabase.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
+        
 
         if (enemy[m_currentEnemytoSpawn] == null) m_currentEnemytoSpawn = 0;
 

@@ -284,7 +284,14 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	private ShieldController m_instantiatedShield;
 
     //INVENTORY!
-    public EquipmentData[] m_inventory;
+    public List<EquipmentData> m_inventory;
+    public List<CannonData> m_cannonInventory
+    {
+        get
+        {
+            return m_inventory.Where(c => c.m_myType == EquipmentController.equipmentType.cannon).Cast<CannonData>().ToList();
+        }
+    }
 
     #region ChangedForHPController
     //UI energy, health and shield!
@@ -494,7 +501,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		}
 	}
 
-    public void SetInventory(EquipmentData[] data) {
+    public void SetInventory(List<EquipmentData> data) {
         m_inventory = data;
     }
 

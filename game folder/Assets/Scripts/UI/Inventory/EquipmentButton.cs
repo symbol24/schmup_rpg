@@ -92,7 +92,7 @@ public class EquipmentButton : MonoBehaviour {
 
     private int GetEquipmentID()
     {
-        for (int i = 0; i < m_playerController.m_inventory.Length; i++)
+        for (int i = 0; i < m_playerController.m_inventory.Count; i++)
         {
             if (this.name == m_playerController.m_inventory[i].m_equipmentName) return i;
         }
