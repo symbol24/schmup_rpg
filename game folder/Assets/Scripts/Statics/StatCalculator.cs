@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public static class StatCalculator {
     enum ChassisSpeeds : int
@@ -92,6 +94,18 @@ public static class StatCalculator {
         else
         {
             return values[Random.Range(min, max)];
+        }
+    }
+
+    public static T GetRandomValue<T>()
+    {
+        if (typeof (T).IsEnum)
+        {
+            return GetRandomValue<T>(0, Enum.GetValues(typeof (T)).Length);
+        }
+        else
+        {
+            throw new NotSupportedException();
         }
     }
 }

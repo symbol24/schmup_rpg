@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShopMenu : MonoBehaviour {
+public class ShopMenu : MonoBehaviour
+{
+
+    
+        
 
 	// Use this for initialization
 	void Start () {

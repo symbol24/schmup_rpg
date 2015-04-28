@@ -6,4 +6,7 @@ using System;
 public class CannonData : EquipmentData {
 
     public string m_bulletPrefabName;
+
+    public string m_altFireMode;
+    public float m_altFireEnergyConsumption;
 }

@@ -59,6 +59,12 @@ public class BasicHPController : MonoBehaviour , IHPController
         {
             shieldGuiBar.Init(this);
         }
+        var otherUIBars = FindObjectsOfType<RectTransWidthBar>();
+        foreach (var rectTransWidthBar in otherUIBars)
+        {
+            rectTransWidthBar.Init(this);
+        }
+
     }
     public bool TryHit(IProjectileController projectile)
     {
