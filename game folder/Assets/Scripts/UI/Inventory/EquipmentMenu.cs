@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class EquipmentMenu : Menu {
     PlayerController m_playerController;
@@ -30,7 +31,7 @@ public class EquipmentMenu : Menu {
             scRectTransform.sizeDelta = newRect;
         }
 
-        if (m_buttonList != null) Extensions.DestroyChildren(m_buttonList);
+        if (m_buttonList != null) m_buttonList.DestroyChildren();
 
         m_buttonList = new GameObject[amount];
         int i = 0;
@@ -81,7 +82,7 @@ public class EquipmentMenu : Menu {
         return ret;
     }
 
-    private int CountEquipmentAmount(EquipmentData[] list, EquipmentController.equipmentType type)
+    private int CountEquipmentAmount(IEnumerable<EquipmentData> list, EquipmentController.equipmentType type)
     {
         int count = 0;
 

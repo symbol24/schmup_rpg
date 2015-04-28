@@ -31,6 +31,9 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
 	public EquipmentData[] rewardEquipment;
 	public EquipmentData[] m_rewardEquipment{ get{ return rewardEquipment; } set{ rewardEquipment = value; } }
 
+    public float scavangeTimer;
+    public float m_scavangeTimer { get { return scavangeTimer; } set { scavangeTimer = value; } }
+
 
 	void Awake(){
 		if (mInstance == null || mInstance is MissionContainerDummy) {
@@ -53,6 +56,7 @@ public interface iMissionContainer
 	EnemyData[] m_listOfMissionEnemies { get; set; }
     EnemyData[] m_listofBosses { get; set; }
 	EquipmentData[] m_rewardEquipment { get; set; }
+    float m_scavangeTimer { get; set; }
 }
 
 public class MissionContainerDummy : iMissionContainer
@@ -64,4 +68,5 @@ public class MissionContainerDummy : iMissionContainer
 	public EnemyData[] m_listOfMissionEnemies{ get; set; }
     public EnemyData[] m_listofBosses { get; set; }
 	public EquipmentData[] m_rewardEquipment{ get; set; }
+    public float m_scavangeTimer { get; set; }
 }

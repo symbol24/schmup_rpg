@@ -18,6 +18,7 @@ public static class StatCalculator {
         float min = ((playerLevel / 2) + 0.5f);
         float max = playerLevel + ((playerLevel / 2) + 1);
         float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
@@ -26,6 +27,7 @@ public static class StatCalculator {
         float min = -((7 * playerLevel ) / 1980f) + (983f / 1980f);
         float max = -((7 * playerLevel ) / 1980f) + (785f/1980f);
         float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
@@ -34,6 +36,7 @@ public static class StatCalculator {
         float max = 50 + ( playerLevel * (playerLevel + 1 )) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
@@ -42,6 +45,7 @@ public static class StatCalculator {
         float max = 1 + (playerLevel * (playerLevel + 1)) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
@@ -50,6 +54,7 @@ public static class StatCalculator {
         float max = 20 + (playerLevel * (playerLevel + 1)) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 

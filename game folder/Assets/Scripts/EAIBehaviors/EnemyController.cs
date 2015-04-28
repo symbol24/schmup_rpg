@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour {
 	public bool m_IsDying = false;
     public EnergyType m_damageType;
     public float m_baseDamage;
-    public int m_shieldType;
+    public EnergyType m_shieldType;
     public float m_baseShield;
 
 	void Start(){
