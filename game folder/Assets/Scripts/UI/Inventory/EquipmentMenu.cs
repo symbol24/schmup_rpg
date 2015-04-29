@@ -13,7 +13,7 @@ public class EquipmentMenu : Menu {
     {
         m_menuType = type;
         m_playerController = player;
-        print("Buttons for " + m_menuType);
+        //print("Buttons for " + m_menuType);
         CreateButtons();
     }
 

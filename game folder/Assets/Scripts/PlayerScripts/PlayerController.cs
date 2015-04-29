@@ -526,7 +526,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		m_maxPlayerShield =  m_playerBaseStatValues[6] + (m_playerBaseStatValues[6] * m_playerStatModifiers[6]);
 	    m_regenerationDelay = m_instantiatedShield.m_regenerationDelay;
 
-		PrintStats ();
+		//PrintStats ();
         m_playerInfo.UpdateStats(this);
 	}
 	
