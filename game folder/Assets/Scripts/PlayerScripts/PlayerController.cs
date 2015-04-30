@@ -257,9 +257,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	public float vertLimit = 0.0f;
 	private Vector2 velocity = Vector2.zero;
 
-	//animator
-	private Animator anim;
-
 	//death state
 	private bool isDead = false;
 	private Vector3 startingPosition;
@@ -282,16 +279,16 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	//[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
 	private EquipmentController[] m_instantiatedEquipment;
 	private ShieldController m_instantiatedShield;
+    private ChassisController m_instatiatedChassis;
+    private List<EquipmentController> m_allEquips = new List<EquipmentController>();
 
     //INVENTORY!
     public List<EquipmentData> m_inventory;
-    public List<CannonData> m_cannonInventory
-    {
-        get
-        {
-            return m_inventory.Where(c => c.m_myType == EquipmentController.equipmentType.cannon).Cast<CannonData>().ToList();
-        }
-    }
+    public List<CannonData> m_cannonInventory;
+
+    //ship Sprites
+    private Sprite[] m_shipSprites;
+    private SpriteRenderer m_spriteRender;
 
     #region ChangedForHPController
     //UI energy, health and shield!
@@ -318,27 +315,28 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 	public void Init(){
 		startingPosition = transform.position;
-		anim = GetComponent<Animator>();
 		m_GameManager = FindObjectOfType<GameManager> ();
         m_canvas = FindObjectOfType<Canvas>();
         m_playerInfo = FindObjectOfType<PlayerInfo>();
 		horLimit = m_GameManager.m_limiterX - 0.2f;
 		m_myCol = GetComponent<BoxCollider2D> ();
-		
-		//setup equipment
-		SetupEquipment ();
+
+        //setup equipment
         SetupCannons();
+		SetupEquipment ();
 		CalculateStats ();
         m_playerInfo.UpdateStats(this);
-        m_playerInfo.UpdateEquipmentNames(this);
+        m_playerInfo.UpdateEquipmentNames(m_allEquips);
+        m_spriteRender = GetComponent<SpriteRenderer>();
+        m_spriteRender.sprite = m_shipSprites[1];
 
         //HP
 	    m_HPController = GetComponent<IHPController>();
         if(m_HPController == null) Debug.LogError("No IHPControllerFound in " + gameObject.name);
-	    var chassisController =
-	        m_instantiatedEquipment.Single(c => c.m_myType == EquipmentController.equipmentType.chassis) as
-	            IChassisController;	    
-	    m_HPController.Init(this, m_instantiatedShield, chassisController);
+	    //var chassisController =
+	      //  m_instantiatedEquipment.Single(c => c.m_myType == EquipmentController.equipmentType.chassis) as
+	        //    IChassisController;	    
+	    m_HPController.Init(this, m_instantiatedShield, m_instatiatedChassis);
         m_HPController.Died += m_HPController_Died;
 
 	    #region ChangedForHPController
@@ -384,11 +382,14 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 			//changing the ship from side to side and idle
 			if (m_GameManager.m_HorValue > 0.0f) {
-				anim.SetInteger("direction",1);
+                //anim.SetInteger("direction",1);
+                m_spriteRender.sprite = m_shipSprites[2];
 			} else if (m_GameManager.m_HorValue < 0.0f) {
-				anim.SetInteger("direction", -1);
+                //anim.SetInteger("direction", -1);
+                m_spriteRender.sprite = m_shipSprites[0];
 			}else{
-				anim.SetInteger("direction", 0);
+                //anim.SetInteger("direction", 0);
+                m_spriteRender.sprite = m_shipSprites[1];
 			}
 
 			//move the ship, cannon and shields
@@ -409,6 +410,12 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	public void SetOtherEquipmenet(EquipmentController[] newEquip){
 		m_instantiatedEquipment = newEquip;
 	}
+
+    public void SetChassis(ChassisController newChassis)
+    {
+        m_instatiatedChassis = newChassis;
+        m_shipSprites = newChassis.m_shipSprites;
+    }
 
 	public void SetShield(ShieldController newShield){
 		m_instantiatedShield = newShield;
@@ -475,6 +482,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		for (int i = 0; i < instantiatedCannons.Length; i++) {
 			instantiatedCannons[i].transform.parent = transform;
 			instantiatedCannons[i].Init(this);
+            m_allEquips.Add(instantiatedCannons[i]);
 			if(i == cannonID) {
 				currentCannon = instantiatedCannons[i];
 				currentCannon.m_IsAvailable = true;
@@ -495,10 +503,24 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 	private void SetupEquipment(){
 		for(int i = 0; i < m_instantiatedEquipment.Length; i++){
-			m_instantiatedEquipment[i].transform.parent = transform;
-			UpdateValuesModifiers(m_instantiatedEquipment[i]);
-			m_instantiatedEquipment[i].Init(this);
+            if (m_instantiatedEquipment[i] != null)
+            {
+                m_instantiatedEquipment[i].transform.parent = transform;
+                UpdateValuesModifiers(m_instantiatedEquipment[i]);
+                m_instantiatedEquipment[i].Init(this);
+                m_allEquips.Add(m_instantiatedEquipment[i].GetComponent<EquipmentController>());
+            }
 		}
+
+        m_instatiatedChassis.transform.parent = transform;
+        UpdateValuesModifiers(m_instatiatedChassis);
+        m_instatiatedChassis.Init(this);
+        m_allEquips.Add(m_instatiatedChassis.GetComponent<EquipmentController>());
+
+        m_instantiatedShield.transform.parent = transform;
+        UpdateValuesModifiers(m_instantiatedShield);
+        m_instantiatedShield.Init(this);
+        m_allEquips.Add(m_instantiatedShield.GetComponent<EquipmentController>());
 	}
 
     public void SetInventory(List<EquipmentData> data) {
@@ -553,6 +575,15 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		m_experience += newExp;
 	}
 
+    public void CheckLevel()
+    {
+        int tempLvl = StatCalculator.GetCurrentLevel(m_experience);
+        if(tempLvl > m_level){
+            m_level = tempLvl;
+            //update display
+        }
+    }
+
 	private void PrintStats(){
 		print ("m_level " + m_level);
 		print ("m_experience " + m_experience);
@@ -586,5 +617,27 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		}
 	}*/
 
-    
+    public iPlayerContainer SavePlayer()
+    {
+        PlayerContainer ret = (PlayerContainer)PlayerContainer.instance;
+        CannonData[] tempC = new CannonData[instantiatedCannons.Length];
+        for (int i = 0; i < tempC.Length; i++)
+        {
+            tempC[i] = instantiatedCannons[i].GetSavableObject();
+        }
+        ret.m_Cannons = tempC;
+
+        EquipmentData[] tempE = new EquipmentData[m_instantiatedEquipment.Length];
+        for (int i = 0; i < tempE.Length; i++)
+        {
+            tempE[i] = m_instantiatedEquipment[i].GetSavableObjectInternal<EquipmentData>();
+        }
+        ret.m_OtherEquipment = tempE;
+
+        ret.m_Shield = m_instantiatedShield.GetSavableObject();
+
+        ret.m_chassis = m_instatiatedChassis.GetSavableObject();
+
+        return ret;
+    }
 }

@@ -96,9 +96,12 @@ public class EnemyController : MonoBehaviour {
 				Destroy(behavior.gameObject);
 			}
 		}
-		m_playerController.AddExp(score);
-		if(score > 0)
-			m_missionController.IncrementKillCount ();
+        if (score > 0)
+        {
+            print(m_playerController.m_experience);
+            m_missionController.IncrementKillCount();
+            m_playerController.AddExp(score);
+        }
 
 		m_missionController.DecreaseSpawnCount ();
 		Destroy (this.gameObject);

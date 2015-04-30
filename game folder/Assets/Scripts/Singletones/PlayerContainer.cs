@@ -17,6 +17,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 	public CannonData[] m_Cannons;
 	public EquipmentData[] m_OtherEquipment;
 	public ShieldData m_Shield;
+    public ChassisData m_chassis;
     public List<EquipmentData> m_inventory;
 
 	void Awake(){

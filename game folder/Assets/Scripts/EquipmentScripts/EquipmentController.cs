@@ -49,7 +49,7 @@ public class EquipmentController : MonoBehaviour {
 		m_playerController = player;
 	}
 
-	protected virtual T GetSavableObjectInternal<T>() where T : EquipmentData
+	public virtual T GetSavableObjectInternal<T>() where T : EquipmentData
 	{
 		var ret = Activator.CreateInstance<T> ();
 		ret.m_prefabName = this.gameObject.name;
