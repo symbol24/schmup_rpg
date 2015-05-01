@@ -5,6 +5,13 @@ using System;
 
 public class EnemyController : MonoBehaviour {
 
+    public enum EnemyType
+    {
+        grunt,
+        miniboss,
+        boss
+    }
+
 	public GameManager m_GameMgr;
 	private PlayerController m_playerController;
 	private MissionController m_missionController;
@@ -30,6 +37,7 @@ public class EnemyController : MonoBehaviour {
     public float m_baseDamage;
     public EnergyType m_shieldType;
     public float m_baseShield;
+    public EnemyType m_enemyType;
 
 	void Start(){
 		m_GameMgr = FindObjectOfType<GameManager> ();
@@ -88,9 +96,12 @@ public class EnemyController : MonoBehaviour {
 				Destroy(behavior.gameObject);
 			}
 		}
-		m_playerController.AddExp(score);
-		if(score > 0)
-			m_missionController.IncrementKillCount ();
+        if (score > 0)
+        {
+            print(m_playerController.m_experience);
+            m_missionController.IncrementKillCount();
+            m_playerController.AddExp(score);
+        }
 
 		m_missionController.DecreaseSpawnCount ();
 		Destroy (this.gameObject);

@@ -48,6 +48,10 @@ public class RectTransWidthBar : MonoBehaviour
         {
             normalizedValue = (_hpController.CurrentShield*(float) maxWidth/_hpController.PlayerStats.MaxShield);
         }
+        else if (barType == UIBarType.Experience)
+        {
+           // normalizedValue = (_hpController.CurrentShield * (float)maxWidth / _hpController.PlayerStats);
+        }
         RecTransform.sizeDelta = new Vector2(Mathf.RoundToInt(normalizedValue), Rect.height);
 
     }

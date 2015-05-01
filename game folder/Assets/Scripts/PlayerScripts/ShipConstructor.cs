@@ -7,12 +7,12 @@ public class ShipConstructor : MonoBehaviour {
 	private PrefabContainer m_prefabs;
 	private GameManager m_manager;
 	private CannonController[] m_cannons = new CannonController[2];
-	private EquipmentController[] m_otherEquipment = new EquipmentController[4];
+	private EquipmentController[] m_otherEquipment = new EquipmentController[2];
 	private ShieldController m_shieldController;
 
 	// Use this for initialization
 	void Start () {
-		m_playerContainer = FindObjectOfType<PlayerContainer>();
+		m_playerContainer = (PlayerContainer)PlayerContainer.instance;
         if(m_playerContainer == null){
             print("PlayerContainer missing!");
             Application.LoadLevel("loader");
@@ -21,16 +21,6 @@ public class ShipConstructor : MonoBehaviour {
 		m_prefabs = FindObjectOfType<PrefabContainer>();
 		m_manager = FindObjectOfType<GameManager>();
 		m_playerController = SetPlayerController ();
-//		m_manager.SetPlayerShip (m_playerController);
-		//m_playerController.m_energyBar.SetPlayerShip (m_playerController);
-		//m_playerController.m_HPBar.SetPlayerShip (m_playerController);
-		//m_playerController.m_shieldBar.SetPlayerShip (m_playerController);
-		//m_playerController.m_shieldBar.SetShieldController (m_shieldController);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
 	PlayerController SetPlayerController ()
@@ -41,7 +31,8 @@ public class ShipConstructor : MonoBehaviour {
 		ret.m_level = m_playerContainer.m_level;
 		ret.SetCannons(GetInstancedCannons(m_playerContainer));
 		ret.SetOtherEquipmenet (GetInstancedEquipment (m_playerContainer));
-		ret.SetShield (m_shieldController);
+        ret.SetShield(GetInstantiatedShield(m_playerContainer));
+        ret.SetChassis(GetInstancedChassis(m_playerContainer));
         ret.SetInventory(m_playerContainer.m_inventory);
 		ret.Init ();
 		return ret;
@@ -58,6 +49,24 @@ public class ShipConstructor : MonoBehaviour {
 		return ret;
 	}
 
+    private ChassisController GetInstancedChassis(PlayerContainer container)
+    {
+        ChassisController ret;
+        string name = container.m_chassis.m_prefabName;
+        ret = Instantiate(m_prefabs.GetEquipmentPerName(name), transform.position, transform.rotation) as ChassisController;
+        ret.LoadFrom(container.m_chassis);
+        return ret;
+    }
+
+    private ShieldController GetInstantiatedShield(PlayerContainer container)
+    {
+        string name = container.m_Shield.m_prefabName;
+        ShieldController sTemp = Instantiate(m_prefabs.GetEquipmentPerName(name), transform.position, transform.rotation) as ShieldController;
+        sTemp.LoadFrom(container.m_Shield);
+
+        return sTemp;
+    }
+
 	private EquipmentController[] GetInstancedEquipment(PlayerContainer container){
 		EquipmentController[] ret = new EquipmentController[4];
 		int x = 0;
@@ -68,13 +77,7 @@ public class ShipConstructor : MonoBehaviour {
 			ret[i].LoadFromInternal(container.m_OtherEquipment [i]);
 			x = i;
 		}
-		x += 1;
-		name = container.m_Shield.m_prefabName;
-		ShieldController sTemp = Instantiate (m_prefabs.GetEquipmentPerName (name), transform.position, transform.rotation) as ShieldController;
-		sTemp.LoadFrom (container.m_Shield);
-		ret [x] = sTemp;
-
-		m_shieldController = sTemp;
+		
 		return ret;
 	}
 

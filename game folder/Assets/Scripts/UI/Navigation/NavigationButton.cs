@@ -44,7 +44,7 @@ public class NavigationButton : MonoBehaviour
     private void SelectMission()
     {
         m_generator.SetSelectedMission(m_myMission);
-        //Application.LoadLevel("phil_test");
+        Application.LoadLevel("phil_test");
     }
 
     private void SetOnClick()

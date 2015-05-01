@@ -16,6 +16,8 @@ public class ChassisController : EquipmentController, ISavable<ChassisData>, ICh
 
     public ChassisSize m_chassisSize = ChassisSize.small;
 
+    public Sprite[] m_shipSprites;
+
     private IDummyCollider _collider;
     public IDummyCollider Collider
     {
@@ -44,7 +46,7 @@ public class ChassisController : EquipmentController, ISavable<ChassisData>, ICh
     public void LoadFrom(ChassisData data)
 	{
 		LoadFromInternal (data);
-        //m_chassisSize = data.m_chassisSize;
+        m_chassisSize = data.m_chassisSize;
 	}
 
 	#endregion

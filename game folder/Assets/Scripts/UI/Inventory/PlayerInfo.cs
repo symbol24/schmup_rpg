@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PlayerInfo : MonoBehaviour {
     public void UpdateStats(PlayerController player){
@@ -23,39 +24,36 @@ public class PlayerInfo : MonoBehaviour {
         temp.text = player.m_maxPlayerEnergy.ToString();
     }
 
-    public void UpdateEquipmentNames(PlayerController player)
+    public void UpdateEquipmentNames(List<EquipmentController> equipList)
     {
-        CannonController[] cannons = player.GetCannons();
-        EquipmentController[] equip = player.GetOtherEquipment();
-
         Text temp = GameObject.Find("cannonTxt1").GetComponent<Text>();
-        temp.text = cannons[0].m_equipmentName;
+        temp.text = equipList[0].m_equipmentName;
 
         temp = GameObject.Find("cannonTxt2").GetComponent<Text>();
-        temp.text = cannons[1].m_equipmentName;
+        temp.text = equipList[1].m_equipmentName;
 
         temp = GameObject.Find("chassisTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.chassis);
+        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.chassis);
 
         temp = GameObject.Find("engineTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.engine);
+        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.engine);
 
         temp = GameObject.Find("hullTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.hull);
+        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.hull);
 
         temp = GameObject.Find("shieldTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.shield);
+        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.shield);
 
     }
 
-    private string GetEquipmentName(EquipmentController[] equips, EquipmentController.equipmentType type){
+    private string GetEquipmentName(List<EquipmentController> equips, EquipmentController.equipmentType type){
         string ret = "";
 
         foreach (EquipmentController e in equips){
             if (e.m_myType == type)
                 ret = e.m_equipmentName;
         }
-        print(ret);
+        //print(ret);
         return ret;
     }
 }

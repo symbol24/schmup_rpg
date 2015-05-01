@@ -13,52 +13,61 @@ public static class StatCalculator {
         veryFast = 14
     };
 
-    public static float CalculateBaseDamage(float playerLevel)
+    public static float CalculateBaseDamage(float level)
     {
-        float min = ((playerLevel / 2) + 0.5f);
-        float max = playerLevel + ((playerLevel / 2) + 1);
+        float min = ((level / 2) + 0.5f);
+        float max = level + ((level / 2) + 1);
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
-    public static float CalculateBaseFireRate(float playerLevel)
+    public static float CalculateBaseFireRate(float level)
     {
-        float min = -((7 * playerLevel ) / 1980f) + (983f / 1980f);
-        float max = -((7 * playerLevel ) / 1980f) + (785f/1980f);
+        float min = -((7 * level ) / 1980f) + (983f / 1980f);
+        float max = -((7 * level ) / 1980f) + (785f/1980f);
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
-    public static float CalculateBaseHP(float playerLevel)
+    public static float CalculateBaseHP(float level)
     {
-        float max = 50 + ( playerLevel * (playerLevel + 1 )) / 2;
+        float max = 50 + ( level * (level + 1 )) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
-    public static float CalculateBaseArmor(float playerLevel)
+    public static float CalculateEAIBaseHP(float level)
     {
-        float max = 1 + (playerLevel * (playerLevel + 1)) / 2;
+        float max = 5 + (level * (level + 1)) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
-    public static float CalculateBaseShield(float playerLevel)
+    public static float CalculateBaseArmor(float level)
     {
-        float max = 20 + (playerLevel * (playerLevel + 1)) / 2;
+        float max = 1 + (level * (level + 1)) / 2;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
     }
 
-    public static float CalculateBaseSpeed(float playerLevel, ChassisController.ChassisSize chassisSize)
+    public static float CalculateBaseShield(float level)
+    {
+        float max = 20 + (level * (level + 1)) / 2;
+        float min = max * 0.90f;
+        float ret = Random.Range(min, max);
+        ret = (float)System.Math.Round(ret, 2);
+        return ret;
+    }
+
+    public static float CalculateBaseSpeed(float level, ChassisController.ChassisSize chassisSize)
     {
         float ret = 0;
         int min = 0;
@@ -112,5 +121,29 @@ public static class StatCalculator {
         {
             throw new NotSupportedException();
         }
+    }
+
+    public static int GetCurrentLevel(float exp)
+    {
+        return (int)(exp / 100);
+    }
+
+    public static float GetExpValue(EnemyController.EnemyType type)
+    {
+        float ret = 0.0f;
+        switch (type)
+        {
+            case EnemyController.EnemyType.grunt:
+                ret = 1.0f;
+                break;
+            case EnemyController.EnemyType.miniboss:
+                ret = 20.0f;
+                break;
+            case EnemyController.EnemyType.boss:
+                ret = 50.0f;
+                break;
+        }
+
+        return ret;
     }
 }

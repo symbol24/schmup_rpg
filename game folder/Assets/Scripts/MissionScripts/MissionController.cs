@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MissionController : MonoBehaviour {
 
@@ -25,19 +26,23 @@ public class MissionController : MonoBehaviour {
 	//the global
 	private PrefabContainer m_prefabDatabase;
 
-    //the manage
+    //the managers
 	private GameManager m_gameManager;
 
-    //the player
-    private PlayerController m_playerController;
+    //scavange timer
+    private GameObject m_scavangeTimerPanel;
+    private Text m_scavangeText;
+    private float m_scavangeTimer;
 
     //spawn delay timer stuff
 	[SerializeField] private float m_minSpawnDelay = 0.0f;
 	[SerializeField] private float m_maxSpawnDelay = 0.0f;
 	private float m_Timer = 0.0f;
+    private bool m_survived = false;
 
     //intro delay
-    [SerializeField] private float m_introDelay;
+    [SerializeField] private float m_introDelay = 5.0f;
+    private bool m_isIntroDisplayed = false;
 
 	private int m_currentEnemytoSpawn = 0;
 	private EnemyController[] m_listofEnemies;
@@ -59,9 +64,9 @@ public class MissionController : MonoBehaviour {
 		m_gameManager = FindObjectOfType<GameManager> ();
 		m_spawnerX = m_gameManager.m_limiterX;
 		GetMissionInfo ();
+        
         m_Timer = Time.time + m_introDelay;
 		m_spawnStatus = SpawnStatus.intro;
-        DisplayIntro();
 	}
 	
 	// Update is called once per frame
@@ -69,6 +74,10 @@ public class MissionController : MonoBehaviour {
         if (m_gameManager.m_CurrentState == GameManager.gameState.playing) {
 		    switch (m_spawnStatus) {
 		    case SpawnStatus.intro:
+                    if (m_scavangeTimerPanel == null) GetScavangerTimerPanel();
+
+                    if (!m_isIntroDisplayed) m_isIntroDisplayed = DisplayIntro();
+
                     if (m_Timer <= Time.time) {
 
                         nextStatus = SpawnStatus.spawningEnemies;
@@ -82,6 +91,11 @@ public class MissionController : MonoBehaviour {
 			    break;
 		    case SpawnStatus.waiting:
                     //do nothing
+
+                if (m_missionType == MissionType.scavange && m_survived && m_currentSpawnCount <= 0)
+                {
+                    m_spawnStatus = SpawnStatus.outro;
+                }
 			    break;
 		    case SpawnStatus.spawningEnemies:
 			    if(m_Timer <= Time.time && m_currentSpawnCount < m_delaySpawnCount){
@@ -90,7 +104,18 @@ public class MissionController : MonoBehaviour {
 				    m_Timer = Time.time + delay;
 
 			    }
-			    break;
+
+                if (m_missionType == MissionType.scavange && m_scavangeTimer > 0.0f)
+                {
+                    m_scavangeTimer -= Time.deltaTime;
+                    m_scavangeText.text = "" + (int)m_scavangeTimer;
+                }
+                else if (m_missionType == MissionType.scavange && m_scavangeTimer <= 0.0f)
+                {
+                    m_survived = true;
+                    m_spawnStatus = SpawnStatus.waiting;
+                }
+                    break;
 		    case SpawnStatus.waitToSpawnBoss:
 			    if(m_currentSpawnCount <=0)
 				    m_spawnStatus = SpawnStatus.spawningBoss;
@@ -106,24 +131,43 @@ public class MissionController : MonoBehaviour {
         }
 	}
 
-    private void DisplayIntro(){
-        //implement mission intro stuff
-        print("Misison Type = " + m_missionType);
-        switch (m_missionType)
+    private void GetScavangerTimerPanel()
+    {
+        m_scavangeTimerPanel = GameObject.Find("ScavangeTimerPanel");
+        m_scavangeText = m_scavangeTimerPanel.GetComponentInChildren<Text>();
+        m_scavangeTimerPanel.SetActive(false);
+    }
+
+    private bool DisplayIntro(){
+        if (m_scavangeTimerPanel != null)
         {
-            case MissionType.bounty:
-                //do somthing to show the mission has a boss to kill
-                //there may or may not be rewards
-                break;
-            case MissionType.exploration:
-                //show if there is something here or not
-                //there may or may not be rewards
-                break;
-            case MissionType.scavange:
-                //show that the goal is to retrive rewards
-                //tehre may or may not be a boss
-                break;
+
+            //implement mission intro stuff
+            print("Misison Type = " + m_missionType);
+            switch (m_missionType)
+            {
+                case MissionType.bounty:
+                    //do somthing to show the mission has a boss to kill
+                    //there may or may not be rewards
+                    break;
+                case MissionType.exploration:
+                    //show if there is something here or not
+                    //there may or may not be rewards
+                    break;
+                case MissionType.scavange:
+                    //show that the goal is to retrive rewards
+                    //tehre may or may not be a boss
+
+                    m_scavangeTimerPanel.SetActive(true);
+                    m_scavangeTimer = MissionContainer.instance.m_scavangeTimer;
+                    m_scavangeText.text = m_scavangeTimer.ToString();
+                    break;
+            }
+
+            return true;
         }
+
+        return false;
     }
 
 	private void GetMissionInfo(){
