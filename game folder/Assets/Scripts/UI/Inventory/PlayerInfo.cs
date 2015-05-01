@@ -22,6 +22,17 @@ public class PlayerInfo : MonoBehaviour {
 
         temp = GameObject.Find("energyValue").GetComponent<Text>();
         temp.text = player.m_maxPlayerEnergy.ToString();
+
+        UpdateLevel(player.m_level);
+
+        temp = GameObject.Find("creditValue").GetComponent<Text>();
+        temp.text = player.m_credits.ToString();
+    }
+
+    public void UpdateLevel(float lvl)
+    {
+        Text temp = GameObject.Find("levelValue").GetComponent<Text>();
+        temp.text = lvl.ToString();
     }
 
     public void UpdateEquipmentNames(List<EquipmentController> equipList)

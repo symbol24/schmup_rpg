@@ -10,7 +10,6 @@ using UnityEngine.UI;
 [Serializable]
 public class PlayerController : MonoBehaviour, IPlayerStats {
 	public GameManager m_GameManager;
-    private Canvas m_canvas;
     private PlayerInfo m_playerInfo;
 
 	//the base values compiled
@@ -249,6 +248,8 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
     #endregion CalculatedPlayerStats
 
+    private float currentLevelExp = 0.0f;
+
 	//boxcollider
 	private BoxCollider2D m_myCol;
 
@@ -284,7 +285,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
     //INVENTORY!
     public List<EquipmentData> m_inventory;
-    public List<CannonData> m_cannonInventory;
 
     //ship Sprites
     private Sprite[] m_shipSprites;
@@ -316,7 +316,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	public void Init(){
 		startingPosition = transform.position;
 		m_GameManager = FindObjectOfType<GameManager> ();
-        m_canvas = FindObjectOfType<Canvas>();
         m_playerInfo = FindObjectOfType<PlayerInfo>();
 		horLimit = m_GameManager.m_limiterX - 0.2f;
 		m_myCol = GetComponent<BoxCollider2D> ();
@@ -573,6 +572,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	
 	public void AddExp(float newExp){
 		m_experience += newExp;
+        currentLevelExp += newExp;
 	}
 
     public void CheckLevel()
@@ -580,7 +580,8 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         int tempLvl = StatCalculator.GetCurrentLevel(m_experience);
         if(tempLvl > m_level){
             m_level = tempLvl;
-            //update display
+            currentLevelExp = 0.0f; //for bar?
+            m_playerInfo.UpdateLevel(m_level);
         }
     }
 
@@ -639,5 +640,25 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         ret.m_chassis = m_instatiatedChassis.GetSavableObject();
 
         return ret;
+    }
+
+    public ChassisController GetChassis()
+    {
+        return m_instatiatedChassis;
+    }
+
+    public ShieldController GetShield()
+    {
+        return m_instantiatedShield;
+    }
+
+    public List<EquipmentController> GetAllEquips()
+    {
+        return m_allEquips;
+    }
+
+    public Sprite[] GetShipSprites()
+    {
+        return m_shipSprites;
     }
 }

@@ -187,7 +187,11 @@ public class MissionController : MonoBehaviour {
 
 		m_listofBosses = new EnemyController[MissionContainer.instance.m_listofBosses.Length];
 		for(int i = 0; i < MissionContainer.instance.m_listofBosses.Length; i++){
-			m_listofBosses[i] = m_prefabDatabase.GetEnemyPerName(MissionContainer.instance.m_listofBosses[i].m_PrefabName);
+            if (m_listofBosses[i] != null)
+            {
+			    m_listofBosses[i] = m_prefabDatabase.GetEnemyPerName(MissionContainer.instance.m_listofBosses[i].m_PrefabName);
+            }
+
 		}
 		if (m_listofBosses.Length <= 0)
 			print ("No bosses in boss data");

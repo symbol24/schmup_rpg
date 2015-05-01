@@ -6,12 +6,16 @@ using UnityEngine.EventSystems;
 public class EquipmentButton : MonoBehaviour {
 
     PlayerController m_playerController;
+    PlayerContainer m_playerContainer;
     EquipmentController.equipmentType myType;
     EquipmentData toDisplay;
+    PrefabContainer prefabs;
 
     public void Init()
     {
         m_playerController = FindObjectOfType<PlayerController>();
+        m_playerContainer = FindObjectOfType<PlayerContainer>();
+        prefabs = FindObjectOfType<PrefabContainer>();
         myType = m_playerController.m_inventory[GetEquipmentID()].m_myType;
         toDisplay = GetEquipment();
         SetOnClick();
@@ -36,6 +40,19 @@ public class EquipmentButton : MonoBehaviour {
 
         txt = GameObject.Find("cannonEU").GetComponentInChildren<Text>();
         txt.text = "Not implemented yey";
+
+        CannonData data = new CannonData();
+
+        if (toDisplay.GetType() == typeof(CannonData)) data = (CannonData)toDisplay;
+
+        string bulletname = "Player_Base_Bullet";
+        if (data.m_bulletPrefabName != null) bulletname = data.m_bulletPrefabName;
+
+        ProjectileController projectile = prefabs.GetBulletPerName(bulletname);
+        Sprite bulletSprite = projectile.GetComponent<SpriteRenderer>().sprite;
+
+        Image myImage = GameObject.Find("bulletSprite").GetComponent<Image>();
+        myImage.sprite = bulletSprite;
     }
 
     private void UpdateChassisInfo()
@@ -49,7 +66,18 @@ public class EquipmentButton : MonoBehaviour {
         txt = GameObject.Find("chassisSpeed").GetComponentInChildren<Text>();
         txt.text = toDisplay.m_baseValues[4].ToString();
 
-        //needs sprite modif
+        ChassisData data = new ChassisData();
+
+        if (toDisplay.GetType() == typeof(ChassisData)) data = (ChassisData)toDisplay;
+
+        if(data.m_prefabName != null && data.m_prefabName != ""){
+            ChassisController controller = (ChassisController)prefabs.GetEquipmentPerName(data.m_prefabName);
+            Sprite[] sprites = controller.m_shipSprites;
+
+            Image myImage = GameObject.Find("chassisSprite").GetComponent<Image>();
+            myImage.sprite = sprites[1];
+        }
+        
     }
 
     private void UpdateHullInfo()

@@ -2,10 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class PlayerStatusMenu : Menu {
 
-    private string GetEquipmentName(EquipmentController[] equips, EquipmentController.equipmentType type)
+    private string GetEquipmentName(IEnumerable<EquipmentController> equips, EquipmentController.equipmentType type)
     {
         string ret = "";
 
@@ -20,9 +21,7 @@ public class PlayerStatusMenu : Menu {
 
     public void UpdateLargePlayerInfo(PlayerController player)
     {
-
-        CannonController[] cannons = player.GetCannons();
-        EquipmentController[] equip = player.GetOtherEquipment();
+        List<EquipmentController> allEquips = player.GetAllEquips();
 
         Text temp = GameObject.Find("largeDmgValue").GetComponent<Text>();
         temp.text = player.m_playerDamage.ToString();
@@ -36,18 +35,26 @@ public class PlayerStatusMenu : Menu {
         temp.text = player.m_playerMouvementSpeed.ToString();
         temp = GameObject.Find("largeEnergyValue").GetComponent<Text>();
         temp.text = player.m_maxPlayerEnergy.ToString();
-        temp = GameObject.Find("cannonTxt1 1").GetComponent<Text>();
-        temp.text = cannons[0].m_equipmentName;
-        temp = GameObject.Find("cannonTxt2 1").GetComponent<Text>();
-        temp.text = cannons[1].m_equipmentName;
-        temp = GameObject.Find("chassisTxt 1").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.chassis);
-        temp = GameObject.Find("engineTxt 1").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.engine);
-        temp = GameObject.Find("hullTxt 1").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.hull);
-        temp = GameObject.Find("shieldTxt 1").GetComponent<Text>();
-        temp.text = GetEquipmentName(equip, EquipmentController.equipmentType.shield);
 
+
+        temp = GameObject.Find("cannonTxt1 1").GetComponent<Text>();
+        temp.text = allEquips[0].m_equipmentName;
+        temp = GameObject.Find("cannonTxt2 1").GetComponent<Text>();
+        temp.text = allEquips[1].m_equipmentName;
+        temp = GameObject.Find("chassisTxt 1").GetComponent<Text>();
+        temp.text = GetEquipmentName(allEquips, EquipmentController.equipmentType.chassis);
+        temp = GameObject.Find("engineTxt 1").GetComponent<Text>();
+        temp.text = GetEquipmentName(allEquips, EquipmentController.equipmentType.engine);
+        temp = GameObject.Find("hullTxt 1").GetComponent<Text>();
+        temp.text = GetEquipmentName(allEquips, EquipmentController.equipmentType.hull);
+        temp = GameObject.Find("shieldTxt 1").GetComponent<Text>();
+        temp.text = GetEquipmentName(allEquips, EquipmentController.equipmentType.shield);
+
+        temp = GameObject.Find("largeLvlValue").GetComponent<Text>();
+        temp.text = player.m_level.ToString();
+        temp = GameObject.Find("largeExpValue").GetComponent<Text>();
+        temp.text = player.m_experience.ToString();
+        temp = GameObject.Find("largeCreditValue").GetComponent<Text>();
+        temp.text = player.m_credits.ToString();
     }
 }

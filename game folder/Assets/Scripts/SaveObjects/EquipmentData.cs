@@ -30,6 +30,5 @@ public class EquipmentData {
     public float m_modifierEnergyModifier { get { return m_ValueModifiers[4]; } set { m_ValueModifiers[4] = value; } }
     public float m_modifierShieldModifier { get { return m_ValueModifiers[5]; } set { m_ValueModifiers[5] = value; } }
     public float m_modifierHealthModifier { get { return m_ValueModifiers[6]; } set { m_ValueModifiers[6] = value; } }
-	
 
 }
