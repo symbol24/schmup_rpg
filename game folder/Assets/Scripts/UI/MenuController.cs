@@ -33,6 +33,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private Menu m_engineInfo;
     [SerializeField] private Menu m_shieldInfo;
     [SerializeField] private OptionsMenu m_optionsMenu;
+    [SerializeField] private CannonConfirmMenu m_cannonConfirm;
     
 
     void Start(){
@@ -140,6 +141,19 @@ public class MenuController : MonoBehaviour {
                     m_shieldInfo.gameObject.SetActive(true);
                     m_currentActiveInfo = m_shieldInfo;
                 }
+                break;
+        }
+    }
+
+    public void ConfirmScreen(EquipmentData toEquip)
+    {
+        switch (toEquip.m_myType)
+        {
+            case EquipmentController.equipmentType.cannon:
+                m_cannonConfirm.gameObject.SetActive(true);
+                m_cannonConfirm.Init(toEquip);
+                break;
+            default:
                 break;
         }
     }
