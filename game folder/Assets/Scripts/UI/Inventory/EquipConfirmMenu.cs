@@ -18,7 +18,7 @@ public class EquipConfirmMenu : Menu {
 
     void Update()
     {
-        if (m_manager.m_altFireButton > 0 && m_manager.m_CurrentState != GameManager.gameState.playing)
+        if (InputManager.instance.m_altFireButton > 0 && m_manager.m_CurrentState != GameManager.gameState.playing)
         {
             Close();
         }

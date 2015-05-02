@@ -7,6 +7,6 @@ public class EAIBehaviorEndGame : EAIBehaviors {
 	// Use this for initialization
 	public override void Init (EnemyController controller) {
 		base.Init (controller);
-		m_Controller.m_GameMgr.SetGameOver(m_EndGameMessage);
+		m_Controller.m_GameMgr.SetGameOver();
 	}
 }

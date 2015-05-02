@@ -40,22 +40,24 @@ public class MenuController : MonoBehaviour {
 
     void Start(){
         m_GameManager = FindObjectOfType<GameManager>();
+
         m_eventSystem = FindObjectOfType<EventSystem>();
     }
 
     void Update(){
-        if (m_GameManager.m_CurrentState == GameManager.gameState.playing && m_GameManager.m_pauseButton > 0 && Time.time >= m_time){
+        if (m_GameManager.m_CurrentState == GameManager.gameState.playing && InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
+        {
             ShowMenu(m_PauseMenu);
             m_GameManager.UpdateGameState(GameManager.gameState.paused);
             m_time = Time.time + delay;
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.paused && m_GameManager.m_pauseButton > 0 && Time.time >= m_time)
+        else if (m_GameManager.m_CurrentState == GameManager.gameState.paused && InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
         {
             HideMenu(m_PauseMenu);
             m_GameManager.UpdateGameState(GameManager.gameState.playing);
             m_time = Time.time + delay;
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.playing && m_GameManager.m_backButton > 0 && Time.time >= m_time)
+        else if (m_GameManager.m_CurrentState == GameManager.gameState.playing && InputManager.instance.m_backButton > 0 && Time.time >= m_time)
         {
             ShowMenu(m_StatusandInventoryMenu);
             CheckIfFirstTimeOpen();
@@ -63,7 +65,7 @@ public class MenuController : MonoBehaviour {
             m_time = Time.time + delay;
 
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.inventory && m_GameManager.m_backButton > 0 && Time.time >= m_time)
+        else if (m_GameManager.m_CurrentState == GameManager.gameState.inventory && InputManager.instance.m_backButton > 0 && Time.time >= m_time)
         {
             HideMenu(m_StatusandInventoryMenu);
             m_GameManager.UpdateGameState(GameManager.gameState.playing);

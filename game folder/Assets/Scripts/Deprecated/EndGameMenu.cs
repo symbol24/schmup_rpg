@@ -28,11 +28,11 @@ public class EndGameMenu : MonoBehaviour {
 			}
 
 			//gameover menu controls
-			if(m_MenuTimer < Time.time && (m_GameManager.m_VertValue > m_GameManager.m_MenuDeadSpot || (m_GameManager.m_VertValue < -m_GameManager.m_MenuDeadSpot))){
-				m_MenuTimer = Time.time + m_GameManager.m_MenuDelayTimer;//to add a delay in input to prevent inputs taht are too quick
-				MoveEndGameSelector(m_GameManager.m_VertValue);
-			}
-			if(m_GameManager.m_firebutton > 0){
+			//if(m_MenuTimer < Time.time && (m_GameManager.m_VertValue > m_GameManager.m_MenuDeadSpot || (m_GameManager.m_VertValue < -m_GameManager.m_MenuDeadSpot))){
+			//	m_MenuTimer = Time.time + m_GameManager.m_MenuDelayTimer;//to add a delay in input to prevent inputs taht are too quick
+			//	MoveEndGameSelector(m_GameManager.m_VertValue);
+			//}
+			if(InputManager.instance.m_firebutton > 0){
 				ConfirmEndGameSelect();
 			}
 		}

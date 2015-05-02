@@ -358,18 +358,19 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	void Update () {
 		if(m_GameManager.m_CurrentState == GameManager.gameState.playing && !isDead){
 
-			if(m_GameManager.m_firebutton > 0){
+			if(InputManager.instance.m_firebutton > 0){
 				currentCannon.FireForEachReference(m_playerDamage, m_playerFireRate);
 			}
 
 			//cannon selection
 			cannonSelectionDirection = -1;
-			if(m_GameManager.m_switchButtons[0] > 0){
+            if (InputManager.instance.m_switchButtons < 0)
+            {
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 0;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
 				}
-			}else if(m_GameManager.m_switchButtons[1] > 0){
+			}else if(InputManager.instance.m_switchButtons > 0){
 				if(Time.time >= cannonSelectionTimer){
 					cannonSelectionDirection = 1;
 					cannonSelectionTimer = Time.time + cannonSelectionDelay;
@@ -378,14 +379,14 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 			if(cannonSelectionDirection != -1) ChangeSelectedCannon(cannonSelectionDirection);
 
 			//move
-			velocity.x = m_GameManager.m_HorValue * m_playerMouvementSpeed * Time.deltaTime;
-			velocity.y = m_GameManager.m_VertValue * m_playerMouvementSpeed * Time.deltaTime;
+			velocity.x = InputManager.instance.m_HorValue * m_playerMouvementSpeed * Time.deltaTime;
+            velocity.y = InputManager.instance.m_VertValue * m_playerMouvementSpeed * Time.deltaTime;
 
 			//changing the ship from side to side and idle
-			if (m_GameManager.m_HorValue > 0.0f) {
+            if (InputManager.instance.m_HorValue > 0.0f){
                 //anim.SetInteger("direction",1);
                 m_spriteRender.sprite = m_shipSprites[2];
-			} else if (m_GameManager.m_HorValue < 0.0f) {
+			} else if (InputManager.instance.m_HorValue < 0.0f) {
                 //anim.SetInteger("direction", -1);
                 m_spriteRender.sprite = m_shipSprites[0];
 			}else{

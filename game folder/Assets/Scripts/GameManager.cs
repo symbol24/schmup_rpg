@@ -38,23 +38,14 @@ public class GameManager : MonoBehaviour {
 //	public float m_TotalScore = 0;
 //	private float m_TotalKills = 0;
 //	public float m_TargetScore;
-
-	//controls
-	public float m_VertValue;
-	public float m_HorValue;
-	public float m_firebutton;
-	public float m_altFireButton;
-	public float[] m_switchButtons = new float[2];
-	public float m_pauseButton;
-	public float m_backButton;
 	
 	//menu dely timer
 	public float m_MenuDelayTimer = 0.0f;
 	public float m_MenuDeadSpot = 0.1f;
 
 	//end game messages
-	public string m_VictoryMessage;
-	public string m_LoseMessage;
+	//public string m_VictoryMessage;
+	//public string m_LoseMessage;
 
 	//for firing status and shield management
 	public bool m_isShooting = false;
@@ -89,14 +80,14 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		
 		//get both controller and keyboard axis's
-		m_VertValue = Input.GetAxis("Vertical");
-		m_HorValue = Input.GetAxis("Horizontal");
-		m_firebutton = Input.GetAxis("Fire");
-		m_altFireButton = Input.GetAxis("Alt Fire");
-		m_switchButtons[0] = Input.GetAxis("Switch Left");
-		m_switchButtons[1] = Input.GetAxis("Switch Right");
-		m_pauseButton = Input.GetAxis("Pause");
-		m_backButton = Input.GetAxis("Back");
+		//m_VertValue = Input.GetAxis("Vertical");
+		//m_HorValue = Input.GetAxis("Horizontal");
+		//m_firebutton = Input.GetAxis("Fire");
+		//m_altFireButton = Input.GetAxis("Alt Fire");
+		//m_switchButtons[0] = Input.GetAxis("Switch Left");
+		//m_switchButtons[1] = Input.GetAxis("Switch Right");
+		//m_pauseButton = Input.GetAxis("Pause");
+		//m_backButton = Input.GetAxis("Back");
 	}
 //
 //	public void SetPlayerShip(PlayerController playerShip){
@@ -108,7 +99,7 @@ public class GameManager : MonoBehaviour {
 		m_NumberOfLives -= 1;
 		//m_LifeIconsDisplayed[m_NumberOfLives].SetActive(false);
 		if(m_NumberOfLives <= 0){
-			SetGameOver(m_LoseMessage);
+			SetGameOver();
 		}
 	}
 	
@@ -119,12 +110,8 @@ public class GameManager : MonoBehaviour {
 //	}
 
 	//endgame process
-	public void SetGameOver(string message){
+	public void SetGameOver(){
 		m_CurrentState = gameState.gameover;
-		EndGameMenu egm = GetComponent<EndGameMenu> ();
-		if (egm != null) {
-			egm.DisplayGameOverScreen(message);
-		}
 	}
 
 	public void ChangeLevel(){
