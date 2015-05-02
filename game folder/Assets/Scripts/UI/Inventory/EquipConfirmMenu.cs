@@ -32,7 +32,9 @@ public class EquipConfirmMenu : Menu {
 
     public void DefaultEquip()
     {
+        Inventory.Equip(m_toEquip);
         Close();
+        m_controller.SwitchMenu(m_controller.GetCurrentMenuTypeInt());
     }
 
     private void Close()

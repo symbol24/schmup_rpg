@@ -113,30 +113,106 @@ public static class Inventory {
 
     public static void Equip(EquipmentData toEquip)
     {
-        
+        EquipmentController.equipmentType type = toEquip.m_myType;
+        EquipmentData old;
+
+        int inventoryId = GetEquipmentID(toEquip.m_equipmentName);
+
+        switch(type){
+            case EquipmentController.equipmentType.chassis:
+                old = PlayerContainer.instance.M_chassis;
+                ChassisData newChassis = (ChassisData)ConvertEquipment(toEquip);
+                PlayerContainer.instance.M_chassis = newChassis;
+                break;
+            case EquipmentController.equipmentType.shield:
+                old = PlayerContainer.instance.M_Shield;
+                ShieldData newShield = (ShieldData)ConvertEquipment(toEquip);
+                PlayerContainer.instance.M_Shield = newShield;
+                break;
+            default:
+                old = PlayerContainer.instance.GetOneEquipment(type);
+                PlayerContainer.instance.SetOneEquipment(toEquip);
+                break;
+        }
+
+
+        PlayerContainer.instance.M_inventory[inventoryId] = old;
+
+        EquipOnPlayerController(type);
     }
 
     public static void CannonEquip(EquipmentData toEquip, int id)
     {
 
-        CannonData temp = new CannonData();
+        CannonData temp = (CannonData)ConvertEquipment(toEquip);
         CannonData temp2 = PlayerContainer.instance.M_Cannons[id];
         int inventoryId = GetEquipmentID(toEquip.m_equipmentName);
-
-        if (toEquip.GetType() != typeof(CannonData) && toEquip.GetType() == typeof(EquipmentData))
-            temp.LoadFromData(toEquip);
-        else if (toEquip.GetType() == typeof(CannonData))
-            temp = (CannonData)toEquip;
 
         PlayerContainer.instance.M_Cannons[id] = temp;
         PlayerContainer.instance.M_inventory[inventoryId] = temp2;
 
+        EquipCannonOnPlayerController(id);
+    }
+
+    private static void EquipCannonOnPlayerController(int pos)
+    {
         ShipConstructor constructor = GameObject.FindObjectOfType<ShipConstructor>();
         if (constructor != null)
         {
-            constructor.RebuildCannon(id);
+            constructor.RebuildCannon(pos);
         }
     }
 
+    private static void EquipOnPlayerController(EquipmentController.equipmentType toRebuild)
+    {
+        ShipConstructor constructor = GameObject.FindObjectOfType<ShipConstructor>();
+        if (constructor != null)
+        {
+            constructor.RebuildCEquipment(toRebuild);
+        }
+    }
+
+
+    private static EquipmentData ConvertEquipment(EquipmentData equip)
+    {
+        EquipmentData ret = new EquipmentData();
+
+        switch (equip.m_myType)
+        {
+            case EquipmentController.equipmentType.cannon:
+                if (equip.GetType() != typeof(CannonData) && equip.GetType() == typeof(EquipmentData))
+                {
+                    CannonData temp = new CannonData();
+                    temp.LoadFromData(equip);
+                    ret = temp;
+                }
+                else ret = equip;
+                break;
+            case EquipmentController.equipmentType.chassis:
+                if (equip.GetType() != typeof(ChassisData) && equip.GetType() == typeof(EquipmentData))
+                {
+                    ChassisData temp = new ChassisData();
+                    temp.LoadFromData(equip);
+                    ret = temp;
+                }
+                else ret = equip;
+                break;
+            case EquipmentController.equipmentType.shield:
+                if (equip.GetType() != typeof(ShieldData) && equip.GetType() == typeof(EquipmentData))
+                {
+                    ShieldData temp = new ShieldData();
+                    temp.LoadFromData(equip);
+                    ret = temp;
+                }
+                else ret = equip;
+                break;
+            default:
+                ret = equip;
+                break;
+        }
+
+        return ret;
+
+    }
     
 }

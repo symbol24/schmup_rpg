@@ -86,6 +86,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
             m_OtherEquipment = value;
         }
     }
+    
     public ShieldData M_Shield
     {
         get
@@ -119,6 +120,22 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
             m_inventory = value;
         }
     }
+
+    public EquipmentData GetOneEquipment(EquipmentController.equipmentType type)
+    {
+            foreach(EquipmentData e in m_OtherEquipment){
+                if(e.m_myType == type) return e;
+            }
+            return null;
+    }
+
+    public void SetOneEquipment(EquipmentData value)
+    {
+        for (int i = 0; i < m_OtherEquipment.Length; i++ )
+        {
+            if (m_OtherEquipment[i].m_myType == value.m_myType) m_OtherEquipment[i] = value;
+        }
+    }
 }
 
 public interface iPlayerContainer{
@@ -131,6 +148,8 @@ public interface iPlayerContainer{
     ShieldData M_Shield { get; set; }
     ChassisData M_chassis { get; set; }
     List<EquipmentData> M_inventory { get; set; }
+    EquipmentData GetOneEquipment(EquipmentController.equipmentType type);
+    void SetOneEquipment(EquipmentData value);
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -238,6 +257,21 @@ public class PlayerContainerDummy: iPlayerContainer{
         set
         {
             throw new System.NotImplementedException();
+        }
+    }
+
+    public EquipmentData GetOneEquipment(EquipmentController.equipmentType type)
+    {
+            foreach(EquipmentData e in m_OtherEquipment){
+                if(e.m_myType == type) return e;
+            }
+            return null;
+    }
+    public void SetOneEquipment(EquipmentData value)
+    {
+        for (int i = 0; i < m_OtherEquipment.Length; i++)
+        {
+            if (m_OtherEquipment[i].m_myType == value.m_myType) m_OtherEquipment[i] = value;
         }
     }
 }

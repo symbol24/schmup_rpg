@@ -28,7 +28,7 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 		m_GameManager = FindObjectOfType<GameManager>();
 		m_ProjectileEnergyValue = m_ProjectileToShootPrefab.m_EnergyValue;
 		m_EnergyBar = FindObjectOfType<EnergySystemController>();
-		m_ReferencePointForBullet = GameObject.FindGameObjectsWithTag (m_cannonTag);
+        UpdateRefs(GameObject.FindGameObjectsWithTag(m_cannonTag));
         m_prefabContainer = FindObjectOfType<PrefabContainer>();
         SetBullet();
         m_playerController.SetBulletImg();
@@ -38,6 +38,11 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 	void Update () {
 
 	}
+
+    public void UpdateRefs(GameObject[] newRefs)
+    {
+        m_ReferencePointForBullet = newRefs;
+    }
 
 	public void FireForEachReference(float damage, float delay){
 		if(Time.time > m_NextFire && m_EnergyBar.GetCurrentValue() >= m_ProjectileEnergyValue){

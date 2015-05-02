@@ -22,16 +22,16 @@ public class EquipmentButton : MonoBehaviour {
                 gameObject.GetComponent<Button>().onClick.AddListener(CannonEquip);
                 break;
             case EquipmentController.equipmentType.chassis:
-                gameObject.GetComponent<Button>().onClick.AddListener(ButtonEquip);
+                gameObject.GetComponent<Button>().onClick.AddListener(OtherEquip);
                 break;
             case EquipmentController.equipmentType.engine:
-                gameObject.GetComponent<Button>().onClick.AddListener(ButtonEquip);
+                gameObject.GetComponent<Button>().onClick.AddListener(OtherEquip);
                 break;
             case EquipmentController.equipmentType.hull:
-                gameObject.GetComponent<Button>().onClick.AddListener(ButtonEquip);
+                gameObject.GetComponent<Button>().onClick.AddListener(OtherEquip);
                 break;
             case EquipmentController.equipmentType.shield:
-                gameObject.GetComponent<Button>().onClick.AddListener(ButtonEquip);
+                gameObject.GetComponent<Button>().onClick.AddListener(OtherEquip);
                 break;
         }
         
@@ -61,9 +61,9 @@ public class EquipmentButton : MonoBehaviour {
         }
     }
 
-    public void ButtonEquip()
+    public void OtherEquip()
     {
-        //Inventory.Equip();
+        menu.ConfirmScreen(toDisplay, gameObject);
     }
 
     public void CannonEquip()

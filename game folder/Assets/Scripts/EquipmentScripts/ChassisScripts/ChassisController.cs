@@ -14,6 +14,8 @@ public class ChassisController : EquipmentController, ISavable<ChassisData>, ICh
         large
     }
 
+    public GameObject[] m_cannonRefs;
+
     public ChassisSize m_chassisSize = ChassisSize.small;
 
     public Sprite[] m_shipSprites;

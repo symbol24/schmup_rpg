@@ -23,11 +23,9 @@ public class MissionController : MonoBehaviour {
     private SpawnStatus m_spawnStatus;
     private SpawnStatus nextStatus;
 
-	//the global
-	private PrefabContainer m_prefabDatabase;
-
     //the managers
 	private GameManager m_gameManager;
+    private MenuController m_menuController;
 
     //scavange timer
     private GameObject m_scavangeTimerPanel;
@@ -43,6 +41,7 @@ public class MissionController : MonoBehaviour {
     //intro delay
     [SerializeField] private float m_introDelay = 5.0f;
     private bool m_isIntroDisplayed = false;
+    private bool m_canStart = false;
 
 	private int m_currentEnemytoSpawn = 0;
 	private EnemyController[] m_listofEnemies;
@@ -60,8 +59,8 @@ public class MissionController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_prefabDatabase = FindObjectOfType<PrefabContainer> ();
 		m_gameManager = FindObjectOfType<GameManager> ();
+        m_menuController = FindObjectOfType<MenuController>();
 		m_spawnerX = m_gameManager.m_limiterX;
 		GetMissionInfo ();
         
@@ -78,15 +77,17 @@ public class MissionController : MonoBehaviour {
 
                     if (!m_isIntroDisplayed) m_isIntroDisplayed = DisplayIntro();
 
-                    if (m_Timer <= Time.time) {
+                    if (m_canStart) { 
+                        if (m_Timer <= Time.time) {
 
-                        nextStatus = SpawnStatus.spawningEnemies;
+                            nextStatus = SpawnStatus.spawningEnemies;
 
-                        //empty exploration goes to outro
-                        if (MissionContainer.instance.m_isMissionEmpty)
-                            nextStatus = SpawnStatus.outro;
+                            //empty exploration goes to outro
+                            if (MissionContainer.instance.m_isMissionEmpty)
+                                nextStatus = SpawnStatus.outro;
 
-				        m_spawnStatus = nextStatus;
+				            m_spawnStatus = nextStatus;
+                        }
                     }
 			    break;
 		    case SpawnStatus.waiting:
@@ -164,6 +165,8 @@ public class MissionController : MonoBehaviour {
                     break;
             }
 
+            m_menuController.DisplayIntroPanel(m_missionType.ToString());
+
             return true;
         }
 
@@ -172,14 +175,14 @@ public class MissionController : MonoBehaviour {
 
 	private void GetMissionInfo(){
 		//enemyspawner prefab
-		m_enemySpawner = m_prefabDatabase.GetEnemySpawner();
+		m_enemySpawner = PrefabContainer.instance.GetEnemySpawner();
 
 		//mission data from container
 		m_missionType = MissionContainer.instance.m_MissionType;
 
 		m_listofEnemies = new EnemyController[MissionContainer.instance.m_listOfMissionEnemies.Length];
 		for(int i = 0; i < MissionContainer.instance.m_listOfMissionEnemies.Length; i++){
-			m_listofEnemies[i] = m_prefabDatabase.GetEnemyPerName(MissionContainer.instance.m_listOfMissionEnemies[i].m_PrefabName);
+			m_listofEnemies[i] = PrefabContainer.instance.GetEnemyPerName(MissionContainer.instance.m_listOfMissionEnemies[i].m_PrefabName);
 		}
 		if (m_listofEnemies.Length <= 0)
 			print ("No enemies in enemy data");
@@ -189,7 +192,7 @@ public class MissionController : MonoBehaviour {
 		for(int i = 0; i < MissionContainer.instance.m_listofBosses.Length; i++){
             if (m_listofBosses[i] != null)
             {
-			    m_listofBosses[i] = m_prefabDatabase.GetEnemyPerName(MissionContainer.instance.m_listofBosses[i].m_PrefabName);
+			    m_listofBosses[i] = PrefabContainer.instance.GetEnemyPerName(MissionContainer.instance.m_listofBosses[i].m_PrefabName);
             }
 
 		}
@@ -202,7 +205,7 @@ public class MissionController : MonoBehaviour {
 		float x = Random.Range (-m_spawnerX, m_spawnerX); 
 		Vector3 pos = new Vector3 (x, m_spawnerY, 0);
 
-		EnemyController prefab = m_prefabDatabase.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
+		EnemyController prefab = PrefabContainer.instance.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
         
 
         if (enemy[m_currentEnemytoSpawn] == null) m_currentEnemytoSpawn = 0;
@@ -229,4 +232,10 @@ public class MissionController : MonoBehaviour {
 			m_spawnStatus = SpawnStatus.waitToSpawnBoss;
 		}
 	}
+
+    public void StartMission(Menu menu)
+    {
+        m_canStart = true;
+        m_menuController.HideMenu(menu);
+    }
 }

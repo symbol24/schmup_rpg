@@ -35,6 +35,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private OptionsMenu m_optionsMenu;
     [SerializeField] private EquipConfirmMenu m_cannonConfirm;
     [SerializeField] private EquipConfirmMenu m_defaultConfirm;
+    [SerializeField] private Menu m_startDisplay;
     
 
     void Start(){
@@ -177,5 +178,12 @@ public class MenuController : MonoBehaviour {
                 m_defaultConfirm.Init(toEquip, button);
                 break;
         }
+    }
+
+    public void DisplayIntroPanel(string mission)
+    {
+        ShowMenu(m_startDisplay);
+        Text missionText = GameObject.Find("missionType").GetComponent<Text>();
+        missionText.text = mission;
     }
 }

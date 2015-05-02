@@ -22,7 +22,7 @@ public class EquipmentMenu : Menu {
         GameObject scRect = GameObject.Find("equipmentScroll");
         RectTransform scRectTransform = scRect.GetComponent<RectTransform>();
         EquipmentController.equipmentType equipType = GetType(m_menuType);
-        int amount = CountEquipmentAmount(m_playerController.m_inventory, equipType);
+        int amount = CountEquipmentAmount(PlayerContainer.instance.M_inventory, equipType);
 
         if (amount > 12)
         {
@@ -36,7 +36,7 @@ public class EquipmentMenu : Menu {
         m_buttonList = new GameObject[amount];
         int i = 0;
 
-        foreach (EquipmentData e in m_playerController.m_inventory)
+        foreach (EquipmentData e in PlayerContainer.instance.M_inventory)
         {
             if (e.m_myType == equipType)
             {

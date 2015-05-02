@@ -283,9 +283,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
     private ChassisController m_instatiatedChassis;
     private List<EquipmentController> m_allEquips = new List<EquipmentController>();
 
-    //INVENTORY!
-    public List<EquipmentData> m_inventory;
-
     //ship Sprites
     private Sprite[] m_shipSprites;
     private SpriteRenderer m_spriteRender;
@@ -324,8 +321,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         SetupCannons();
 		SetupEquipment ();
 		CalculateStats ();
-        m_playerInfo.UpdateStats(this);
-        m_playerInfo.UpdateEquipmentNames(m_allEquips);
+        UpdatePlayerInfo();
         m_spriteRender = GetComponent<SpriteRenderer>();
         m_spriteRender.sprite = m_shipSprites[1];
 
@@ -350,6 +346,12 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 	    #endregion ChangedForHPController
 	}
+
+    public void UpdatePlayerInfo()
+    {
+        m_playerInfo.UpdateStats(this);
+        m_playerInfo.UpdateEquipmentNames(m_allEquips);
+    }
 
     
 	
@@ -500,30 +502,57 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         img.sprite = cannonSprite.sprite;
     }
 
-	private void SetupEquipment(){
+	public void SetupEquipment(){
 		for(int i = 0; i < m_instantiatedEquipment.Length; i++){
             if (m_instantiatedEquipment[i] != null)
             {
                 m_instantiatedEquipment[i].transform.parent = transform;
                 UpdateValuesModifiers(m_instantiatedEquipment[i]);
                 m_instantiatedEquipment[i].Init(this);
-                m_allEquips.Add(m_instantiatedEquipment[i].GetComponent<EquipmentController>());
+                int pos = GetEquipPosition(m_instantiatedEquipment[i].m_myType);
+                UpdateAllEquips(pos, m_instantiatedEquipment[i]);
             }
 		}
 
+        SetupChassis();
+
+        SetupShield();
+	}
+
+    public void SetupChassis()
+    {
         m_instatiatedChassis.transform.parent = transform;
         UpdateValuesModifiers(m_instatiatedChassis);
         m_instatiatedChassis.Init(this);
-        m_allEquips.Add(m_instatiatedChassis.GetComponent<EquipmentController>());
+        int pos = GetEquipPosition(m_instatiatedChassis.m_myType);
+        UpdateAllEquips(pos, m_instatiatedChassis);
+    }
 
+    public void SetupShield()
+    {
         m_instantiatedShield.transform.parent = transform;
         UpdateValuesModifiers(m_instantiatedShield);
         m_instantiatedShield.Init(this);
-        m_allEquips.Add(m_instantiatedShield.GetComponent<EquipmentController>());
-	}
+        int pos = GetEquipPosition(m_instantiatedShield.m_myType);
+        UpdateAllEquips(pos, m_instantiatedShield);
+    }
 
-    public void SetInventory(List<EquipmentData> data) {
-        m_inventory = data;
+    public void UpdateAllEquips(int id, EquipmentController newEquip)
+    {
+        if (id == -1)
+            m_allEquips.Add(newEquip);
+        else
+            m_allEquips[id] = newEquip;
+    }
+
+    public int GetEquipPosition(EquipmentController.equipmentType type)
+    {
+        for(int i = 0; i < m_allEquips.Count; i++)
+        {
+            if (m_allEquips[i].m_myType == type) return i;
+        }
+
+        return -1;
     }
 
 	public void UpdateCollider(bool status){
@@ -660,5 +689,13 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
     public Sprite[] GetShipSprites()
     {
         return m_shipSprites;
+    }
+
+    public void UpdateCannonRefs()
+    {
+        foreach (CannonController c in instantiatedCannons)
+        {
+            c.UpdateRefs(m_instatiatedChassis.m_cannonRefs);
+        }
     }
 }
