@@ -267,8 +267,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 
 	//the cannons!
 	public GameObject cannonPoint;
-
-	//[SerializeField] private CannonController[] cannons;
 	private CannonController[] instantiatedCannons;
 	public CannonController currentCannon;
 	public int cannonID;
@@ -277,7 +275,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	private int cannonSelectionDirection = 0;
 
 	//equipment prefabs!
-	//[SerializeField] private EquipmentController[] m_listofEquipmentPrefabs;
 	private EquipmentController[] m_instantiatedEquipment;
 	private ShieldController m_instantiatedShield;
     private ChassisController m_instatiatedChassis;
@@ -328,9 +325,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         //HP
 	    m_HPController = GetComponent<IHPController>();
         if(m_HPController == null) Debug.LogError("No IHPControllerFound in " + gameObject.name);
-	    //var chassisController =
-	      //  m_instantiatedEquipment.Single(c => c.m_myType == EquipmentController.equipmentType.chassis) as
-	        //    IChassisController;	    
 	    m_HPController.Init(this, m_instantiatedShield, m_instatiatedChassis);
         m_HPController.Died += m_HPController_Died;
 
@@ -647,6 +641,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
     public EquipmentController[] GetOtherEquipment(){
         return m_instantiatedEquipment;
     }
+
 	/*void OnTriggerEnter2D(Collider2D coll) {
 		
 		ProjectileController tempBullet = coll.gameObject.GetComponent<ProjectileController>();

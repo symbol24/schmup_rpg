@@ -30,6 +30,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 		}
 	}
 
+    #region GetterAndSetters
     public float M_credits
     {
         get
@@ -120,6 +121,7 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
             m_inventory = value;
         }
     }
+    #endregion GetterAndSetters
 
     public EquipmentData GetOneEquipment(EquipmentController.equipmentType type)
     {

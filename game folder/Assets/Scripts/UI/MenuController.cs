@@ -45,30 +45,30 @@ public class MenuController : MonoBehaviour {
     }
 
     void Update(){
-        if (m_GameManager.m_CurrentState == GameManager.gameState.playing && InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
+        if (InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
         {
             ShowMenu(m_PauseMenu);
-            m_GameManager.UpdateGameState(GameManager.gameState.paused);
+            if(m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.paused);
             m_time = Time.time + delay;
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.paused && InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
+        else if (InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
         {
             HideMenu(m_PauseMenu);
-            m_GameManager.UpdateGameState(GameManager.gameState.playing);
+            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.playing);
             m_time = Time.time + delay;
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.playing && InputManager.instance.m_backButton > 0 && Time.time >= m_time)
+        else if (InputManager.instance.m_backButton > 0 && Time.time >= m_time)
         {
             ShowMenu(m_StatusandInventoryMenu);
             CheckIfFirstTimeOpen();
-            m_GameManager.UpdateGameState(GameManager.gameState.inventory);
+            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.inventory);
             m_time = Time.time + delay;
 
         }
-        else if (m_GameManager.m_CurrentState == GameManager.gameState.inventory && InputManager.instance.m_backButton > 0 && Time.time >= m_time)
+        else if (InputManager.instance.m_backButton > 0 && Time.time >= m_time)
         {
             HideMenu(m_StatusandInventoryMenu);
-            m_GameManager.UpdateGameState(GameManager.gameState.playing);
+            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.playing);
             m_time = Time.time + delay;
         }
     }
@@ -187,5 +187,11 @@ public class MenuController : MonoBehaviour {
         ShowMenu(m_startDisplay);
         Text missionText = GameObject.Find("missionType").GetComponent<Text>();
         missionText.text = mission;
+    }
+
+    public void SetButtonAvailability(bool isInteractable)
+    {
+        Button[] allActive = FindObjectsOfType<Button>() as Button[];
+
     }
 }
