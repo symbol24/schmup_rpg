@@ -126,10 +126,7 @@ public static class Inventory {
         if (toEquip.GetType() != typeof(CannonData) && toEquip.GetType() == typeof(EquipmentData))
             temp.LoadFromData(toEquip);
         else if (toEquip.GetType() == typeof(CannonData))
-        {
             temp = (CannonData)toEquip;
-            temp.m_bulletPrefabName = "Player_Base_Bullet";
-        }
 
         PlayerContainer.instance.M_Cannons[id] = temp;
         PlayerContainer.instance.M_inventory[inventoryId] = temp2;

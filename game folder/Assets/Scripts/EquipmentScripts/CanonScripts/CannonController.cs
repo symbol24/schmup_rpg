@@ -78,7 +78,6 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
     {
         if (m_bulletPrefabName == null || m_bulletPrefabName == "")
             m_bulletPrefabName = "Player_Base_Bullet";
-        print("m_bylletPrefabName = _" + m_bulletPrefabName + "_");
 
         m_ProjectileToShootPrefab = m_prefabContainer.GetBulletPerName(m_bulletPrefabName);
 
