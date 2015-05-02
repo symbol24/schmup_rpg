@@ -81,4 +81,18 @@ public class ShipConstructor : MonoBehaviour {
 		return ret;
 	}
 
+    public void RebuildCannon(int id)
+    {
+        PlayerController player = FindObjectOfType<PlayerController>();
+        CannonController[] cannons = player.GetCannons();
+        string name = PlayerContainer.instance.M_Cannons[id].m_prefabName;
+        CannonController newCannon = Instantiate(PrefabContainer.instance.GetEquipmentPerName(name), player.transform.position, player.transform.rotation) as CannonController;
+        newCannon.LoadFrom(PlayerContainer.instance.M_Cannons[id]);
+        newCannon.Init(player);
+        CannonController temp = cannons[id];
+        cannons[id] = newCannon;
+        Destroy(temp);
+        player.SetCannons(cannons);
+        player.SetupCannons();
+    }
 }

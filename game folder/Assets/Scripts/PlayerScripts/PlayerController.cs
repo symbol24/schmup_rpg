@@ -476,7 +476,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 //		currentCannon.gameObject.SetActive(true);
 //	}
 
-	private void SetupCannons(){
+	public void SetupCannons(){
 		//set the first cannon
 		for (int i = 0; i < instantiatedCannons.Length; i++) {
 			instantiatedCannons[i].transform.parent = transform;

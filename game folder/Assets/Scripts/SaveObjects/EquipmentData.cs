@@ -39,4 +39,15 @@ public class EquipmentData {
     public float m_modifierShield { get { return m_ValueModifiers[5]; } set { m_ValueModifiers[5] = value; } }
     public float m_modifierHealth { get { return m_ValueModifiers[6]; } set { m_ValueModifiers[6] = value; } }
 
+    public void LoadFromData(EquipmentData data)
+    {
+        m_equipmentName = data.m_equipmentName;
+        m_prefabName = data.m_prefabName;
+        m_equipmentLevel = data.m_equipmentLevel;
+        m_creditValue = data.m_creditValue;
+        m_damageType = data.m_damageType;
+        m_Owner = data.m_Owner;
+        m_baseValues = data.m_baseValues;
+        m_ValueModifiers = data.m_ValueModifiers;
+    }
 }

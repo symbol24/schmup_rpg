@@ -4,15 +4,13 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class EquipmentButton : MonoBehaviour {
-
-    iPlayerContainer m_playerContainer;
     EquipmentData toDisplay;
+    MenuController menu;
 
     public void Init()
     {
-        m_playerContainer = PlayerContainer.instance;
-
-        toDisplay = Inventory.GetEquipment(gameObject, m_playerContainer);
+        menu = FindObjectOfType<MenuController>();
+        toDisplay = Inventory.GetEquipment(gameObject.name);
         SetOnClick();
     }
 
@@ -41,6 +39,7 @@ public class EquipmentButton : MonoBehaviour {
 
     public void UpdateInfo()
     {
+        menu.CloseConfirmScreens();
 
         switch (toDisplay.m_myType)
         {
@@ -69,7 +68,6 @@ public class EquipmentButton : MonoBehaviour {
 
     public void CannonEquip()
     {
-        MenuController menu = FindObjectOfType<MenuController>();
-        menu.ConfirmScreen(toDisplay);
+        menu.ConfirmScreen(toDisplay, gameObject);
     }
 }

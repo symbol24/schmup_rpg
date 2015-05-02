@@ -95,17 +95,17 @@ public static class Inventory {
         //need sprite for shield as well
     }
 
-    public static EquipmentData GetEquipment(GameObject btn, iPlayerContainer player)
+    public static EquipmentData GetEquipment(string btnname)
     {
-        int index = GetEquipmentID(btn, player);
-        return player.M_inventory[index];
+        int index = GetEquipmentID(btnname);
+        return PlayerContainer.instance.M_inventory[index];
     }
 
-    public static int GetEquipmentID(GameObject btn, iPlayerContainer player)
+    public static int GetEquipmentID(string name)
     {
-        for (int i = 0; i < player.M_inventory.Count; i++)
+        for (int i = 0; i < PlayerContainer.instance.M_inventory.Count; i++)
         {
-            if (btn.name == player.M_inventory[i].m_equipmentName) return i;
+            if (name == PlayerContainer.instance.M_inventory[i].m_equipmentName) return i;
         }
 
         return -1;
@@ -114,6 +114,31 @@ public static class Inventory {
     public static void Equip(EquipmentData toEquip)
     {
         
+    }
+
+    public static void CannonEquip(EquipmentData toEquip, int id)
+    {
+
+        CannonData temp = new CannonData();
+        CannonData temp2 = PlayerContainer.instance.M_Cannons[id];
+        int inventoryId = GetEquipmentID(toEquip.m_equipmentName);
+
+        if (toEquip.GetType() != typeof(CannonData) && toEquip.GetType() == typeof(EquipmentData))
+            temp.LoadFromData(toEquip);
+        else if (toEquip.GetType() == typeof(CannonData))
+        {
+            temp = (CannonData)toEquip;
+            temp.m_bulletPrefabName = "Player_Base_Bullet";
+        }
+
+        PlayerContainer.instance.M_Cannons[id] = temp;
+        PlayerContainer.instance.M_inventory[inventoryId] = temp2;
+
+        ShipConstructor constructor = GameObject.FindObjectOfType<ShipConstructor>();
+        if (constructor != null)
+        {
+            constructor.RebuildCannon(id);
+        }
     }
 
     

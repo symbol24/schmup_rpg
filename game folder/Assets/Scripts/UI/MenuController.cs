@@ -33,7 +33,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private Menu m_engineInfo;
     [SerializeField] private Menu m_shieldInfo;
     [SerializeField] private OptionsMenu m_optionsMenu;
-    [SerializeField] private CannonConfirmMenu m_cannonConfirm;
+    [SerializeField] private EquipConfirmMenu m_cannonConfirm;
+    [SerializeField] private EquipConfirmMenu m_defaultConfirm;
     
 
     void Start(){
@@ -71,7 +72,12 @@ public class MenuController : MonoBehaviour {
 
     public void ShowMenu(Menu menu){
         menu.gameObject.SetActive(true);
-        m_eventSystem.SetSelectedGameObject(menu.m_firstButton);
+        SetSelectedButton(menu.m_firstButton);
+    }
+
+    public void SetSelectedButton(GameObject btn)
+    {
+        m_eventSystem.SetSelectedGameObject(btn);
     }
 
     public void HideMenu(Menu menu)
@@ -89,6 +95,8 @@ public class MenuController : MonoBehaviour {
 
     public void SwitchMenu(int type)
     {
+        CloseConfirmScreens();
+
         if (m_currentActiveMenu != null)
             m_currentActiveMenu.gameObject.SetActive(false);
 
@@ -145,15 +153,28 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    public void ConfirmScreen(EquipmentData toEquip)
+    public int GetCurrentMenuTypeInt()
+    {
+        return (int)m_currentActiveMenu.m_menuType;
+    }
+
+    public void CloseConfirmScreens()
+    {
+        HideMenu(m_cannonConfirm);
+        HideMenu(m_defaultConfirm);
+    }
+
+    public void ConfirmScreen(EquipmentData toEquip, GameObject button)
     {
         switch (toEquip.m_myType)
         {
             case EquipmentController.equipmentType.cannon:
-                m_cannonConfirm.gameObject.SetActive(true);
-                m_cannonConfirm.Init(toEquip);
+                ShowMenu(m_cannonConfirm);
+                m_cannonConfirm.Init(toEquip, button);
                 break;
             default:
+                ShowMenu(m_defaultConfirm);
+                m_defaultConfirm.Init(toEquip, button);
                 break;
         }
     }
