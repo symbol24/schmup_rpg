@@ -168,7 +168,7 @@ public static class Inventory {
         ShipConstructor constructor = GameObject.FindObjectOfType<ShipConstructor>();
         if (constructor != null)
         {
-            constructor.RebuildCEquipment(toRebuild);
+            constructor.RebuildEquipment(toRebuild);
         }
     }
 

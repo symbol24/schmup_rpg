@@ -91,7 +91,7 @@ public class ShipConstructor : MonoBehaviour {
         m_playerController.UpdatePlayerInfo();
     }
 
-    public void RebuildCEquipment(EquipmentController.equipmentType type)
+    public void RebuildEquipment(EquipmentController.equipmentType type)
     {
         switch (type)
         {
@@ -108,8 +108,34 @@ public class ShipConstructor : MonoBehaviour {
                 m_playerController.SetupEquipment();
                 m_playerController.UpdateCannonRefs();
                 break;
+            case EquipmentController.equipmentType.shield:
+                ShieldController cShield = m_playerController.GetShield();
+                name = PlayerContainer.instance.M_Shield.m_prefabName;
+                ShieldController preShield = (ShieldController)PrefabContainer.instance.GetEquipmentPerName(name);
+                ShieldController newShield = Instantiate(preShield, m_playerController.transform.position, m_playerController.transform.rotation) as ShieldController;
+                newShield.LoadFrom(PlayerContainer.instance.M_Shield);
+                ShieldController tempShield = cShield;
+                cShield = newShield;
+                Destroy(tempShield.gameObject);
+                m_playerController.SetShield(cShield);
+                m_playerController.SetupEquipment();
+                break;
             default:
+                int id = m_playerController.GetPositionInOtherEquips(type);
+                print("equipment id " + id);
+                EquipmentController[] cEquip = m_playerController.GetOtherEquipment();
+                EquipmentData toEquipData = PlayerContainer.instance.GetOneEquipment(type);
+                name = toEquipData.m_prefabName;
+                EquipmentController newPrefab = PrefabContainer.instance.GetEquipmentPerName(name);
+                EquipmentController newEquip = Instantiate<EquipmentController>(newPrefab);
+                newEquip.LoadFromInternal(toEquipData);
+                EquipmentController tempE = cEquip[id];
+                cEquip[id] = newEquip;
+                Destroy(tempE.gameObject);
+                m_playerController.SetOtherEquipmenet(cEquip);
+                m_playerController.SetupEquipment();
                 break;
         }
+        m_playerController.UpdatePlayerInfo();
     }
 }

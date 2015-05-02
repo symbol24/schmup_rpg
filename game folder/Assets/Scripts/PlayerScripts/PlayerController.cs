@@ -509,7 +509,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
                 m_instantiatedEquipment[i].transform.parent = transform;
                 UpdateValuesModifiers(m_instantiatedEquipment[i]);
                 m_instantiatedEquipment[i].Init(this);
-                int pos = GetEquipPosition(m_instantiatedEquipment[i].m_myType);
+                int pos = GetPositionInAllEquips(m_instantiatedEquipment[i].m_myType);
                 UpdateAllEquips(pos, m_instantiatedEquipment[i]);
             }
 		}
@@ -524,7 +524,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         m_instatiatedChassis.transform.parent = transform;
         UpdateValuesModifiers(m_instatiatedChassis);
         m_instatiatedChassis.Init(this);
-        int pos = GetEquipPosition(m_instatiatedChassis.m_myType);
+        int pos = GetPositionInAllEquips(m_instatiatedChassis.m_myType);
         UpdateAllEquips(pos, m_instatiatedChassis);
     }
 
@@ -533,7 +533,7 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
         m_instantiatedShield.transform.parent = transform;
         UpdateValuesModifiers(m_instantiatedShield);
         m_instantiatedShield.Init(this);
-        int pos = GetEquipPosition(m_instantiatedShield.m_myType);
+        int pos = GetPositionInAllEquips(m_instantiatedShield.m_myType);
         UpdateAllEquips(pos, m_instantiatedShield);
     }
 
@@ -545,11 +545,21 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
             m_allEquips[id] = newEquip;
     }
 
-    public int GetEquipPosition(EquipmentController.equipmentType type)
+    public int GetPositionInAllEquips(EquipmentController.equipmentType type)
     {
         for(int i = 0; i < m_allEquips.Count; i++)
         {
             if (m_allEquips[i].m_myType == type) return i;
+        }
+
+        return -1;
+    }
+
+    public int GetPositionInOtherEquips(EquipmentController.equipmentType type)
+    {
+        for (int i = 0; i < m_instantiatedEquipment.Length; i++)
+        {
+            if (m_instantiatedEquipment[i].m_myType == type) return i;
         }
 
         return -1;
