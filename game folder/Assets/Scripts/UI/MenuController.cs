@@ -45,30 +45,9 @@ public class MenuController : MonoBehaviour {
     }
 
     void Update(){
-        if (InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
+        if (InputManager.instance.m_backButton > 0 && Time.time >= m_time)
         {
-            ShowMenu(m_PauseMenu);
-            if(m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.paused);
-            m_time = Time.time + delay;
-        }
-        else if (InputManager.instance.m_pauseButton > 0 && Time.time >= m_time)
-        {
-            HideMenu(m_PauseMenu);
-            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.playing);
-            m_time = Time.time + delay;
-        }
-        else if (InputManager.instance.m_backButton > 0 && Time.time >= m_time)
-        {
-            ShowMenu(m_StatusandInventoryMenu);
-            CheckIfFirstTimeOpen();
-            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.inventory);
-            m_time = Time.time + delay;
-
-        }
-        else if (InputManager.instance.m_backButton > 0 && Time.time >= m_time)
-        {
-            HideMenu(m_StatusandInventoryMenu);
-            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.playing);
+            ToggleStatsAndInventoryMenu(m_StatusandInventoryMenu);
             m_time = Time.time + delay;
         }
     }
@@ -81,6 +60,20 @@ public class MenuController : MonoBehaviour {
     public void SetSelectedButton(GameObject btn)
     {
         m_eventSystem.SetSelectedGameObject(btn);
+    }
+
+    public void ToggleStatsAndInventoryMenu(Menu menu)
+    {
+        if (menu.gameObject.activeInHierarchy)
+        {
+            HideMenu(menu);
+            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.playing);
+        }
+        else {
+            ShowMenu(menu);
+
+            if (m_GameManager != null) m_GameManager.UpdateGameState(GameManager.gameState.paused);
+    }
     }
 
     public void HideMenu(Menu menu)
