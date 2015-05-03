@@ -57,6 +57,8 @@ public class MissionController : MonoBehaviour {
 	public int m_delaySpawnCount;
 	public int m_bossSpawnCount;
 
+    private bool m_isBossSpawned = false;
+
 	// Use this for initialization
 	void Start () {
 		m_gameManager = FindObjectOfType<GameManager> ();
@@ -66,6 +68,8 @@ public class MissionController : MonoBehaviour {
         
         m_Timer = Time.time + m_introDelay;
 		m_spawnStatus = SpawnStatus.intro;
+
+        print("m_listofBosses[0].m_PrefabName " + MissionContainer.instance.m_listofBosses[0].m_PrefabName);
 	}
 	
 	// Update is called once per frame
@@ -122,8 +126,10 @@ public class MissionController : MonoBehaviour {
 				    m_spawnStatus = SpawnStatus.spawningBoss;
 			    break;
 		    case SpawnStatus.spawningBoss:
+                m_currentEnemytoSpawn = 0;
 			    SpawnEnemySpawnController (MissionContainer.instance.m_listofBosses);
 			    m_spawnStatus = SpawnStatus.waiting;
+                m_isBossSpawned = true;
 			    break;
             case SpawnStatus.outro:
                 //ask to return to hub
@@ -204,7 +210,7 @@ public class MissionController : MonoBehaviour {
 	private void SpawnEnemySpawnController(EnemyData[] enemy){
 		float x = Random.Range (-m_spawnerX, m_spawnerX); 
 		Vector3 pos = new Vector3 (x, m_spawnerY, 0);
-
+        //print("m_currentEnemytoSpawn " + m_currentEnemytoSpawn);
 		EnemyController prefab = PrefabContainer.instance.GetEnemyPerName (enemy[m_currentEnemytoSpawn].m_PrefabName);
         
 
@@ -228,9 +234,14 @@ public class MissionController : MonoBehaviour {
 
 	public void IncrementKillCount(){
 		m_killCount++;
-		if (m_missionType == MissionType.bounty && m_killCount >= m_bossSpawnCount) {
+        if (m_missionType == MissionType.bounty && m_killCount >= m_bossSpawnCount && !m_isBossSpawned)
+        {
 			m_spawnStatus = SpawnStatus.waitToSpawnBoss;
-		}
+        }
+        else if (m_isBossSpawned)
+        {
+            m_spawnStatus = SpawnStatus.outro;
+        }
 	}
 
     public void StartMission(Menu menu)
