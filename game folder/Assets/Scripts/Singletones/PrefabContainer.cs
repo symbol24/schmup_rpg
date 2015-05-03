@@ -97,8 +97,15 @@ public class PrefabContainer : MonoBehaviour, iPrefabContainer
 
     public ProjectileController GetRandomProjective()
     {
-        int ran = Random.Range(0, M_ListofBullets.Length);
-        return M_ListofBullets[ran];
+        List<ProjectileController> list = new List<ProjectileController>();
+
+        foreach (ProjectileController p in M_ListofBullets)
+        {
+            if (p.m_Owner == "player") list.Add(p);
+        }
+
+        int ran = Random.Range(0, list.Count);
+        return list[ran];
     }
 
     public EquipmentController GetRandomEquipement(EquipmentController.equipmentType type)

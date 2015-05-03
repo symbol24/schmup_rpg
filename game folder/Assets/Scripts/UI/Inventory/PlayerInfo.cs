@@ -46,11 +46,11 @@ public class PlayerInfo : MonoBehaviour {
         temp = GameObject.Find("chassisTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.chassis);
 
-        temp = GameObject.Find("engineTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.engine);
-
         temp = GameObject.Find("hullTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.hull);
+
+        temp = GameObject.Find("engineTxt").GetComponent<Text>();
+        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.engine);
 
         temp = GameObject.Find("shieldTxt").GetComponent<Text>();
         temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.shield);
@@ -64,7 +64,7 @@ public class PlayerInfo : MonoBehaviour {
             if (e.m_myType == type)
                 ret = e.m_equipmentName;
         }
-        //print(ret);
+        print(ret);
         return ret;
     }
 }

@@ -19,6 +19,8 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
 	public ShieldData m_Shield;
     public ChassisData m_chassis;
     public List<EquipmentData> m_inventory;
+    bool m_isFirstShipGenerated = false;
+    public bool M_isFirstShipGenerated { get { return m_isFirstShipGenerated; } set { m_isFirstShipGenerated = value; } }
 
 	void Awake(){
 		if (pcInstance == null || pcInstance is PlayerContainerDummy) {
@@ -138,6 +140,9 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
             if (m_OtherEquipment[i].m_myType == value.m_myType) m_OtherEquipment[i] = value;
         }
     }
+
+
+   
 }
 
 public interface iPlayerContainer{
@@ -152,6 +157,7 @@ public interface iPlayerContainer{
     List<EquipmentData> M_inventory { get; set; }
     EquipmentData GetOneEquipment(EquipmentController.equipmentType type);
     void SetOneEquipment(EquipmentData value);
+    bool M_isFirstShipGenerated { get; set; }
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -274,6 +280,19 @@ public class PlayerContainerDummy: iPlayerContainer{
         for (int i = 0; i < m_OtherEquipment.Length; i++)
         {
             if (m_OtherEquipment[i].m_myType == value.m_myType) m_OtherEquipment[i] = value;
+        }
+    }
+
+
+    public bool M_isFirstShipGenerated
+    {
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+        set
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

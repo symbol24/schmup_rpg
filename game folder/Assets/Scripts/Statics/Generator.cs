@@ -20,7 +20,7 @@ public static class ItemGenerator
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
             m_myType = EquipmentController.equipmentType.cannon,
-            m_equipmentName = "Cannon " + Random.Range(level, (level *level)),
+            m_equipmentName = "Cannon " + Random.Range(level, (level * level) + 1),
             m_baseDamage = StatCalculator.CalculateBaseDamage(level),
             m_baseFireRate = StatCalculator.CalculateBaseFireRate(level),
             m_damageType = bullet.m_damageType,
@@ -40,7 +40,7 @@ public static class ItemGenerator
         return new ChassisData()
         {
             m_prefabName = PrefabContainer.instance.GetRandomEquipement(EquipmentController.equipmentType.chassis).name,
-            m_equipmentName = "Chassis " + Random.Range(level, (level * level)),
+            m_equipmentName = "Chassis " + Random.Range(level, (level * level) + 1),
             m_creditValue = baseData.m_creditValue,
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
@@ -63,7 +63,7 @@ public static class ItemGenerator
         return new ShieldData()
         {
             m_prefabName = PrefabContainer.instance.GetRandomEquipement(EquipmentController.equipmentType.shield).name,
-            m_equipmentName = "Shield " + Random.Range(level, (level * level)),
+            m_equipmentName = "Shield " + Random.Range(level, (level * level) + 1),
             m_creditValue = baseData.m_creditValue,
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
@@ -81,7 +81,7 @@ public static class ItemGenerator
         return new EquipmentData()
         {
             m_prefabName = PrefabContainer.instance.GetRandomEquipement(EquipmentController.equipmentType.hull).name,
-            m_equipmentName = "Hull " + Random.Range(level, (level * level)),
+            m_equipmentName = "Hull " + Random.Range(level, (level * level) + 1),
             m_creditValue = baseData.m_creditValue,
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
@@ -99,11 +99,11 @@ public static class ItemGenerator
         return new EquipmentData
         {
             m_prefabName = PrefabContainer.instance.GetRandomEquipement(EquipmentController.equipmentType.engine).name,
-            m_equipmentName = "Engine " + Random.Range(level, (level * level)),
+            m_equipmentName = "Engine " + Random.Range(level, (level * level)+1),
             m_creditValue = baseData.m_creditValue,
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
-            m_myType = EquipmentController.equipmentType.hull,
+            m_myType = EquipmentController.equipmentType.engine,
             m_baseEnergy = StatCalculator.CalculateBaseEnergy(level),
             m_modifierSpeed = speedModifier,
             m_modifierShield = shieldModifier,

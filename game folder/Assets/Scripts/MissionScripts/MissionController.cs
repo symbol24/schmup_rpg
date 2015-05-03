@@ -62,6 +62,7 @@ public class MissionController : MonoBehaviour {
 
     private bool m_isBossSpawned = false;
     private bool m_isMissionSuccesful = false;
+    private bool m_isRewardGiven = false;
 
 	// Use this for initialization
 	void Start () {
@@ -72,8 +73,6 @@ public class MissionController : MonoBehaviour {
         
         m_Timer = Time.time + m_introDelay;
 		m_spawnStatus = SpawnStatus.intro;
-
-        print("m_listofBosses[0].m_PrefabName " + MissionContainer.instance.m_listofBosses[0].m_PrefabName);
 	}
 	
 	// Update is called once per frame
@@ -138,10 +137,14 @@ public class MissionController : MonoBehaviour {
 			    break;
             case SpawnStatus.outro:
                 if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
-
+                if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
 
                 break;
 		    }
+        }
+        else if (m_gameManager.m_CurrentState == GameManager.gameState.gameover)
+        {
+            if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
         }
 	}
 
@@ -258,12 +261,19 @@ public class MissionController : MonoBehaviour {
         m_menuController.HideMenu(menu);
     }
 
-    private bool DisplayOutro()
+    private bool DisplayOutro(){
+        m_menuController.DisplayOutroPanel(m_isMissionSuccesful);
+        return true;
+
+    }
+
+    private bool GiveRewardsToPlayer()
     {
-        bool ret = false;
+        PlayerContainer.instance.M_experience += MissionContainer.instance.m_experienceValue;
+        PlayerContainer.instance.M_credits += MissionContainer.instance.m_creditValue;
 
-        ret = true;
-        return ret;
+        if (MissionContainer.instance.m_rewardEquipment.Length > 0) PlayerContainer.instance.M_inventory.Add(MissionContainer.instance.m_rewardEquipment[0]);
 
+        return true;
     }
 }

@@ -23,6 +23,7 @@ public class MenuController : MonoBehaviour {
         options = 7
     }
 
+    [SerializeField] private string m_hub = "loader";
     [SerializeField] private Menu m_PauseMenu;
     [SerializeField] private Menu m_StatusandInventoryMenu;
     [SerializeField] private PlayerStatusMenu m_playerStatusMenu;
@@ -35,7 +36,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private OptionsMenu m_optionsMenu;
     [SerializeField] private EquipConfirmMenu m_cannonConfirm;
     [SerializeField] private EquipConfirmMenu m_defaultConfirm;
-    [SerializeField] private Menu m_startDisplay;
+    [SerializeField] private Menu m_introDisplay;
+    [SerializeField] private Menu m_outroDisplay;
     
 
     void Start(){
@@ -177,7 +179,7 @@ public class MenuController : MonoBehaviour {
 
     public void DisplayIntroPanel(string mission)
     {
-        ShowMenu(m_startDisplay);
+        ShowMenu(m_introDisplay);
         Text missionText = GameObject.Find("missionType").GetComponent<Text>();
         missionText.text = mission;
     }
@@ -186,5 +188,42 @@ public class MenuController : MonoBehaviour {
     {
         Button[] allActive = FindObjectsOfType<Button>() as Button[];
 
+    }
+
+    public void DisplayOutroPanel(bool succes)
+    {
+        ShowMenu(m_outroDisplay);
+        string result = "Mission successful";
+        string exp = MissionContainer.instance.m_experienceValue.ToString();
+        string credits = MissionContainer.instance.m_creditValue.ToString();
+
+        
+        string reward = "None";
+
+        if(MissionContainer.instance.m_rewardEquipment.Length > 0)  
+        reward = MissionContainer.instance.m_rewardEquipment[0].m_equipmentName;
+
+        if (!succes){ 
+            result = "Mission failed";
+            exp = "None";
+            credits = "None";
+            reward = "None";
+        }
+        Text txt = GameObject.Find("missionResult").GetComponent<Text>();
+        txt.text = result;
+
+        txt = GameObject.Find("expRewardValue").GetComponent<Text>();
+        txt.text = exp;
+
+        txt = GameObject.Find("creditRewardValue").GetComponent<Text>();
+        txt.text = credits;
+
+        txt = GameObject.Find("rewardValue").GetComponent<Text>();
+        txt.text = reward;
+    }
+
+    public void ReturnToHub()
+    {
+        Application.LoadLevel(m_hub);
     }
 }

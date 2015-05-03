@@ -122,13 +122,13 @@ public class MissionGenerator : MonoBehaviour {
     private EnemyData GenerateStatsForEnemy(EnemyData ret)
     {
         int lvl = PlayerContainer.instance.M_level;
-        ret.m_baseDamage = StatCalculator.CalculateBaseDamage(lvl);
+        ret.m_experienceValue = StatCalculator.GetExpValue(EnemyController.EnemyType.grunt);
+        ret.m_baseDamage = StatCalculator.CalculateBaseDamage(lvl) * 0.5f;
         ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
         ret.m_baseHP = StatCalculator.CalculateEAIBaseHP(lvl);
-        ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl);
+        ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl) * 0.01f ;
         ret.m_spawnCount = Random.Range(3, 5);
         ret.m_spawnDelay = (float)System.Math.Round(Random.Range(0.75f, 1.5f), 2);
-        ret.m_experienceValue = StatCalculator.GetExpValue(EnemyController.EnemyType.grunt);
         return ret;
     }
 

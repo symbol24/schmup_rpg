@@ -15,8 +15,8 @@ public static class StatCalculator {
 
     public static float CalculateBaseDamage(float level)
     {
-        float min = ((level / 2) + 0.5f);
-        float max = level + ((level / 2) + 1);
+        float max = (level * 2) + 9;
+        float min = max * 0.50f;
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
         return ret;
@@ -42,7 +42,7 @@ public static class StatCalculator {
 
     public static float CalculateEAIBaseHP(float level)
     {
-        float max = 5 + (level * (level + 1)) / 2;
+        float max = (50 + (level * (level + 1)) / 2) * 0.10f;
         float min = max * 0.90f;
         float ret = Random.Range(min, max);
         ret = (float)System.Math.Round(ret, 2);
@@ -83,12 +83,12 @@ public static class StatCalculator {
 
             case ChassisController.ChassisSize.medium:
                 min = 1;
-                max = 4;
+                max = 3;
                 break;
 
             case ChassisController.ChassisSize.small:
                 min = 2;
-                max = 5;
+                max = 4;
                 break;
         }
 

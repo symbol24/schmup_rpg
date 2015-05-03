@@ -653,30 +653,6 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 		}
 	}*/
 
-    public iPlayerContainer SavePlayer()
-    {
-        PlayerContainer ret = (PlayerContainer)PlayerContainer.instance;
-        CannonData[] tempC = new CannonData[instantiatedCannons.Length];
-        for (int i = 0; i < tempC.Length; i++)
-        {
-            tempC[i] = instantiatedCannons[i].GetSavableObject();
-        }
-        ret.m_Cannons = tempC;
-
-        EquipmentData[] tempE = new EquipmentData[m_instantiatedEquipment.Length];
-        for (int i = 0; i < tempE.Length; i++)
-        {
-            tempE[i] = m_instantiatedEquipment[i].GetSavableObjectInternal<EquipmentData>();
-        }
-        ret.m_OtherEquipment = tempE;
-
-        ret.m_Shield = m_instantiatedShield.GetSavableObject();
-
-        ret.m_chassis = m_instatiatedChassis.GetSavableObject();
-
-        return ret;
-    }
-
     public ChassisController GetChassis()
     {
         return m_instatiatedChassis;
