@@ -72,6 +72,7 @@ public class MissionGenerator : MonoBehaviour {
                         enemyData = new EnemyData[0];
                         bossData = new EnemyData[0];
                         reward = new EquipmentData[0];
+                        ret.m_creditReward = 0;
                         break;
                     case false:
                         GetEnemyList(enemyData, ret.m_missionLevel, "enemy");
@@ -139,7 +140,7 @@ public class MissionGenerator : MonoBehaviour {
         ret.m_experienceValue = StatCalculator.GetExpValue(EnemyController.EnemyType.boss);
         ret.m_baseDamage = StatCalculator.CalculateBaseDamage(lvl) * 0.5f;
         ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
-        ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl);
+        ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl) * 10;
         ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl) * 0.01f;
         ret.m_baseShield = StatCalculator.CalculateBaseShield(lvl);
         ret.m_spawnCount = 1;

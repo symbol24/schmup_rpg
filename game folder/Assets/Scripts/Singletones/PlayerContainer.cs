@@ -141,11 +141,24 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
         }
     }
 
-    public void AddExp(float exp)
+    public bool AddExp(float exp)
     {
+        bool ret = false;
         m_experience += exp;
+        int tempLevel = CheckLevel();
+        if (tempLevel > M_level)
+        {
+            M_level = tempLevel;
+            ret = true;
+        }
+        return ret;
     }
 
+    public int CheckLevel(){
+        int lvl = StatCalculator.GetCurrentLevel(M_experience);
+
+        return lvl;
+    }
    
 }
 
@@ -162,7 +175,8 @@ public interface iPlayerContainer{
     EquipmentData GetOneEquipment(EquipmentController.equipmentType type);
     void SetOneEquipment(EquipmentData value);
     bool M_isFirstShipGenerated { get; set; }
-    void AddExp(float exp);
+    bool AddExp(float exp);
+    int CheckLevel();
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -302,7 +316,13 @@ public class PlayerContainerDummy: iPlayerContainer{
     }
 
 
-    public void AddExp(float exp)
+    public bool AddExp(float exp)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    public int CheckLevel()
     {
         throw new System.NotImplementedException();
     }

@@ -99,7 +99,7 @@ public class EnemyController : MonoBehaviour {
         if (score > 0)
         {
             m_missionController.IncrementKillCount();
-            PlayerContainer.instance.AddExp(score);
+            m_missionController.AddExpThroughMission(score);
         }
 
 		m_missionController.DecreaseSpawnCount ();

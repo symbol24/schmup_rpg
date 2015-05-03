@@ -130,7 +130,7 @@ public static class StatCalculator {
 
     public static int GetCurrentLevel(float exp)
     {
-        return (int)(exp / 100);
+        return (int)(exp / 100) + 1;
     }
 
     public static float GetExpValue(EnemyController.EnemyType type)

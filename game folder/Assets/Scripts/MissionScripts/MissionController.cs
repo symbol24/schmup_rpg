@@ -143,7 +143,8 @@ public class MissionController : MonoBehaviour {
                 if (m_Timer <= Time.time)
                 {
                     if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
-                    if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
+                    if (!MissionContainer.instance.m_isMissionEmpty)
+                        if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
                 }
                 break;
 		    }
@@ -277,11 +278,20 @@ public class MissionController : MonoBehaviour {
     private bool GiveRewardsToPlayer()
     {
 
-        PlayerContainer.instance.AddExp(MissionContainer.instance.m_experienceValue);
+        AddExpThroughMission(MissionContainer.instance.m_experienceValue);
         PlayerContainer.instance.M_credits += MissionContainer.instance.m_creditValue;
 
         if (MissionContainer.instance.m_rewardEquipment.Length > 0) PlayerContainer.instance.M_inventory.Add(MissionContainer.instance.m_rewardEquipment[0]);
 
         return true;
+    }
+
+    public void AddExpThroughMission(float exp)
+    {
+        bool levelup = PlayerContainer.instance.AddExp(exp);
+        if (levelup)
+        {
+            m_menuController.LevelUP();
+        }
     }
 }

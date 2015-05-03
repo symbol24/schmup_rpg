@@ -38,6 +38,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] private EquipConfirmMenu m_defaultConfirm;
     [SerializeField] private Menu m_introDisplay;
     [SerializeField] private Menu m_outroDisplay;
+    [SerializeField] private Menu m_levelUp;
     
 
     void Start(){
@@ -225,5 +226,23 @@ public class MenuController : MonoBehaviour {
     public void ReturnToHub()
     {
         Application.LoadLevel(m_hub);
+    }
+
+    public void CloseGame(){
+        Application.Quit();
+    }
+
+    public void LevelUP()
+    {
+        StartCoroutine(TimedLevelUp());
+        Text txt = GameObject.Find("levelValue").GetComponent<Text>();
+        txt.text = PlayerContainer.instance.M_level.ToString();
+    }
+
+    private IEnumerator TimedLevelUp()
+    {
+        ShowMenu(m_levelUp);
+        yield return new WaitForSeconds(5f);
+        HideMenu(m_levelUp);
     }
 }
