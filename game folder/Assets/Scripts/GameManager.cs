@@ -5,26 +5,15 @@ using System.Xml;
 using System.Xml.Serialization; 
 
 public class GameManager : MonoBehaviour {
-	//the player ship
-	//public PlayerController m_PlayerShip;
-
-	//the player and enemy bullets
-//	public int m_BulletAmount;
-//	public ProjectileController[] m_ProjectilePrefabs;
-//	public Stack<ProjectileController>[] m_ProjectileStacks;
-//	public Stack<ProjectileController>[] m_PlayerProjectileStacks;
 
 	//game state enum
 	public enum gameState{
 		playing, paused, gameover, dead, inventory
 	}
 	public gameState m_CurrentState;
-
-	
+    	
 	//life icons top left of screen
 	public int m_NumberOfLives;
-//	public GameObject m_LifeIconPrefab;
-//	public GameObject[] m_LifeIconsDisplayed;
 
 	//explosions when dead
 	public GameObject longPinkExplosionPrefab;
@@ -33,25 +22,12 @@ public class GameManager : MonoBehaviour {
 	public float explosionAnimationTime;
 	public float deathControlDelay;
 
-	//score info
-//	public GUIText m_ScoreGUI;
-//	public float m_TotalScore = 0;
-//	private float m_TotalKills = 0;
-//	public float m_TargetScore;
-	
 	//menu dely timer
 	public float m_MenuDelayTimer = 0.0f;
 	public float m_MenuDeadSpot = 0.1f;
 
-	//end game messages
-	//public string m_VictoryMessage;
-	//public string m_LoseMessage;
-
 	//for firing status and shield management
 	public bool m_isShooting = false;
-
-	//for the powerups! no longer used
-	//public PowerUpController m_PowerUpPrefab;
 
 	//next level!
 	public string m_NextLevel = "Hub";
