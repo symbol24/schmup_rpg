@@ -43,12 +43,15 @@ public class MissionController : MonoBehaviour {
     private bool m_isIntroDisplayed = false;
     private bool m_canStart = false;
 
+    //outro
+    private bool m_isOutroDisplayed = false;
+
 	private int m_currentEnemytoSpawn = 0;
 	private EnemyController[] m_listofEnemies;
 	private EnemyController[] m_listofBosses;
 	private EnemySpawnController m_enemySpawner;
 
-	private EquipmentData m_rewardEquipment;
+	private EquipmentData[] m_rewardEquipment;
 
 	public float m_spawnerX, m_spawnerY;
 
@@ -58,6 +61,7 @@ public class MissionController : MonoBehaviour {
 	public int m_bossSpawnCount;
 
     private bool m_isBossSpawned = false;
+    private bool m_isMissionSuccesful = false;
 
 	// Use this for initialization
 	void Start () {
@@ -100,6 +104,7 @@ public class MissionController : MonoBehaviour {
                 if (m_missionType == MissionType.scavange && m_survived && m_currentSpawnCount <= 0)
                 {
                     m_spawnStatus = SpawnStatus.outro;
+                    m_isMissionSuccesful = true;
                 }
 			    break;
 		    case SpawnStatus.spawningEnemies:
@@ -132,7 +137,9 @@ public class MissionController : MonoBehaviour {
                 m_isBossSpawned = true;
 			    break;
             case SpawnStatus.outro:
-                //ask to return to hub
+                if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
+
+
                 break;
 		    }
         }
@@ -241,6 +248,7 @@ public class MissionController : MonoBehaviour {
         else if (m_isBossSpawned)
         {
             m_spawnStatus = SpawnStatus.outro;
+            m_isMissionSuccesful = true;
         }
 	}
 
@@ -248,5 +256,14 @@ public class MissionController : MonoBehaviour {
     {
         m_canStart = true;
         m_menuController.HideMenu(menu);
+    }
+
+    private bool DisplayOutro()
+    {
+        bool ret = false;
+
+        ret = true;
+        return ret;
+
     }
 }

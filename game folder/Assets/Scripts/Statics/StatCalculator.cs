@@ -97,6 +97,11 @@ public static class StatCalculator {
         return ret;
     }
 
+    public static float CalculateBaseEnergy(float level)
+    {
+        return  (float)System.Math.Round(CalculateBaseHP(level)/2,2);
+    }
+
     public static T GetRandomValue<T>(int min, int max)
     {
 

@@ -90,7 +90,6 @@ public class MissionGenerator : MonoBehaviour {
                 rewardAmount = 1;
                 reward = new EquipmentData[rewardAmount];
                 reward = GenerateRewardList(reward);
-                print(reward.Length);
                 break;
         }
 

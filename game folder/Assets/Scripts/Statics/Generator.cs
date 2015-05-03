@@ -95,7 +95,6 @@ public static class ItemGenerator
     {
         if (Math.Abs(speedModifier - float.MinValue) < 0.1) speedModifier = Random.Range(0f, 20f)/100f;
         if (Math.Abs(shieldModifier - float.MinValue) < 0.1) shieldModifier = Random.Range(0f, 20f)/100f;
-        Debug.Log("need to take a look at m_baseEnergy random value");
         EquipmentData baseData = BaseInfo(level);
         return new EquipmentData
         {
@@ -105,7 +104,7 @@ public static class ItemGenerator
             m_Owner = baseData.m_Owner,
             m_equipmentLevel = baseData.m_equipmentLevel,
             m_myType = EquipmentController.equipmentType.hull,
-            m_baseEnergy = level*5, //Need to take a look at it
+            m_baseEnergy = StatCalculator.CalculateBaseEnergy(level),
             m_modifierSpeed = speedModifier,
             m_modifierShield = shieldModifier,
         };
