@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 
 public class CannonController : EquipmentController, ISavable<CannonData> {
 	private GameManager m_GameManager;
-    private PrefabContainer m_prefabContainer;
 
 	public float m_baseWeaponDamage = 1.0f;
 	public float m_baseWeaponFireRate = 0.05F;
@@ -29,7 +28,6 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
 		m_ProjectileEnergyValue = m_ProjectileToShootPrefab.m_EnergyValue;
 		m_EnergyBar = FindObjectOfType<EnergySystemController>();
         UpdateRefs(GameObject.FindGameObjectsWithTag(m_cannonTag));
-        m_prefabContainer = FindObjectOfType<PrefabContainer>();
         SetBullet();
         m_playerController.SetBulletImg();
 	}
@@ -84,7 +82,7 @@ public class CannonController : EquipmentController, ISavable<CannonData> {
         if (m_bulletPrefabName == null || m_bulletPrefabName == "")
             m_bulletPrefabName = "Player_Base_Bullet";
 
-        m_ProjectileToShootPrefab = m_prefabContainer.GetBulletPerName(m_bulletPrefabName);
+        m_ProjectileToShootPrefab = PrefabContainer.instance.GetBulletPerName(m_bulletPrefabName);
 
     }
 }

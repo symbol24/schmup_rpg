@@ -147,4 +147,56 @@ public static class StatCalculator {
         return ret;
     }
 
+    public static int GetCreditValue(float lvl)
+    {
+        float max = lvl * 100;
+        float min = max * 0.90f;
+        return (int)Random.Range(min, max);
+    }
+
+    public static float GetMissionLevel(float playerlvl)
+    {
+        float level = 0.0f;
+        if(playerlvl > 5)
+            level = (float)System.Math.Round(Random.Range(playerlvl-5, playerlvl + 5), 0);
+        else
+            level = (float)System.Math.Round(Random.Range(playerlvl, playerlvl + 2), 0);
+        return level;
+    }
+
+    public static MissionDifficulty GetMissionDifficulty(float missionLevel, float playerLevel)
+    {
+        MissionDifficulty ret = MissionDifficulty.Easy;
+        float diff = playerLevel - missionLevel;
+
+        if (diff > -2 && diff < 2)
+            ret = MissionDifficulty.Medium;
+        else if (diff < -2)
+            ret = MissionDifficulty.Hard;
+
+        return ret;
+    }
+
+    public static float GetMissionExperience(MissionDifficulty difficulty, float player, float mission)
+    {
+        float ret = 0.0f;
+        float diff = player / mission;
+
+        switch (difficulty)
+        {
+            case MissionDifficulty.Easy:
+                ret = 20.0f;
+                break;
+            case MissionDifficulty.Medium:
+                ret = 50.0f;
+                break;
+            case MissionDifficulty.Hard:
+                ret = 80.0f;
+                break;
+        }
+
+        ret = (float)System.Math.Round(ret / diff, 0);
+
+        return ret;
+    }
 }

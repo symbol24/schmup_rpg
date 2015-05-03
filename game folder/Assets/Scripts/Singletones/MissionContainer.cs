@@ -10,30 +10,38 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
 		get{ return mInstance ?? (mInstance = new MissionContainerDummy());}
 	}
 
-    public string MissionCoordinates;
+    string MissionCoordinates;
     public string m_missionCoordinates { get{ return MissionCoordinates; } set{MissionCoordinates = value;} }
 
-	public MissionController.MissionType MissionType;
+	MissionController.MissionType MissionType;
 	public MissionController.MissionType m_MissionType{ get{ return MissionType; } set{ MissionType = value; } }
 
-	public float playerLevel;
+	float playerLevel;
 	public float m_playerLevel{ get{ return playerLevel; } set{ playerLevel = value; } }
 
-    public bool isMissionEmpty;
+    bool isMissionEmpty;
     public bool m_isMissionEmpty { get { return isMissionEmpty; } set { isMissionEmpty = value; } }
 
-	public EnemyData[] listofEnemies;
+	EnemyData[] listofEnemies;
 	public EnemyData[] m_listOfMissionEnemies{ get{ return listofEnemies; } set{ listofEnemies = value; } }
 
-    public EnemyData[] listofBosses;
+    EnemyData[] listofBosses;
     public EnemyData[] m_listofBosses { get { return listofBosses; } set { listofBosses = value; } }
 
-	public EquipmentData[] rewardEquipment;
+	EquipmentData[] rewardEquipment;
 	public EquipmentData[] m_rewardEquipment{ get{ return rewardEquipment; } set{ rewardEquipment = value; } }
 
-    public float scavangeTimer;
+    float scavangeTimer;
     public float m_scavangeTimer { get { return scavangeTimer; } set { scavangeTimer = value; } }
 
+    MissionDifficulty difficulty;
+    public MissionDifficulty m_difficulty { get { return difficulty; } set { difficulty = value; } }
+
+    float creditValue;
+    public float m_creditValue { get { return creditValue; } set { creditValue = value; } }
+
+    float experieneValue;
+    public float m_experienceValue { get { return experieneValue; } set { experieneValue = value; } }
 
 	void Awake(){
 		if (mInstance == null || mInstance is MissionContainerDummy) {
@@ -57,6 +65,9 @@ public interface iMissionContainer
     EnemyData[] m_listofBosses { get; set; }
 	EquipmentData[] m_rewardEquipment { get; set; }
     float m_scavangeTimer { get; set; }
+    MissionDifficulty m_difficulty { get; set; }
+    float m_creditValue { get; set; }
+    float m_experienceValue { get; set; }
 }
 
 public class MissionContainerDummy : iMissionContainer
@@ -69,4 +80,7 @@ public class MissionContainerDummy : iMissionContainer
     public EnemyData[] m_listofBosses { get; set; }
 	public EquipmentData[] m_rewardEquipment{ get; set; }
     public float m_scavangeTimer { get; set; }
+    public MissionDifficulty m_difficulty { get; set; }
+    public float m_creditValue { get; set; }
+    public float m_experienceValue { get; set; }
 }

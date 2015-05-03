@@ -7,9 +7,6 @@ public class MissionGenerator : MonoBehaviour {
     [SerializeField] private string leveltoLoad = "loader";
     [SerializeField] private string gameplayLevel = "phil_test";
     [SerializeField] public MissionData[] m_missions;
-    private PlayerContainer m_playerController;
-    private PrefabContainer m_prefabs;
-    private MissionContainer m_missionContainer;
     [SerializeField] private GameObject leftPanel;
     [SerializeField] private GameObject rightPanel;
     [SerializeField] private GameObject btnScavange;
@@ -23,16 +20,13 @@ public class MissionGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        m_playerController = FindObjectOfType<PlayerContainer>();
-        if (m_playerController == null)
+        if (FindObjectOfType<PlayerContainer>() == null)
         {
             print("No player found!");
             Application.LoadLevel(leveltoLoad);
         }
 
         m_missions = new MissionData[m_amountOfMissions];
-        m_prefabs = FindObjectOfType<PrefabContainer>();
-        m_missionContainer = FindObjectOfType<MissionContainer>();
         GenerateMissionsRandomly();
         DisplayMissionButtons();
 	}
@@ -50,10 +44,10 @@ public class MissionGenerator : MonoBehaviour {
 
     private MissionData GenerateMission(MissionController.MissionType type)
     {
+
         MissionData ret = new MissionData();
-        ret.m_missionCoordinates = Random.Range(0, 360) + ". " + Random.Range(-50, 50) + "' " + Random.Range(-180, 180);
-        ret.m_MissionType = type;
-        ret.m_playerLevel = m_playerController.m_level;
+
+        ret.m_missionLevel = StatCalculator.GetMissionLevel(PlayerContainer.instance.M_level);
 
         bool isEmpty = false;
         EnemyData[] enemyData = new EnemyData[enemyAmount];
@@ -64,8 +58,11 @@ public class MissionGenerator : MonoBehaviour {
         {
             case MissionController.MissionType.bounty:
                 isEmpty = false;
-                GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
-                GetEnemyList(bossData, ret.m_playerLevel, "boss");
+                GetEnemyList(enemyData, ret.m_missionLevel, "enemy");
+                GetEnemyList(bossData, ret.m_missionLevel, "boss");
+                ret.m_creditReward = GenerateCreditReward(ret.m_missionLevel);
+                rewardAmount = 0;
+                reward = new EquipmentData[rewardAmount];
                 break;
             case MissionController.MissionType.exploration:
                 isEmpty = Extensions.randomBoolean();
@@ -74,20 +71,33 @@ public class MissionGenerator : MonoBehaviour {
                     case true:
                         enemyData = new EnemyData[0];
                         bossData = new EnemyData[0];
+                        reward = new EquipmentData[0];
                         break;
                     case false:
-                        GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
+                        GetEnemyList(enemyData, ret.m_missionLevel, "enemy");
+                        ret.m_creditReward = GenerateCreditReward(ret.m_missionLevel);
+                        rewardAmount = 1;
+                        reward = new EquipmentData[rewardAmount];
+                        reward = GenerateRewardList(reward);
                         break;
                 }
                 break;
             case MissionController.MissionType.scavange:
                 isEmpty = false;
                 ret.m_scavangeTimer = (float)Random.Range(45, 60);
-                GetEnemyList(enemyData, ret.m_playerLevel, "enemy");
+                GetEnemyList(enemyData, ret.m_missionLevel, "enemy");
                 bossData = new EnemyData[0];
+                rewardAmount = 1;
+                reward = new EquipmentData[rewardAmount];
+                reward = GenerateRewardList(reward);
+                print(reward.Length);
                 break;
         }
 
+        ret.m_difficulty = StatCalculator.GetMissionDifficulty(ret.m_missionLevel, PlayerContainer.instance.M_level);
+        ret.m_experienceValue = StatCalculator.GetMissionExperience(ret.m_difficulty, PlayerContainer.instance.M_level, ret.m_missionLevel);
+        ret.m_missionCoordinates = Random.Range(0, 360) + ". " + Random.Range(-50, 50) + "' " + Random.Range(-180, 180);
+        ret.m_MissionType = type;
         ret.m_isMissionEmpty = isEmpty;
         ret.m_listOfMissionEnemies = enemyData;
         ret.m_listofBosses = bossData;
@@ -102,7 +112,7 @@ public class MissionGenerator : MonoBehaviour {
     {
         for (int i = 0; i < enemies.Length; i++)
         {
-            enemies[i] = m_prefabs.GetRandomEnemy(type);
+            enemies[i] = PrefabContainer.instance.GetRandomEnemy(type);
             if (type == "enemy")
                 enemies[i] = GenerateStatsForEnemy(enemies[i]);
             else
@@ -112,7 +122,7 @@ public class MissionGenerator : MonoBehaviour {
 
     private EnemyData GenerateStatsForEnemy(EnemyData ret)
     {
-        int lvl = m_playerController.m_level;
+        int lvl = PlayerContainer.instance.M_level;
         ret.m_baseDamage = StatCalculator.CalculateBaseDamage(lvl);
         ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
         ret.m_baseHP = StatCalculator.CalculateEAIBaseHP(lvl);
@@ -125,7 +135,7 @@ public class MissionGenerator : MonoBehaviour {
 
     private EnemyData GenerateStatsForBoss(EnemyData ret)
     {
-        int lvl = m_playerController.m_level;
+        int lvl = PlayerContainer.instance.M_level;
         ret = GenerateStatsForEnemy(ret);
         ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl);
         ret.m_baseShield = StatCalculator.CalculateBaseShield(lvl);
@@ -183,13 +193,64 @@ public class MissionGenerator : MonoBehaviour {
 
     public void SetSelectedMission(MissionData mission)
     {
-        m_missionContainer.m_listOfMissionEnemies = mission.m_listOfMissionEnemies;
-        m_missionContainer.m_isMissionEmpty = mission.m_isMissionEmpty;
-        m_missionContainer.m_listofBosses = mission.m_listofBosses;
-        m_missionContainer.m_missionCoordinates = mission.m_missionCoordinates;
-        m_missionContainer.m_MissionType = mission.m_MissionType;
-        m_missionContainer.m_playerLevel = mission.m_playerLevel;
-        m_missionContainer.m_rewardEquipment = mission.m_rewardEquipment;
-        m_missionContainer.m_scavangeTimer = mission.m_scavangeTimer;
+        MissionContainer.instance.m_listOfMissionEnemies = mission.m_listOfMissionEnemies;
+        MissionContainer.instance.m_isMissionEmpty = mission.m_isMissionEmpty;
+        MissionContainer.instance.m_listofBosses = mission.m_listofBosses;
+        MissionContainer.instance.m_missionCoordinates = mission.m_missionCoordinates;
+        MissionContainer.instance.m_MissionType = mission.m_MissionType;
+        MissionContainer.instance.m_playerLevel = mission.m_missionLevel;
+        MissionContainer.instance.m_rewardEquipment = mission.m_rewardEquipment;
+        MissionContainer.instance.m_scavangeTimer = mission.m_scavangeTimer;
+        MissionContainer.instance.m_creditValue = mission.m_creditReward;
+        MissionContainer.instance.m_difficulty = mission.m_difficulty;
+        MissionContainer.instance.m_experienceValue = mission.m_experienceValue;
+    }
+
+    private EquipmentData[] GenerateRewardList(EquipmentData[] list)
+    {
+
+        if (rewardAmount > 0)
+        {
+            for (int i = 0; i < rewardAmount; i++)
+            {
+                list[i] = GenerateRandomReward();
+            }
+        }
+
+        return list;
+    }
+
+    private EquipmentData GenerateRandomReward()
+    {
+        EquipmentController.equipmentType type = StatCalculator.GetRandomValue<EquipmentController.equipmentType>();
+
+        EquipmentData ret = new EquipmentData();
+
+        switch (type)
+        {
+            case EquipmentController.equipmentType.chassis:
+                ret = ItemGenerator.Chassis(PlayerContainer.instance.M_level);
+                break;
+            case EquipmentController.equipmentType.cannon:
+                ret = ItemGenerator.Cannon(PlayerContainer.instance.M_level);
+                break;
+            case EquipmentController.equipmentType.engine:
+                ret = ItemGenerator.Engine(PlayerContainer.instance.M_level);
+                break;
+            case EquipmentController.equipmentType.hull:
+                ret = ItemGenerator.Hull(PlayerContainer.instance.M_level);
+                break;
+            case EquipmentController.equipmentType.shield:
+                ret = ItemGenerator.Shield(PlayerContainer.instance.M_level);
+                break;
+
+        }
+
+        return ret;
+    }
+
+    private float GenerateCreditReward(float missionLevel)
+    {
+        return missionLevel * 1000;
     }
 }

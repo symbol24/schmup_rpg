@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PrefabContainer : MonoBehaviour, iPrefabContainer
 {
@@ -93,6 +94,24 @@ public class PrefabContainer : MonoBehaviour, iPrefabContainer
 
         return ret;
     }
+
+    public ProjectileController GetRandomProjective()
+    {
+        int ran = Random.Range(0, M_ListofBullets.Length);
+        return M_ListofBullets[ran];
+    }
+
+    public EquipmentController GetRandomEquipement(EquipmentController.equipmentType type)
+    {
+        List<EquipmentController> list = new List<EquipmentController>();
+        foreach (EquipmentController e in M_ListofEquipments)
+        {
+            if(e.m_myType == type)
+                list.Add(e);
+        }
+        int ran = Random.Range(0, list.Count);
+        return list[ran];
+    }
 }
 
 
@@ -111,6 +130,8 @@ public interface iPrefabContainer
     EnemyController GetEnemyPerName(string name);
     EnemySpawnController GetEnemySpawner();
     EnemyData GetRandomEnemy(string type);
+    ProjectileController GetRandomProjective();
+    EquipmentController GetRandomEquipement(EquipmentController.equipmentType type);
 }
 
 public class PrefabContainerDummy : iPrefabContainer
@@ -188,6 +209,17 @@ public class PrefabContainerDummy : iPrefabContainer
     }
 
     public EnemyData GetRandomEnemy(string type)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public ProjectileController GetRandomProjective()
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    public EquipmentController GetRandomEquipement(EquipmentController.equipmentType type)
     {
         throw new System.NotImplementedException();
     }

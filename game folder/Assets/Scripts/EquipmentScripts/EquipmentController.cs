@@ -19,7 +19,7 @@ public class EquipmentController : MonoBehaviour {
     public string m_equipmentName;
 	public equipmentType m_myType;
 
-	public int m_equipmentLevel = 1;
+	public float m_equipmentLevel = 1;
 	public float m_creditValue = 1.0f;
 	public EnergyType m_damageType = 0;
 	public string m_Owner = "player";

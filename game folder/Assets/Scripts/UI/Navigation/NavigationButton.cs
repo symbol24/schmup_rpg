@@ -23,10 +23,31 @@ public class NavigationButton : MonoBehaviour
     public void UpdateInfo()
     {
         m_texts[0].text = m_myMission.m_missionCoordinates;
-        m_texts[1].text = "Not implemented yet";
-        m_texts[2].text = "Not implemented yet";
-        m_texts[3].text = "Not implemented yet";
-        m_texts[4].text = "Not implemented yet";
+
+        string difficulty = m_myMission.m_difficulty.ToString();
+        string exp = m_myMission.m_experienceValue.ToString();
+        string credit = m_myMission.m_creditReward.ToString();
+        string reward;
+
+
+
+        if (m_myMission.m_rewardEquipment.Length > 0)
+            reward = m_myMission.m_rewardEquipment[0].m_equipmentName;
+        else
+            reward = "None";
+
+        if (m_myMission.m_MissionType == MissionController.MissionType.exploration)
+        {
+            difficulty = "unknown";
+            exp = "unknown";
+            credit = "unknown";
+            reward = "unknown";
+        }
+        
+        m_texts[1].text = difficulty;
+        m_texts[2].text = exp;
+        m_texts[3].text = credit;
+        m_texts[4].text = reward;
     }
 
     private MissionData GetMission()
