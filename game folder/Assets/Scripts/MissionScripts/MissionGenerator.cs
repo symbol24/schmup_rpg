@@ -127,6 +127,7 @@ public class MissionGenerator : MonoBehaviour {
         ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
         ret.m_baseHP = StatCalculator.CalculateEAIBaseHP(lvl);
         ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl) * 0.01f ;
+        ret.m_baseShield = 0.0f;
         ret.m_spawnCount = Random.Range(3, 5);
         ret.m_spawnDelay = (float)System.Math.Round(Random.Range(0.75f, 1.5f), 2);
         return ret;
@@ -135,11 +136,12 @@ public class MissionGenerator : MonoBehaviour {
     private EnemyData GenerateStatsForBoss(EnemyData ret)
     {
         int lvl = PlayerContainer.instance.M_level;
-        ret = GenerateStatsForEnemy(ret);
-        ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl);
-        ret.m_baseShield = StatCalculator.CalculateBaseShield(lvl);
-        ret.m_shieldType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
         ret.m_experienceValue = StatCalculator.GetExpValue(EnemyController.EnemyType.boss);
+        ret.m_baseDamage = StatCalculator.CalculateBaseDamage(lvl) * 0.5f;
+        ret.m_damageType = StatCalculator.GetRandomValue<EnergyType>(0, 0);
+        ret.m_baseHP = StatCalculator.CalculateBaseHP(lvl);
+        ret.m_baseArmour = StatCalculator.CalculateBaseArmor(lvl) * 0.01f;
+        ret.m_baseShield = StatCalculator.CalculateBaseShield(lvl);
         ret.m_spawnCount = 1;
         ret.m_spawnDelay = 0;
         return ret;

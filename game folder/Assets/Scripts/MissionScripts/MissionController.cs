@@ -91,7 +91,10 @@ public class MissionController : MonoBehaviour {
 
                             //empty exploration goes to outro
                             if (MissionContainer.instance.m_isMissionEmpty)
+                            {
                                 nextStatus = SpawnStatus.outro;
+                                m_Timer = Time.time + m_introDelay;
+                            }
 
 				            m_spawnStatus = nextStatus;
                         }
@@ -103,6 +106,7 @@ public class MissionController : MonoBehaviour {
                 if (m_missionType == MissionType.scavange && m_survived && m_currentSpawnCount <= 0)
                 {
                     m_spawnStatus = SpawnStatus.outro;
+                    m_Timer = Time.time + m_introDelay;
                     m_isMissionSuccesful = true;
                 }
 			    break;
@@ -136,9 +140,11 @@ public class MissionController : MonoBehaviour {
                 m_isBossSpawned = true;
 			    break;
             case SpawnStatus.outro:
-                if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
-                if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
-
+                if (m_Timer <= Time.time)
+                {
+                    if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
+                    if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
+                }
                 break;
 		    }
         }
@@ -252,6 +258,7 @@ public class MissionController : MonoBehaviour {
         {
             m_spawnStatus = SpawnStatus.outro;
             m_isMissionSuccesful = true;
+            m_Timer = Time.time + m_introDelay;
         }
 	}
 
@@ -269,7 +276,8 @@ public class MissionController : MonoBehaviour {
 
     private bool GiveRewardsToPlayer()
     {
-        PlayerContainer.instance.M_experience += MissionContainer.instance.m_experienceValue;
+
+        PlayerContainer.instance.AddExp(MissionContainer.instance.m_experienceValue);
         PlayerContainer.instance.M_credits += MissionContainer.instance.m_creditValue;
 
         if (MissionContainer.instance.m_rewardEquipment.Length > 0) PlayerContainer.instance.M_inventory.Add(MissionContainer.instance.m_rewardEquipment[0]);

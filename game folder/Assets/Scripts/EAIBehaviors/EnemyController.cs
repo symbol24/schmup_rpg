@@ -98,9 +98,8 @@ public class EnemyController : MonoBehaviour {
 		}
         if (score > 0)
         {
-            print(m_playerController.m_experience);
             m_missionController.IncrementKillCount();
-            m_playerController.AddExp(score);
+            PlayerContainer.instance.AddExp(score);
         }
 
 		m_missionController.DecreaseSpawnCount ();

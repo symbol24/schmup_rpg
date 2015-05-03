@@ -605,8 +605,9 @@ public class PlayerController : MonoBehaviour, IPlayerStats {
 	}
 	
 	public void AddExp(float newExp){
-		m_experience += newExp;
+		PlayerContainer.instance.M_experience += newExp;
         currentLevelExp += newExp;
+        print(PlayerContainer.instance.M_experience);
 	}
 
     public void CheckLevel()

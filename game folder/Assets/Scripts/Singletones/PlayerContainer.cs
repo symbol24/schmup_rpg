@@ -141,6 +141,10 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
         }
     }
 
+    public void AddExp(float exp)
+    {
+        m_experience += exp;
+    }
 
    
 }
@@ -158,6 +162,7 @@ public interface iPlayerContainer{
     EquipmentData GetOneEquipment(EquipmentController.equipmentType type);
     void SetOneEquipment(EquipmentData value);
     bool M_isFirstShipGenerated { get; set; }
+    void AddExp(float exp);
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -294,5 +299,11 @@ public class PlayerContainerDummy: iPlayerContainer{
         {
             throw new System.NotImplementedException();
         }
+    }
+
+
+    public void AddExp(float exp)
+    {
+        throw new System.NotImplementedException();
     }
 }
