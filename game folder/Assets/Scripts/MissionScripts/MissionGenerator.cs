@@ -63,6 +63,7 @@ public class MissionGenerator : MonoBehaviour {
                 ret.m_creditReward = GenerateCreditReward(ret.m_missionLevel);
                 rewardAmount = 0;
                 reward = new EquipmentData[rewardAmount];
+                ret.m_killsForBoss = Random.Range(20, 30);
                 break;
             case MissionController.MissionType.exploration:
                 isEmpty = Extensions.randomBoolean();
@@ -80,6 +81,7 @@ public class MissionGenerator : MonoBehaviour {
                         rewardAmount = 1;
                         reward = new EquipmentData[rewardAmount];
                         reward = GenerateRewardList(reward);
+                        ret.m_killsForBoss = Random.Range(20, 30);
                         break;
                 }
                 break;
@@ -206,6 +208,7 @@ public class MissionGenerator : MonoBehaviour {
         MissionContainer.instance.m_creditValue = mission.m_creditReward;
         MissionContainer.instance.m_difficulty = mission.m_difficulty;
         MissionContainer.instance.m_experienceValue = mission.m_experienceValue;
+        MissionContainer.instance.m_killsForBoss = mission.m_killsForBoss;
     }
 
     private EquipmentData[] GenerateRewardList(EquipmentData[] list)

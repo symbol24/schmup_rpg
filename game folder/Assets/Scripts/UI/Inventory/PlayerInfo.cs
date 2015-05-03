@@ -64,7 +64,7 @@ public class PlayerInfo : MonoBehaviour {
             if (e.m_myType == type)
                 ret = e.m_equipmentName;
         }
-        print(ret);
+        //print(ret);
         return ret;
     }
 }

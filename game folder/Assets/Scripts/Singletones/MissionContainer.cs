@@ -43,6 +43,9 @@ public class MissionContainer : MonoBehaviour, iMissionContainer {
     float experieneValue;
     public float m_experienceValue { get { return experieneValue; } set { experieneValue = value; } }
 
+    int killsForBoss;
+    public int m_killsForBoss { get { return killsForBoss; } set { killsForBoss = value; } }
+
 	void Awake(){
 		if (mInstance == null || mInstance is MissionContainerDummy) {
 			mInstance = this;
@@ -68,6 +71,7 @@ public interface iMissionContainer
     MissionDifficulty m_difficulty { get; set; }
     float m_creditValue { get; set; }
     float m_experienceValue { get; set; }
+    int m_killsForBoss { get; set; }
 }
 
 public class MissionContainerDummy : iMissionContainer
@@ -83,4 +87,5 @@ public class MissionContainerDummy : iMissionContainer
     public MissionDifficulty m_difficulty { get; set; }
     public float m_creditValue { get; set; }
     public float m_experienceValue { get; set; }
+    public int m_killsForBoss { get; set; }
 }

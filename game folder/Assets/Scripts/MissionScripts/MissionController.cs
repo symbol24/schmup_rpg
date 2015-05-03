@@ -167,7 +167,7 @@ public class MissionController : MonoBehaviour {
         {
 
             //implement mission intro stuff
-            print("Misison Type = " + m_missionType);
+            //print("Misison Type = " + m_missionType);
             switch (m_missionType)
             {
                 case MissionType.bounty:
@@ -180,7 +180,6 @@ public class MissionController : MonoBehaviour {
                     break;
                 case MissionType.scavange:
                     //show that the goal is to retrive rewards
-                    //tehre may or may not be a boss
 
                     m_scavangeTimerPanel.SetActive(true);
                     m_scavangeTimer = MissionContainer.instance.m_scavangeTimer;
@@ -251,11 +250,11 @@ public class MissionController : MonoBehaviour {
 
 	public void IncrementKillCount(){
 		m_killCount++;
-        if (m_missionType == MissionType.bounty && m_killCount >= m_bossSpawnCount && !m_isBossSpawned)
+        if (m_missionType == MissionType.bounty && m_killCount >= MissionContainer.instance.m_killsForBoss && !m_isBossSpawned)
         {
 			m_spawnStatus = SpawnStatus.waitToSpawnBoss;
         }
-        else if (m_isBossSpawned)
+        else if (m_isBossSpawned || (m_missionType == MissionType.exploration && m_killCount >= MissionContainer.instance.m_killsForBoss))
         {
             m_spawnStatus = SpawnStatus.outro;
             m_isMissionSuccesful = true;

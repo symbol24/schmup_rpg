@@ -14,4 +14,5 @@ public class MissionData {
     public float m_creditReward { get; set; }
     public MissionDifficulty m_difficulty { get; set; }
     public float m_experienceValue { get; set; }
+    public int m_killsForBoss { get; set; }
 }
