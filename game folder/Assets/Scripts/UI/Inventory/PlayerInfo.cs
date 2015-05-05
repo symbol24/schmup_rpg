@@ -38,22 +38,22 @@ public class PlayerInfo : MonoBehaviour {
     public void UpdateEquipmentNames(List<EquipmentController> equipList)
     {
         Text temp = GameObject.Find("cannonTxt1").GetComponent<Text>();
-        temp.text = equipList[0].m_equipmentName;
+        temp.text = PlayerContainer.instance.M_Cannons[0].m_equipmentName;
 
         temp = GameObject.Find("cannonTxt2").GetComponent<Text>();
-        temp.text = equipList[1].m_equipmentName;
+        temp.text = PlayerContainer.instance.M_Cannons[1].m_equipmentName;
 
         temp = GameObject.Find("chassisTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.chassis);
+        temp.text = PlayerContainer.instance.M_chassis.m_equipmentName;
 
         temp = GameObject.Find("hullTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.hull);
+        temp.text = PlayerContainer.instance.GetOneEquipment(EquipmentController.equipmentType.hull).m_equipmentName;
 
         temp = GameObject.Find("engineTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.engine);
+        temp.text = PlayerContainer.instance.GetOneEquipment(EquipmentController.equipmentType.engine).m_equipmentName;
 
         temp = GameObject.Find("shieldTxt").GetComponent<Text>();
-        temp.text = GetEquipmentName(equipList, EquipmentController.equipmentType.shield);
+        temp.text = PlayerContainer.instance.M_Shield.m_equipmentName;
 
     }
 

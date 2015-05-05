@@ -9,6 +9,16 @@ using Random = UnityEngine.Random;
 
 public static class ItemGenerator
 {
+    public static CannonData CannonWithSpecificPrefab(float level, string prefabName, string bulletPrefabName)
+    {
+        EquipmentData baseData = BaseInfo(level);
+        CannonData ret = Cannon(level);
+        ret.m_equipmentName = prefabName;
+        ret.m_bulletPrefabName = bulletPrefabName;
+
+        return ret;
+    }
+
     public static CannonData Cannon(float level)
     {
         ProjectileController bullet = PrefabContainer.instance.GetRandomProjective();
@@ -28,6 +38,16 @@ public static class ItemGenerator
         };
     }
 
+    public static ChassisData ChassisWithSpecificPrefab(float level, string prefabName)
+    {
+        ChassisData ret = Chassis(level);
+        ret.m_prefabName = prefabName;
+        ChassisController temp =  (ChassisController)PrefabContainer.instance.GetEquipmentPerName(prefabName);
+        ret.m_chassisSize = temp.m_chassisSize;
+
+        return ret;
+    }
+
     public static ChassisData Chassis(float level, float damageModifier = float.MinValue, float fireRateModifier = float.MinValue, float armorModifier = float.MinValue, float shieldModifier = float.MinValue)
     {
         if (Math.Abs(damageModifier - float.MinValue) < 0.1) damageModifier = Random.Range(0f, 20f)/100f;
@@ -39,7 +59,7 @@ public static class ItemGenerator
         EquipmentData baseData = BaseInfo(level);
         return new ChassisData()
         {
-            m_prefabName = PrefabContainer.instance.GetRandomEquipement(EquipmentController.equipmentType.chassis).name,
+            m_prefabName = chassis.name,
             m_equipmentName = "Chassis " + Random.Range(level, (level * level) + 1),
             m_creditValue = baseData.m_creditValue,
             m_Owner = baseData.m_Owner,
