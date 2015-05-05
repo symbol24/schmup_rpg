@@ -73,6 +73,8 @@ public class SelectionManager : MonoBehaviour
     {
         var button = (ButtonContainer) sender;
         button.FinishedFadeOut -= currentActiveButton_FinishedFadeOut;
+        button.gameObject.SetActive(false);
+        currentActiveButton.gameObject.SetActive(true);
         currentActiveButton.StartFadeIn(timeToFade);
         currentActiveButton.FinishedFadeIn += currentActiveButton_FinishedFadeIn;
     }

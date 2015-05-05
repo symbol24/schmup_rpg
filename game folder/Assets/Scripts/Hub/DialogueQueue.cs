@@ -51,6 +51,10 @@ public class DialogueQueue : MonoBehaviour
             StartCoroutine(CheckForQueue());
         }
     }
+    public void Flush()
+    {
+        Queue.Clear();
+    }
     #region HandlingQueueForDialogs
     private DialogueDataObject previousDataObject;
     private IEnumerator CheckForQueue()

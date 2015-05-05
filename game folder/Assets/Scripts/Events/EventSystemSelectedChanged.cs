@@ -6,22 +6,22 @@ using UnityEngine.EventSystems;
 public class EventSystemSelectedChanged : MonoBehaviour
 {
     private EventSystem eventSystem;
-    private GameObject previousGameObjectSelected;
+    public GameObject PreviousGameObjectSelected { get; private set; }
     public event EventHandler SelectedGameObjectChanged;
 
 	// Use this for initialization
 	void Start ()
 	{
 	    eventSystem = EventSystem.current;
-	    previousGameObjectSelected = eventSystem.currentSelectedGameObject;
+	    PreviousGameObjectSelected = eventSystem.currentSelectedGameObject;
 	}
 	
 	// Update is called once per frame
     private void Update()
     {
-        if (eventSystem.currentSelectedGameObject != previousGameObjectSelected)
+        if (eventSystem.currentSelectedGameObject != PreviousGameObjectSelected)
         {
-            previousGameObjectSelected = eventSystem.currentSelectedGameObject;
+            PreviousGameObjectSelected = eventSystem.currentSelectedGameObject;
             if (SelectedGameObjectChanged != null) SelectedGameObjectChanged(this, EventArgs.Empty);
         }
     }

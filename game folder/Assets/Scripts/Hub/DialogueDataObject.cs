@@ -2,9 +2,11 @@
 using UnityEngine;
 using System.Collections;
 
+[Serializable]
 public class DialogueDataObject : ICloneable
 {
-    public CharacterIdentifier Character { get; set; }
+    [SerializeField] private CharacterIdentifier _character;
+    public CharacterIdentifier Character { get { return _character; } set { _character = value; } }
     private string _title;
     public string Title
     {
@@ -18,7 +20,14 @@ public class DialogueDataObject : ICloneable
         }
         set { _title = value; }
     }
-    public string Text { get; set; }
+
+    [SerializeField] private string _text;
+    public string Text
+    {
+        get { return _text; }
+        set { _text = value; }
+    }
+
     public object Clone()
     {
         var ret = new DialogueDataObject()

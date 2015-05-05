@@ -3,10 +3,6 @@ using System.Collections;
 
 public class ShopMenu : MonoBehaviour
 {
-
-    
-        
-
 	// Use this for initialization
 	void Start () {
 	
