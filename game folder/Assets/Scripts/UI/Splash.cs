@@ -3,11 +3,7 @@ using System.Collections;
 
 public class Splash : MonoBehaviour {
 
-	// Use this for initialization
-	void Start ()
-	{
-
-	}
+	public string toLoad;
 	
 	// Update is called once per frame
 	void Update ()
@@ -19,7 +15,7 @@ public class Splash : MonoBehaviour {
 	{
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			Application.LoadLevel("loader"); 
+			Application.LoadLevel(toLoad); 
 		}
 	}
 }
