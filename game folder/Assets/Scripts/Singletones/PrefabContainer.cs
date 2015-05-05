@@ -26,6 +26,9 @@ public class PrefabContainer : MonoBehaviour, iPrefabContainer
         }
     }
 
+    [SerializeField]
+    string[] m_cannonNames;
+    public string[] M_cannonNames { get { return m_cannonNames; } }
 	[SerializeField] private EquipmentController[] m_ListofEquipments;
     public EquipmentController[] M_ListofEquipments { get { return m_ListofEquipments; } }
     [SerializeField] private ProjectileController[] m_ListofBullets;
@@ -125,6 +128,7 @@ public class PrefabContainer : MonoBehaviour, iPrefabContainer
 
 public interface iPrefabContainer
 {
+    string[] M_cannonNames { get; }
     EquipmentController[] M_ListofEquipments { get; }
     ProjectileController[] M_ListofBullets { get; }
     PlayerController M_playerControllerPrefab { get; }
@@ -229,5 +233,10 @@ public class PrefabContainerDummy : iPrefabContainer
     public EquipmentController GetRandomEquipement(EquipmentController.equipmentType type)
     {
         throw new System.NotImplementedException();
+    }
+
+    public string[] M_cannonNames
+    {
+        get { throw new System.NotImplementedException(); }
     }
 }
