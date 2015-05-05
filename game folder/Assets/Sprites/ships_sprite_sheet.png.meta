@@ -1,0 +1,330 @@
+fileFormatVersion: 2
+guid: 9721dd366d685c346be8b735684b721c
+timeCreated: 1430779523
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: ships_small_classic_left
+    21300002: ships_small_classic_center
+    21300004: ships_small_classic_right
+    21300006: ships_large_cannon_left
+    21300008: ships_large_cannon_center
+    21300010: ships_large_cannon_right
+    21300012: ships_medium_classic_left
+    21300014: ships_medium_classic_center
+    21300016: ships_medium_classic_right
+    21300018: ships_large_candle_left
+    21300020: ships_large_candle_center
+    21300022: ships_large_candle_right
+    21300024: ships_large_flame_left
+    21300026: ships_large_flame_center
+    21300028: ships_large_flame_right
+    21300030: ships_medium_bow_left
+    21300032: ships_medium_bow_center
+    21300034: ships_medium_bow_right
+    21300036: ships_small_cannon_right
+    21300038: ships_small_cannon_center
+    21300040: ships_small_cannon_left
+    21300042: ships_large_arrow_left
+    21300044: ships_large_arrow_center
+    21300046: ships_large_arrow_right
+    21300048: ships_small_sphere
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 115
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: ships_small_classic_left
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 374
+        width: 42
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_classic_center
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 374
+        width: 42
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_classic_right
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 374
+        width: 42
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_cannon_left
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 322
+        width: 76
+        height: 124
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_cannon_center
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 322
+        width: 76
+        height: 124
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_cannon_right
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 322
+        width: 76
+        height: 124
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_classic_left
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 371
+        width: 63
+        height: 73
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_classic_center
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 370
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_classic_right
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 370
+        width: 64
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_candle_left
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 333
+        width: 78
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_candle_center
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 332
+        width: 78
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_candle_right
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 330
+        width: 78
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_flame_left
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 228
+        width: 144
+        height: 65
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_flame_center
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 228
+        width: 144
+        height: 65
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_flame_right
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 227
+        width: 144
+        height: 65
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_bow_left
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 218
+        width: 58
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_bow_center
+      rect:
+        serializedVersion: 2
+        x: 666
+        y: 218
+        width: 58
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_medium_bow_right
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 218
+        width: 58
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_cannon_right
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 233
+        width: 64
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_cannon_center
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 231
+        width: 64
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_cannon_left
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 233
+        width: 64
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_arrow_left
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 82
+        width: 78
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_arrow_center
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 82
+        width: 78
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_large_arrow_right
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 82
+        width: 78
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ships_small_sphere
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 392
+        width: 52
+        height: 44
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
