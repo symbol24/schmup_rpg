@@ -6,11 +6,11 @@ using Random = UnityEngine.Random;
 public static class StatCalculator {
     enum ChassisSpeeds : int
     {
-        verySlow = 2,
-        slow = 5,
-        average = 8,
-        fast = 11,
-        veryFast = 14
+        verySlow = 1,
+        slow = 4,
+        average = 7,
+        fast = 10,
+        veryFast = 12
     };
 
     public static float CalculateBaseDamage(float level)

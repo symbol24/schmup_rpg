@@ -42,6 +42,10 @@ public class PlayerStatusMenu : Menu {
 
         }
 
+
+        temp = GameObject.Find("largeSizeValue").GetComponent<Text>();
+        temp.text = PlayerContainer.instance.M_chassis.m_chassisSize.ToString();
+
         temp = GameObject.Find("cannonTxt1 1").GetComponent<Text>();
         temp.text = PlayerContainer.instance.M_Cannons[0].m_equipmentName;
         temp = GameObject.Find("cannonTxt2 1").GetComponent<Text>();

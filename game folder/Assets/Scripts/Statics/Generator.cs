@@ -13,7 +13,7 @@ public static class ItemGenerator
     {
         EquipmentData baseData = BaseInfo(level);
         CannonData ret = Cannon(level);
-        ret.m_equipmentName = prefabName;
+        ret.m_prefabName = prefabName;
         ret.m_bulletPrefabName = bulletPrefabName;
 
         return ret;

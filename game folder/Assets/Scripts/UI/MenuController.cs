@@ -23,7 +23,8 @@ public class MenuController : MonoBehaviour {
         options = 7
     }
 
-    [SerializeField] private string m_hub = "loader";
+    [SerializeField] private string m_hub = "Hub";
+    [SerializeField] private string m_mainMenu = "thanksscreen";
     [SerializeField] private Menu m_PauseMenu;
     [SerializeField] private Menu m_StatusandInventoryMenu;
     [SerializeField] private PlayerStatusMenu m_playerStatusMenu;
@@ -228,8 +229,9 @@ public class MenuController : MonoBehaviour {
         Application.LoadLevel(m_hub);
     }
 
-    public void CloseGame(){
-        Application.Quit();
+    public void CloseGame()
+    {
+        Application.LoadLevel(m_mainMenu);
     }
 
     public void LevelUP()

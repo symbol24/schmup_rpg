@@ -4,7 +4,14 @@ using UnityEngine.UI;
 
 public class Thanks : MonoBehaviour 
 {
-	//public float delaytime = 5;
+    public string toLoad = "Splash";
+
+    void Start()
+    {
+        PlayerContainer pc = FindObjectOfType<PlayerContainer>();
+        if (pc != null) Destroy(pc.gameObject);
+
+    }
 
     void Update()
 	{
@@ -14,7 +21,7 @@ public class Thanks : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			Application.LoadLevel("loader");
+			Application.LoadLevel(toLoad);
 		}
 	}
 }

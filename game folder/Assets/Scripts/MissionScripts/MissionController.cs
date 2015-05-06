@@ -142,9 +142,13 @@ public class MissionController : MonoBehaviour {
             case SpawnStatus.outro:
                 if (m_Timer <= Time.time)
                 {
-                    if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
-                    if (!MissionContainer.instance.m_isMissionEmpty)
-                        if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
+                    if (m_currentSpawnCount <= 0)
+                    {
+                        if (!m_isOutroDisplayed) m_isOutroDisplayed = DisplayOutro();
+                        if (!MissionContainer.instance.m_isMissionEmpty)
+                            if (!m_isRewardGiven) m_isRewardGiven = GiveRewardsToPlayer();
+
+                    }
                 }
                 break;
 		    }
