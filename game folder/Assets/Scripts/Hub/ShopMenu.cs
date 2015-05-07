@@ -12,6 +12,10 @@ public class ShopMenu : MonoBehaviour
 
     List<EquipmentData> toSell = new List<EquipmentData>();
 
+    List<EquipmentData> toBuy = new List<EquipmentData>();
+
+    bool isToBuyCreated = false;
+
     [SerializeField]
     int amountToCreate;
 
@@ -20,42 +24,45 @@ public class ShopMenu : MonoBehaviour
     [SerializeField]
     GameObject btnConfirm;
 
+    bool m_isSell = true;
+    bool m_isDisplayed = false;
+
 	// Use this for initialization
 	void Start () {
-        CreatEquips();
-        CreateButtons();
-	
 	}
 
     void CreatEquips()
     {
-        for (int i = 0; i < amountToCreate; i++)
+        if (!isToBuyCreated)
         {
-            EquipmentController.equipmentType rand = StatCalculator.GetRandomValue<EquipmentController.equipmentType>();
+            for (int i = 0; i < amountToCreate; i++)
+            {
+                EquipmentController.equipmentType rand = StatCalculator.GetRandomValue<EquipmentController.equipmentType>();
 
+                EquipmentData temp = null;
 
+                switch (rand)
+                {
+                    case EquipmentController.equipmentType.cannon:
+                        temp = ItemGenerator.Cannon(PlayerContainer.instance.M_level);
+                        break;
+                    case EquipmentController.equipmentType.chassis:
+                        temp = ItemGenerator.Chassis(PlayerContainer.instance.M_level);
+                        break;
+                    case EquipmentController.equipmentType.engine:
+                        temp = ItemGenerator.Engine(PlayerContainer.instance.M_level);
+                        break;
+                    case EquipmentController.equipmentType.hull:
+                        temp = ItemGenerator.Hull(PlayerContainer.instance.M_level);
+                        break;
+                    case EquipmentController.equipmentType.shield:
+                        temp = ItemGenerator.Shield(PlayerContainer.instance.M_level);
+                        break;
+                }
 
-            EquipmentData temp = null;
-
-            switch(rand){
-                case EquipmentController.equipmentType.cannon:
-                    temp = ItemGenerator.Cannon(PlayerContainer.instance.M_level);
-                    break;
-                case EquipmentController.equipmentType.chassis:
-                    temp = ItemGenerator.Chassis(PlayerContainer.instance.M_level);
-                    break;
-                case EquipmentController.equipmentType.engine:
-                    temp = ItemGenerator.Engine(PlayerContainer.instance.M_level);
-                    break;
-                case EquipmentController.equipmentType.hull:
-                    temp = ItemGenerator.Hull(PlayerContainer.instance.M_level);
-                    break;
-                case EquipmentController.equipmentType.shield:
-                    temp = ItemGenerator.Shield(PlayerContainer.instance.M_level);
-                    break;
+                toBuy.Add(temp);
             }
-
-            toSell.Add(temp);
+            isToBuyCreated = true;
         }
     }
 
@@ -115,11 +122,31 @@ public class ShopMenu : MonoBehaviour
         CreateButtons();
     }
 
+    public void ConfirmSell()
+    {
+        PlayerContainer.instance.M_credits = toConfirm.m_creditValue;
+        PlayerContainer.instance.M_inventory.Remove(toConfirm);
+
+        toSell.Add(toConfirm);
+
+        CreateButtons();
+    }
+
     private bool CheckPurchase(){
         bool ret = false;
 
         if (toConfirm != null && toConfirm.m_creditValue <= PlayerContainer.instance.M_credits) ret = true;
 
         return ret;
+    }
+
+    public void SwitchShop(bool isBuy)
+    {
+        if (isBuy)
+            CreatEquips();
+        else
+            toSell = PlayerContainer.instance.M_inventory;
+
+        CreateButtons();
     }
 }
