@@ -160,6 +160,20 @@ public class PlayerContainer : MonoBehaviour, iPlayerContainer {
         return lvl;
     }
 
+
+
+    public void ClearPlayer()
+    {
+        M_level = 1;
+        M_credits = 0;
+        M_experience = 0;
+        M_isFirstShipGenerated = false;
+        M_inventory = new List<EquipmentData>();
+        M_Cannons = new CannonData[0];
+        M_chassis = new ChassisData();
+        M_Shield = new ShieldData();
+        M_OtherEquipment = new EquipmentData[0];
+    }
 }
 
 public interface iPlayerContainer{
@@ -177,6 +191,7 @@ public interface iPlayerContainer{
     bool M_isFirstShipGenerated { get; set; }
     bool AddExp(float exp);
     int CheckLevel();
+    void ClearPlayer();
 }
 
 public class PlayerContainerDummy: iPlayerContainer{
@@ -323,6 +338,12 @@ public class PlayerContainerDummy: iPlayerContainer{
 
 
     public int CheckLevel()
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    public void ClearPlayer()
     {
         throw new System.NotImplementedException();
     }

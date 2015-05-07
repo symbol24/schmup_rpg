@@ -8,9 +8,7 @@ public class Thanks : MonoBehaviour
 
     void Start()
     {
-        PlayerContainer pc = FindObjectOfType<PlayerContainer>();
-        if (pc != null) Destroy(pc.gameObject);
-
+        PlayerContainer.instance.ClearPlayer();
     }
 
     void Update()
