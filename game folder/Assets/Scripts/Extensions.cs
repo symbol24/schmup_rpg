@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Xml; 
 using System.Xml.Serialization;
-using System.IO; 
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 public static class Extensions
 {
@@ -59,9 +61,9 @@ public static class Extensions
         return false;
     }
 
-    public static void DestroyChildren(this GameObject[] fromThis)
+    public static void DestroyChildren(this IEnumerable<GameObject> fromThis)
     {
-        if (fromThis != null && fromThis.Length > 0)
+        if (fromThis != null && fromThis.Any())
         {
             foreach (GameObject bt in fromThis)
             {

@@ -5,14 +5,12 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class EquipmentMenu : Menu {
-    PlayerController m_playerController;
     [SerializeField] GameObject m_buttonPrefab;
     GameObject[] m_buttonList;
 
     public void Init(MenuController.MenuType type, PlayerController player)
     {
         m_menuType = type;
-        m_playerController = player;
         //print("Buttons for " + m_menuType);
         CreateButtons();
     }

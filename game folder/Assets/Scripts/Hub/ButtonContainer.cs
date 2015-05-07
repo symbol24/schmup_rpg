@@ -75,9 +75,26 @@ public class ButtonContainer : MonoBehaviour
         }
         foreach (var uiElement in UIElements)
         {
-            _fadeinCoroutines.Push(FadeIn(uiElement,time));
+            //_fadeinCoroutines.Push(FadeIn(uiElement,time));
+            print(uiElement.name);
+            ContinueFadeinInChildren(time, uiElement);
         }
         StartCoroutines(_fadeinCoroutines);
+    }
+    private void ContinueFadeinInChildren(float time, Graphic uiElement)
+    {
+        if (uiElement.gameObject.activeInHierarchy && uiElement.gameObject.activeSelf)
+        {
+            var uiElements = uiElement.gameObject.GetComponentsInChildren<Graphic>(false);
+            foreach (var item in uiElements.Where(graph => graph != null))
+            {
+                print(item.name);
+                if (item.gameObject.activeInHierarchy)
+                {
+                    _fadeinCoroutines.Push(FadeIn(item, time));
+                }
+            }
+        }
     }
     private Stack<IEnumerator> _fadeoutCoroutines = new Stack<IEnumerator>();
     public void StartFadeout(float time)
@@ -94,10 +111,28 @@ public class ButtonContainer : MonoBehaviour
         }
         foreach (var uiElement in UIElements)
         {
-            _fadeoutCoroutines.Push(FadeOut(uiElement,time));
+            /*var children = uiElement.GetComponentsInChildren<Graphic>();
+            foreach (Graphic child in children)
+            {
+                
+            }*/
+            ContinueFadeoutInChildren(time, uiElement);
+            //_fadeoutCoroutines.Push(FadeOut(uiElement,time));
         }
         StartCoroutines(_fadeoutCoroutines);
     }
+
+    private void ContinueFadeoutInChildren(float time, Graphic uiElement)
+    {
+        foreach (var item in uiElement.GetComponentsInChildren<Graphic>(false).Where(graph => graph != null))
+        {
+            if (item.gameObject.activeInHierarchy)
+            {
+                _fadeoutCoroutines.Push(FadeOut(item, time));
+            }
+        }
+    }
+
 
     private void StopCoroutines(IEnumerable<IEnumerator> enumerators)
     {
