@@ -55,6 +55,7 @@ public class SelectionManager : MonoBehaviour
         var currentButtonInstanceID = button.GetInstanceID();
         if (currentActiveButton != null && currentButtonInstanceID == currentActiveButton.GetInstanceID())
         {
+            _inButtonPressProgress = false;
             return;
         }
         if (currentActiveButton != null)
