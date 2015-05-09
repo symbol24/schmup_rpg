@@ -7,6 +7,10 @@ public class ShopMenu : MonoBehaviour
 {
     [SerializeField]
     GameObject m_buttonPrefab;
+    [SerializeField]
+    GameManager m_confirmButton;
+    [SerializeField]
+    Text m_youHave;
 
     List<GameObject> m_buttonList;
 
@@ -24,7 +28,7 @@ public class ShopMenu : MonoBehaviour
     [SerializeField]
     GameObject btnConfirm;
 
-    bool m_isSell = true;
+    bool m_isBuy = true;
     bool m_isDisplayed = false;
 
 	// Use this for initialization
@@ -72,10 +76,13 @@ public class ShopMenu : MonoBehaviour
 
         m_buttonList = new List<GameObject>();
 
+        List<EquipmentData> listToDisplay = toBuy;
+        if (!m_isBuy) listToDisplay = toSell;
+
         RectTransform scRectTransform = this.GetComponent<RectTransform>();
 
         int i = 0;
-        foreach (EquipmentData e in toSell)
+        foreach (EquipmentData e in listToDisplay)
         {
             GameObject btemp = Instantiate(m_buttonPrefab);
             
@@ -89,6 +96,7 @@ public class ShopMenu : MonoBehaviour
             m_buttonList.Add(btemp);
 
         }
+        UpdateYouHave(PlayerContainer.instance.M_credits.ToString());
     }
 
     public void UpdateInfo(EquipmentData toDisplay)
@@ -108,31 +116,39 @@ public class ShopMenu : MonoBehaviour
         toConfirm = toDisplay;
 
 
-        if (CheckPurchase()) btnConfirm.GetComponent<Button>().interactable = true;
-        else btnConfirm.GetComponent<Button>().interactable = false;
+        if (CheckCanPurchase() && m_isBuy) btnConfirm.GetComponent<Button>().interactable = true;
+        else if(!CheckCanPurchase() && m_isBuy) btnConfirm.GetComponent<Button>().interactable = false;
+        else btnConfirm.GetComponent<Button>().interactable = true;
+
+
+        UpdateYouHave(PlayerContainer.instance.M_credits.ToString());
     }
 
-    public void ConfirmSale()
+    public void ConfirmBuy()
     {
+        //print("In ConfirmBuy");
         PlayerContainer.instance.M_credits -= toConfirm.m_creditValue;
         PlayerContainer.instance.M_inventory.Add(toConfirm);
+        UpdateYouHave(PlayerContainer.instance.M_credits.ToString());
 
-        toSell.Remove(toConfirm);
+        toBuy.Remove(toConfirm);
 
         CreateButtons();
     }
 
     public void ConfirmSell()
     {
-        PlayerContainer.instance.M_credits = toConfirm.m_creditValue;
+        //print("In ConfirmSell");
+        PlayerContainer.instance.M_credits += toConfirm.m_creditValue;
         PlayerContainer.instance.M_inventory.Remove(toConfirm);
+        UpdateYouHave(PlayerContainer.instance.M_credits.ToString());
 
-        toSell.Add(toConfirm);
+        toBuy.Add(toConfirm);
 
         CreateButtons();
     }
 
-    private bool CheckPurchase(){
+    private bool CheckCanPurchase(){
         bool ret = false;
 
         if (toConfirm != null && toConfirm.m_creditValue <= PlayerContainer.instance.M_credits) ret = true;
@@ -142,11 +158,27 @@ public class ShopMenu : MonoBehaviour
 
     public void SwitchShop(bool isBuy)
     {
-        if (isBuy)
-            CreatEquips();
-        else
-            toSell = PlayerContainer.instance.M_inventory;
+        btnConfirm.GetComponent<Button>().onClick.RemoveAllListeners();
 
+        if (isBuy)
+        {
+            CreatEquips();
+            btnConfirm.GetComponent<Button>().onClick.AddListener(ConfirmBuy);
+        }
+        else
+        {
+            toSell = PlayerContainer.instance.M_inventory;
+            btnConfirm.GetComponent<Button>().onClick.AddListener(ConfirmSell);
+            btnConfirm.GetComponent<Button>().interactable = true;
+        }
+
+        m_isBuy = isBuy;
         CreateButtons();
+        UpdateYouHave(PlayerContainer.instance.M_credits.ToString());
+    }
+
+    private void UpdateYouHave(string toDisplay)
+    {
+        m_youHave.text = toDisplay;
     }
 }

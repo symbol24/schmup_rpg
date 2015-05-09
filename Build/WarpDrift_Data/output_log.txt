@@ -1,0 +1,78 @@
+Initialize engine version: 5.0.1f1 (5a2e8fe35a68)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 560 SE (ID=0x1208)
+    Vendor:   NVIDIA
+    VRAM:     977 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.114 seconds
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 3360x1080 at -1440,0
+<RI> Initialized touch support.
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Phillip\Documents\GitHub\schmup_rpg\Build\WarpDrift_Data\Managed\System.dll (this message is harmless)
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 2fa0 -> priority: 1 
+  Thread -> id: 2dac -> priority: 1 
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 6.698761 ms
+
+Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 780.
+Total: 0.511040 ms (FindLiveObjects: 0.053730 ms CreateObjectMapping: 0.070634 ms MarkObjects: 0.348642 ms  DeleteObjects: 0.037429 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.250237 ms
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 817.
+Total: 0.316947 ms (FindLiveObjects: 0.044070 ms CreateObjectMapping: 0.053428 ms MarkObjects: 0.214015 ms  DeleteObjects: 0.004527 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.573524 ms
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 1146.
+Total: 0.445839 ms (FindLiveObjects: 0.033505 ms CreateObjectMapping: 0.042259 ms MarkObjects: 0.355886 ms  DeleteObjects: 0.013583 ms)
+
+ShopPic
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+BarPic
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+buttonClicked
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 7.043781 ms
+
+Unloading 51 unused Assets to reduce memory usage. Loaded Objects now: 1636.
+Total: 0.797500 ms (FindLiveObjects: 0.085123 ms CreateObjectMapping: 0.057956 ms MarkObjects: 0.577448 ms  DeleteObjects: 0.076369 ms)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.561193 ms
+
+Unloading 50 unused Assets to reduce memory usage. Loaded Objects now: 2001.
+Total: 1.279562 ms (FindLiveObjects: 0.117723 ms CreateObjectMapping: 0.095386 ms MarkObjects: 1.027211 ms  DeleteObjects: 0.038335 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.877414 ms
+
+Unloading 33 unused Assets to reduce memory usage. Loaded Objects now: 1163.
+Total: 0.979820 ms (FindLiveObjects: 0.097499 ms CreateObjectMapping: 0.056144 ms MarkObjects: 0.797500 ms  DeleteObjects: 0.028072 ms)
+
+ShopPic
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+

@@ -88,7 +88,7 @@ public class ButtonContainer : MonoBehaviour
             var uiElements = uiElement.gameObject.GetComponentsInChildren<Graphic>(false);
             foreach (var item in uiElements.Where(graph => graph != null))
             {
-                print(item.name);
+                //print(item.name);
                 if (item.gameObject.activeInHierarchy)
                 {
                     _fadeinCoroutines.Push(FadeIn(item, time));
